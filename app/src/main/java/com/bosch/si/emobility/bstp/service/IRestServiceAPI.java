@@ -1,10 +1,9 @@
-package bstp.android.boschsi.com.bstp.service;
+package com.bosch.si.emobility.bstp.service;
 
-import bstp.android.boschsi.com.bstp.model.User;
+import com.bosch.si.emobility.bstp.model.User;
 import retrofit.Call;
 import retrofit.Response;
 import retrofit.http.Body;
-import retrofit.http.GET;
 import retrofit.http.POST;
 
 /**

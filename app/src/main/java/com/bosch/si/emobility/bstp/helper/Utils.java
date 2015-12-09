@@ -1,4 +1,4 @@
-package bstp.android.boschsi.com.bstp.helper;
+package com.bosch.si.emobility.bstp.helper;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -13,8 +13,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import bstp.android.boschsi.com.bstp.R;
-import bstp.android.boschsi.com.bstp.app.Application;
+import com.bosch.si.emobility.bstp.R;
+import com.bosch.si.emobility.bstp.app.Application;
 
 /**
  * Created by sgp0458 on 4/12/15.

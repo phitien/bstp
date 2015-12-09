@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="bstp.android.boschsi.com.bstp">
+    package="com.bosch.si.emobility.bstp">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".app.Application"
+        android:name="com.bosch.si.emobility.bstp.app.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="com.bosch.si.emobility.bstp.activity.SplashActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

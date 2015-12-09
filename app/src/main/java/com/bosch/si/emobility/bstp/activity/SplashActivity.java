@@ -1,11 +1,11 @@
-package bstp.android.boschsi.com.bstp.activity;
+package com.bosch.si.emobility.bstp.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import bstp.android.boschsi.com.bstp.R;
+import com.bosch.si.emobility.bstp.R;
 
 public class SplashActivity extends AppCompatActivity {
 

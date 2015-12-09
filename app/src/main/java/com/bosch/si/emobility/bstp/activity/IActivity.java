@@ -1,4 +1,4 @@
-package bstp.android.boschsi.com.bstp.activity;
+package com.bosch.si.emobility.bstp.activity;
 
 /**
  * Created by sgp0458 on 8/12/15.

@@ -1,4 +1,4 @@
-package bstp.android.boschsi.com.bstp.manager;
+package com.bosch.si.emobility.bstp.manager;
 
 /**
  * Created by sgp0458 on 8/12/15.

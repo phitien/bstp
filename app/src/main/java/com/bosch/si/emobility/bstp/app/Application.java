@@ -1,4 +1,4 @@
-package bstp.android.boschsi.com.bstp.app;
+package com.bosch.si.emobility.bstp.app;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -1,10 +1,10 @@
-package bstp.android.boschsi.com.bstp.activity;
+package com.bosch.si.emobility.bstp.activity;
 
 
 import android.os.Bundle;
 
-import bstp.android.boschsi.com.bstp.app.Event;
-import bstp.android.boschsi.com.bstp.helper.Utils;
+import com.bosch.si.emobility.bstp.app.Event;
+import com.bosch.si.emobility.bstp.helper.Utils;
 import de.greenrobot.event.EventBus;
 
 /**

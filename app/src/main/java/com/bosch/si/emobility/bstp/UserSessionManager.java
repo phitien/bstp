@@ -1,4 +1,4 @@
-package com.bosch.si.emobility.bstp.manager;
+package com.bosch.si.emobility.bstp;
 
 /**
  * Created by sgp0458 on 8/12/15.

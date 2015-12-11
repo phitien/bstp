@@ -5,8 +5,8 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "bstp.android.boschsi.com.bstp"
-        minSdkVersion 16
+        applicationId "com.bosch.si.emobility.bstp"
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -15,20 +15,13 @@ android {
 
     lintOptions {
         abortOnError false
-    }    
+    }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-
-    sourceSets {
-        main {
-            manifest.srcFile 'src/main/AndroidManifest.xml'
-        }
-
     }
 
     packagingOptions {
@@ -47,16 +40,21 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.0.0'
-    compile 'com.android.support:support-v4:22.0.0'
-    compile 'com.android.support:design:22.2.0'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:design:23.0.1'
+
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+
+    // Google services
+    compile 'com.google.android.gms:play-services:8.1.0'
 
     // Unit testing dependencies
     testCompile 'junit:junit:4.12'
@@ -64,6 +62,7 @@ dependencies {
     testCompile 'org.mockito:mockito-core:1.10.19'
     // Set this dependency if you want to use Hamcrest matching
     androidTestCompile 'org.hamcrest:hamcrest-library:1.1'
+
 }
 
 repositories {

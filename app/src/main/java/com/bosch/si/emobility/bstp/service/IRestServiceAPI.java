@@ -1,6 +1,7 @@
 package com.bosch.si.emobility.bstp.service;
 
 import com.bosch.si.emobility.bstp.model.User;
+
 import retrofit.Call;
 import retrofit.Response;
 import retrofit.http.Body;

@@ -1,10 +1,12 @@
-package com.bosch.si.emobility.bstp.service;
+package com.bosch.si.emobility.bstp;
 
 import android.test.suitebuilder.annotation.MediumTest;
 
+import com.bosch.si.emobility.bstp.model.User;
+import com.bosch.si.emobility.bstp.service.IRestServiceAPI;
+
 import junit.framework.TestCase;
 
-import com.bosch.si.emobility.bstp.model.User;
 import retrofit.Retrofit;
 
 

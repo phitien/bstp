@@ -1,9 +1,17 @@
 package com.bosch.si.emobility.bstp.helper;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import com.bosch.si.emobility.bstp.R;
@@ -166,4 +174,48 @@ public class Utils {
         return getIdentifier(name, defType, getPackageName());
     }
 
+    public static void askPermissionsForLocation(Activity activity) {
+        if (!hasAccessToLocation(activity)) {
+            // No explanation needed, we can request the permission.
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    },
+                    Constants.PERMISSIONS_REQUEST_RESULT);
+        }
+    }
+
+    public static boolean hasAccessToLocation(Activity activity) {
+        return ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static Location getMyLocation(Context context) {
+        Location location = null;
+        try {
+            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            // getting GPS status
+            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            // getting network status
+            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (!isGPSEnabled && !isNetworkEnabled) {
+                // no network provider is enabled
+            } else if (isNetworkEnabled) {// if GPS Enabled get lat/long using GPS Services
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        Constants.MIN_TIME_BW_UPDATES,
+                        Constants.MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) context);
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            } else if (isGPSEnabled) {
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        Constants.MIN_TIME_BW_UPDATES,
+                        Constants.MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) context);
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
+        } catch (Exception e) {
+            Log.e("BSTP_Utils_getMyLocation", e.getMessage());
+        }
+        return location;
+    }
 }

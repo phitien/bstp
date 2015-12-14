@@ -10,7 +10,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by sgp0458 on 8/12/15.
  */
-public abstract class Activity extends android.app.Activity implements IActivity {
+public abstract class Activity extends android.support.v4.app.FragmentActivity implements IActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

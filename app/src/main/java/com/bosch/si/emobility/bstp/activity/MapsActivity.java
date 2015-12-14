@@ -1,12 +1,15 @@
 package com.bosch.si.emobility.bstp.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.R;
+import com.bosch.si.emobility.bstp.UserSessionManager;
 import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.helper.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -15,69 +18,54 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import de.greenrobot.event.EventBus;
+public class MapsActivity extends Activity implements LocationListener {
 
-public class MapsActivity extends FragmentActivity implements IActivity, LocationListener {
-
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private GoogleMap map;
+    private SupportMapFragment mapFragment;
+    private RelativeLayout loginLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        setUpMapIfNeeded();
-        registerEventBus();
+        loginLayout = (RelativeLayout) findViewById(R.id.loginLayout);
+        checkAuthentication();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+        checkAuthentication();
     }
 
-    /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p>
-     * If it isn't installed {@link SupportMapFragment} (and
-     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     * <p>
-     * A user can return to this FragmentActivity after following the prompt and correctly
-     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
-     * have been completely destroyed during this process (it is likely that it would only be
-     * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
-     * method in {@link #onResume()} to guarantee that it will be called.
-     */
-    private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
-            // Check if we were successful in obtaining the map.
-            if (mMap != null) {
-                setUpMap();
-            }
-        }
-    }
-
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
     private void setUpMap() {
-        mMap.setMyLocationEnabled(true);
-        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        map = mapFragment.getMap();
+        if (map != null) {
+            map.setMyLocationEnabled(true);
+            /**
+             * Move the button
+             */
+            View mapView = mapFragment.getView();
+            if (mapView != null && mapView.findViewById(1) != null) {
+                // Get the button view
+                View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
+                // and next place it, on bottom right (as Google Maps app)
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+                // position on right bottom
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                layoutParams.setMargins(0, 0, 30, 30);
             }
-        });
-        zoomToMyLocation();
+            map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
+
+                }
+            });
+            zoomToMyLocation();
+        }
+
     }
 
     private void zoomToMyLocation() {
@@ -87,25 +75,10 @@ public class MapsActivity extends FragmentActivity implements IActivity, Locatio
             myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
         else
             myLatLng = new LatLng(0, 0);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 11.0f));
-        mMap.addMarker(new MarkerOptions().position(myLatLng).title("It's Me!"));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 11.0f));
+        map.addMarker(new MarkerOptions().position(myLatLng).title("It's Me!"));
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterEventBus();
-    }
-
-    @Override
-    public void registerEventBus() {
-        EventBus.getDefault().register(this); // register EventBus
-    }
-
-    @Override
-    public void unregisterEventBus() {
-        EventBus.getDefault().unregister(this); // unregister EventBus
-    }
 
     @Override
     public void onEventMainThread(Event event) {
@@ -136,5 +109,36 @@ public class MapsActivity extends FragmentActivity implements IActivity, Locatio
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    private void checkAuthentication() {
+        if (!UserSessionManager.getInstance().isLogged()) {//show login dialog
+            loginLayout.setVisibility(View.VISIBLE);
+            loginLayout.setAlpha(0.0f);
+            loginLayout.animate()
+                    .translationY(loginLayout.getHeight())
+                    .alpha(1.0f);
+        } else {
+            openMap();
+        }
+    }
+
+    public void onLoginButtonClicked(View view) {
+        //call login rest service and setup map after succeed
+        loginLayout.animate()
+                .translationY(0)
+                .alpha(0.0f)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        openMap();
+                    }
+                });
+    }
+
+    private void openMap() {
+        loginLayout.setVisibility(View.GONE);
+        setUpMap();
     }
 }

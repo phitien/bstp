@@ -177,17 +177,18 @@ public class Utils {
     public static void askPermissionsForLocation(Activity activity) {
         if (!hasAccessToLocation(activity)) {
             // No explanation needed, we can request the permission.
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                    },
-                    Constants.PERMISSIONS_REQUEST_RESULT);
+//            ActivityCompat.requestPermissions(activity,
+//                    new String[]{
+//                            Manifest.permission.ACCESS_FINE_LOCATION,
+//                            Manifest.permission.ACCESS_COARSE_LOCATION
+//                    },
+//                    Constants.PERMISSIONS_REQUEST_RESULT);
         }
     }
 
     public static boolean hasAccessToLocation(Activity activity) {
-        return ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+//        return ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return true;
     }
 
     public static Location getMyLocation(Context context) {

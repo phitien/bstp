@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.R;
@@ -22,13 +23,22 @@ public class MapsActivity extends Activity implements LocationListener {
 
     private GoogleMap map;
     private SupportMapFragment mapFragment;
+    private View mapView;
+    private ImageButton imageButtonSearch;
+    private ImageButton imageButtonMenu;
+    private RelativeLayout searchLayout;
     private RelativeLayout loginLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         loginLayout = (RelativeLayout) findViewById(R.id.loginLayout);
+        searchLayout = (RelativeLayout) findViewById(R.id.searchLayout);
+        searchLayout.setVisibility(RelativeLayout.GONE);
+        imageButtonSearch = (ImageButton) findViewById(R.id.imageButtonSearch);
+        imageButtonMenu = (ImageButton) findViewById(R.id.imageButtonMenu);
         checkAuthentication();
     }
 
@@ -39,14 +49,10 @@ public class MapsActivity extends Activity implements LocationListener {
     }
 
     private void setUpMap() {
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         map = mapFragment.getMap();
         if (map != null) {
             map.setMyLocationEnabled(true);
-            /**
-             * Move the button
-             */
-            View mapView = mapFragment.getView();
+            mapView = mapFragment.getView();
             if (mapView != null && mapView.findViewById(1) != null) {
                 // Get the button view
                 View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
@@ -55,7 +61,8 @@ public class MapsActivity extends Activity implements LocationListener {
                 // position on right bottom
                 layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
                 layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                layoutParams.setMargins(0, 0, 30, 30);
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+                layoutParams.setMargins(30, 30, 30, 30);
             }
             map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
                 @Override
@@ -87,8 +94,9 @@ public class MapsActivity extends Activity implements LocationListener {
         }
     }
 
-    public void onMyLocationButtonClicked(View view) {
-        zoomToMyLocation();
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 
     @Override
@@ -113,32 +121,65 @@ public class MapsActivity extends Activity implements LocationListener {
 
     private void checkAuthentication() {
         if (!UserSessionManager.getInstance().isLogged()) {//show login dialog
-            loginLayout.setVisibility(View.VISIBLE);
-            loginLayout.setAlpha(0.0f);
-            loginLayout.animate()
-                    .translationY(loginLayout.getHeight())
-                    .alpha(1.0f);
+            showLoginDialog();
         } else {
             openMap();
         }
     }
 
-    public void onLoginButtonClicked(View view) {
-        //call login rest service and setup map after succeed
+    private void setEnabled(boolean enabled) {
+        if (mapView != null)
+            mapView.setEnabled(enabled);
+        imageButtonSearch.setEnabled(enabled);
+        imageButtonMenu.setEnabled(enabled);
+        searchLayout.setEnabled(enabled);
+    }
+
+    private void showLoginDialog() {
         loginLayout.animate()
-                .translationY(0)
+                .translationY(loginLayout.getHeight())
                 .alpha(0.0f)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        openMap();
+                        loginLayout.setVisibility(View.VISIBLE);
+                        setEnabled(false);
                     }
-                });
+                })
+                .alpha(1.0f);
+    }
+
+    public void onLoginButtonClicked(View view) {
+        //call login rest service and setup map after succeed
+        openMap();
     }
 
     private void openMap() {
-        loginLayout.setVisibility(View.GONE);
-        setUpMap();
+        loginLayout.animate()
+                .translationY(0)
+                .alpha(1.0f)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        loginLayout.setVisibility(View.GONE);
+                        setEnabled(true);
+                        setUpMap();
+                    }
+                })
+                .alpha(0.0f);
     }
+
+    public void onSearchButtonClicked(View view) {
+        if (searchLayout.getVisibility() != View.GONE) {
+            searchLayout.setVisibility(View.GONE);
+        } else {
+            searchLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void onMenuButtonClicked(View view) {
+    }
+
 }

@@ -39,20 +39,20 @@ public class SplashActivity extends Activity implements LocationListener {
         startActivity(intent);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case Constants.PERMISSIONS_REQUEST_RESULT: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    openMapsActivity();
-                } else {
-                    checkPermissions();
-                }
-                return;
-            }
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+//        switch (requestCode) {
+//            case Constants.PERMISSIONS_REQUEST_RESULT: {
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    openMapsActivity();
+//                } else {
+//                    checkPermissions();
+//                }
+//                return;
+//            }
+//        }
+//    }
 
     @Override
     public void onLocationChanged(Location location) {

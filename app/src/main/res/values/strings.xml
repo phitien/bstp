@@ -10,4 +10,8 @@
     <string name="action_login">Login</string>
     <string name="login_failed">Could not login to system</string>
     <string name="login_ok">Login successfully</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 </resources>

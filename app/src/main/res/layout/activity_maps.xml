@@ -10,192 +10,41 @@
     android:paddingTop="@dimen/nomargin"
     tools:context=".activity.MapsActivity">
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <include
+        android:id="@+id/mapLayout"
+        layout="@layout/fragment_map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-    </fragment>
-
-    <ImageView
-        android:id="@+id/imageViewLogo"
-        android:layout_width="110dp"
-        android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="3dp"
-        android:src="@drawable/bosch_logo" />
-
-    <ImageButton
-        android:id="@+id/imageButtonSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="60dp"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:onClick="onSearchButtonClicked"
-        android:src="@drawable/search_black" />
-
-    <ImageButton
-        android:id="@+id/imageButtonMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:onClick="onMenuButtonClicked"
-        android:src="@drawable/menu" />
-
-    <RelativeLayout
+    <include
         android:id="@+id/searchLayout"
+        layout="@layout/fragment_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
-        android:background="#eeffffff"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="72dp"
+        android:background="#ffffffff" />
 
-        <EditText
-            android:id="@+id/editTextSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/search"
-            android:maxLines="1"
-            android:singleLine="true" />
-
-        <TextView
-            android:id="@+id/textViewFrom"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/editTextSearch"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/from" />
-
-        <TextView
-            android:id="@+id/textViewStartDate"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editTextSearch"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_toRightOf="@id/textViewFrom"
-            android:singleLine="true"
-            android:text="@string/date"
-            android:textAlignment="center" />
-
-        <TextView
-            android:id="@+id/textViewStartTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editTextSearch"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_toRightOf="@id/textViewStartDate"
-            android:singleLine="true"
-            android:text="@string/time"
-            android:textAlignment="center" />
-
-        <TextView
-            android:id="@+id/textViewTo"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewFrom"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/to" />
-
-        <TextView
-            android:id="@+id/textViewToDate"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewFrom"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_toRightOf="@id/textViewTo"
-            android:singleLine="true"
-            android:text="@string/date"
-            android:textAlignment="center" />
-
-        <TextView
-            android:id="@+id/textViewToTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewFrom"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_toRightOf="@id/textViewToDate"
-            android:singleLine="true"
-            android:text="@string/time"
-            android:textAlignment="center" />
-    </RelativeLayout>
-
-    <RelativeLayout
+    <include
         android:id="@+id/loginLayout"
+        layout="@layout/fragment_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="#40ffffff">
+        android:background="#ffffffff" />
 
-        <ImageView
-            android:id="@+id/imageViewLoginLogo"
-            android:layout_width="110dp"
-            android:layout_height="70dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="3dp"
-            android:src="@drawable/bosch_logo" />
+    <include
+        android:id="@+id/menuLayout"
+        layout="@layout/fragment_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent" />
 
-        <EditText
-            android:id="@+id/editTextUsername"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/editTextPassword"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:hint="Username"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="@string/default_username" />
-
-        <EditText
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/chkBoxSaveCredentials"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="@string/default_password" />
-
-        <CheckBox
-            android:id="@+id/chkBoxSaveCredentials"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/loginButton"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:checked="true"
-            android:paddingLeft="10dp"
-            android:text="@string/save_credentials" />
-
-        <Button
-            android:id="@+id/loginButton"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:onClick="onLoginButtonClicked"
-            android:text="@string/action_login" />
-
-    </RelativeLayout>
 
 </RelativeLayout>

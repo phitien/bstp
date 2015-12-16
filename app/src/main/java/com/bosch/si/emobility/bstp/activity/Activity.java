@@ -1,6 +1,9 @@
 package com.bosch.si.emobility.bstp.activity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.helper.Constants;
@@ -40,6 +43,14 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
         String message = event.getMessage();
         if (message != null || !message.isEmpty()) {
             Utils.Notifier.notify(message);
+        }
+    }
+
+    protected void hideKeyboard() {
+        View v = getWindow().getCurrentFocus();
+        if (v != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
     }
 }

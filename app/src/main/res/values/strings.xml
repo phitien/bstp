@@ -14,4 +14,11 @@
     <string name="to">To</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
+    <string name="home">Home</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="logout">Logout</string>
+    <string name="about">About</string>
+
+    <string name="place_details">&lt;b&gt;%1$s&lt;/b&gt;&lt;br/&gt;&lt;i&gt;Place Id: %2$s&lt;/i&gt;&lt;br/&gt;Address: %3$s&lt;br/&gt;Phone: %4$s&lt;br/&gt;Website: %5$s</string>
+    <string name="autocomplete_hint">Enter place name or address</string>
 </resources>

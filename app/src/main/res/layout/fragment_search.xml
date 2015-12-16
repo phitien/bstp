@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <!--<EditText-->
+        <!--android:id="@+id/editTextSearch"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:maxLines="1"-->
+        <!--android:singleLine="true" />-->
+
+    <AutoCompleteTextView
+        android:id="@+id/editTextSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/autocomplete_hint"
+        android:singleLine="true" />
+
+    <ImageButton
+        android:id="@+id/imageButtonClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <TextView
+        android:id="@+id/textViewFrom"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextSearch"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/from" />
+
+    <TextView
+        android:id="@+id/textViewFromDate"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextSearch"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@id/textViewFrom"
+        android:singleLine="true"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textViewFromTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextSearch"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@id/textViewFromDate"
+        android:singleLine="true"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textViewTo"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFrom"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/to" />
+
+    <TextView
+        android:id="@+id/textViewToDate"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFrom"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@id/textViewTo"
+        android:singleLine="true"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textViewToTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFrom"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@id/textViewToDate"
+        android:singleLine="true"
+        android:textAlignment="center" />
+
+</RelativeLayout>

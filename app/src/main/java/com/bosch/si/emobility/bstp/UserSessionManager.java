@@ -42,10 +42,12 @@ public class UserSessionManager {
         try {
             this.user = user;
             deleteCredentialsFile();//delete old file
-            String base64EncryptedCredentialsData = new AESCryptor().encryptData(this.user.toJsonString());
-            FileOutputStream outputStream = new FileOutputStream(this.credentialsFile);
-            outputStream.write(base64EncryptedCredentialsData.getBytes());
-            outputStream.close();
+            if (this.user != null && this.user.isValid()) {
+                String base64EncryptedCredentialsData = new AESCryptor().encryptData(this.user.toJsonString());
+                FileOutputStream outputStream = new FileOutputStream(this.credentialsFile);
+                outputStream.write(base64EncryptedCredentialsData.getBytes());
+                outputStream.close();
+            }
         } catch (Exception e) {
             Utils.Log.e("BSTP_UserSessionManager_setUser", e.getMessage());
         }

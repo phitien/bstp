@@ -64,6 +64,7 @@ dependencies {
 
     // Google services
     compile 'com.google.android.gms:play-services:8.1.0'
+    compile 'com.google.maps.android:android-maps-utils:0.3.4'
 
     // Unit testing dependencies
     testCompile 'junit:junit:4.12'

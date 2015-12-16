@@ -4,12 +4,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.AdapterView;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.UserSessionManager;
+import com.bosch.si.emobility.bstp.activity.component.LoginComponent;
+import com.bosch.si.emobility.bstp.activity.component.MapComponent;
+import com.bosch.si.emobility.bstp.activity.component.MenuComponent;
+import com.bosch.si.emobility.bstp.activity.component.SearchComponent;
 import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
@@ -17,41 +19,45 @@ import com.bosch.si.emobility.bstp.model.User;
 import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONObject;
 import org.json.XML;
 
 public class MapsActivity extends Activity implements LocationListener {
 
-    private GoogleMap map;
-    private SupportMapFragment mapFragment;
-    private View mapView;
-    private ImageButton imageButtonSearch;
-    private ImageButton imageButtonMenu;
-    private RelativeLayout searchLayout;
-    private RelativeLayout loginLayout;
-    private EditText editTextUsername;
-    private EditText editTextPassword;
+    MapComponent mapPart;
+    LoginComponent loginPart;
+    SearchComponent searchPart;
+    MenuComponent menuPart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapView = findViewById(R.id.map);
-        loginLayout = (RelativeLayout) findViewById(R.id.loginLayout);
-        editTextUsername = (EditText) findViewById(R.id.editTextUsername);
-        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 
-        searchLayout = (RelativeLayout) findViewById(R.id.searchLayout);
-        searchLayout.setVisibility(RelativeLayout.GONE);
-        imageButtonSearch = (ImageButton) findViewById(R.id.imageButtonSearch);
-        imageButtonMenu = (ImageButton) findViewById(R.id.imageButtonMenu);
+        setContentView(R.layout.activity_maps);
+
+        mapPart = MapComponent.getInstance(this);
+        loginPart = LoginComponent.getInstance(this);
+        searchPart = SearchComponent.getInstance(this);
+        menuPart = MenuComponent.getInstance(this);
+        menuPart.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                menuPart.toggleView();
+                if (position == 0) {
+
+                } else if (position == 1) {
+
+                } else if (position == 2) {
+
+                } else if (position == 3) {
+                    logout();
+                }
+            }
+        });
 
         checkAuthentication();
     }
@@ -59,44 +65,6 @@ public class MapsActivity extends Activity implements LocationListener {
     @Override
     protected void onResume() {
         super.onResume();
-        checkAuthentication();
-    }
-
-    private void setUpMap() {
-        map = mapFragment.getMap();
-        if (map != null) {
-            map.setMyLocationEnabled(true);
-            if (mapView != null && mapView.findViewById(1) != null) {
-                // Get the button view
-                View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
-                // and next place it, on bottom right (as Google Maps app)
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-                // position on right bottom
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-                layoutParams.setMargins(30, 30, 30, 30);
-            }
-            map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-                @Override
-                public void onMyLocationChange(Location location) {
-
-                }
-            });
-            zoomToMyLocation();
-        }
-
-    }
-
-    private void zoomToMyLocation() {
-        Location location = Utils.getMyLocation(this);
-        LatLng myLatLng;
-        if (location != null)
-            myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        else
-            myLatLng = new LatLng(0, 0);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 11.0f));
-        map.addMarker(new MarkerOptions().position(myLatLng).title("It's Me!"));
     }
 
 
@@ -115,7 +83,12 @@ public class MapsActivity extends Activity implements LocationListener {
 
     @Override
     public void onBackPressed() {
-        moveTaskToBack(true);
+        if (searchPart.isShown()) {
+            searchPart.toggleView();
+        }
+        if (menuPart.isShown()) {
+            menuPart.toggleView();
+        }
     }
 
     @Override
@@ -147,42 +120,20 @@ public class MapsActivity extends Activity implements LocationListener {
     }
 
     private void setEnabled(boolean enabled) {
-        int visibility = enabled ? View.VISIBLE : View.INVISIBLE;
-        if (mapView != null) {
-            mapView.setEnabled(enabled);
-            mapView.setVisibility(visibility);
-        }
-        imageButtonSearch.setEnabled(enabled);
-        imageButtonSearch.setVisibility(visibility);
-        imageButtonMenu.setEnabled(enabled);
-        imageButtonMenu.setVisibility(visibility);
-        searchLayout.setEnabled(enabled);
-        searchLayout.setVisibility(visibility);
+        mapPart.setEnabled(enabled);
+        searchPart.setEnabled(false);
+        menuPart.setEnabled(false);
     }
 
     private void showLoginDialog() {
-        loginLayout.setVisibility(View.VISIBLE);
+        loginPart.setEnabled(true);
         setEnabled(false);
-//        loginLayout.animate()
-//                .translationY(loginLayout.getHeight())
-//                .alpha(0.0f)
-//                .setListener(new AnimatorListenerAdapter() {
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        super.onAnimationEnd(animation);
-//                        loginLayout.setVisibility(View.VISIBLE);
-//                        setEnabled(false);
-//                    }
-//                })
-//                .alpha(1.0f);
     }
 
     public void onLoginButtonClicked(View view) {
         Utils.Indicator.show();
         //call login rest service and setup map after succeed
-        final User user = new User();
-        user.setUsername(editTextUsername.getText().toString());
-        user.setPassword(editTextPassword.getText().toString());
+        final User user = loginPart.getUser();
 
         LoginService loginService = new LoginService();
         loginService.user = user;
@@ -198,49 +149,57 @@ public class MapsActivity extends Activity implements LocationListener {
                     Event.broadcast(Utils.getString(R.string.login_ok), Constants.EventType.LOGIN_OK.toString());
                 } catch (Exception e) {
                     logout();
+                    Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
                 }
             }
 
             @Override
             public void failure(IService service) {
                 logout();
+                Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
             }
         });
     }
 
     private void logout() {
+        showLoginDialog();
         UserSessionManager.getInstance().clearUserSession();
-        Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
     }
 
     private void openMap() {
-        loginLayout.setVisibility(View.INVISIBLE);
+        loginPart.setEnabled(false);
         setEnabled(true);
-        setUpMap();
-//        loginLayout.animate()
-//                .translationY(0)
-//                .alpha(1.0f)
-//                .setListener(new AnimatorListenerAdapter() {
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        super.onAnimationEnd(animation);
-//                        loginLayout.setVisibility(View.INVISIBLE);
-//                        setEnabled(true);
-//                        setUpMap();
-//                    }
-//                })
-//                .alpha(0.0f);
+        mapPart.setUpMap();
     }
 
     public void onSearchButtonClicked(View view) {
-        if (searchLayout.getVisibility() != View.VISIBLE) {
-            searchLayout.setVisibility(View.VISIBLE);
-        } else {
-            searchLayout.setVisibility(View.INVISIBLE);
-        }
+        searchPart.toggleView();
     }
 
     public void onMenuButtonClicked(View view) {
+        menuPart.toggleView();
     }
 
+    public LatLngBounds getCurrentLatLngBounds() {
+        LatLngBounds bounds = mapPart.getCurrentLatLngBounds();
+        if (bounds == null) {
+            Location location = Utils.getMyLocation(this);
+            LatLng center;
+            if (location != null)
+                center = new LatLng(location.getLatitude(), location.getLongitude());
+            else
+                center = new LatLng(0, 0);
+            double radius = 5000;
+            LatLng southwest = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 225);
+            LatLng northeast = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 45);
+            bounds = new LatLngBounds(southwest, northeast);
+        }
+        return bounds;
+    }
+
+    public void moveCamera(LatLng latLng) {
+        hideKeyboard();
+        mapPart.moveCamera(latLng);
+        //TODO display parking spaces
+    }
 }

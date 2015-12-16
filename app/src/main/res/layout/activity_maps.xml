@@ -25,6 +25,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="3dp"
         android:src="@drawable/bosch_logo" />
 
     <ImageButton
@@ -52,9 +53,10 @@
     <RelativeLayout
         android:id="@+id/searchLayout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="72dp"
-        android:background="#40000000">
+        android:layout_height="130dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="75dp"
+        android:background="#eeffffff">
 
         <EditText
             android:id="@+id/editTextSearch"
@@ -62,10 +64,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:hint="@string/search"
             android:maxLines="1"
-            android:singleLine="true"
-            android:text="@string/default_tenant" />
+            android:singleLine="true" />
 
     </RelativeLayout>
 
@@ -76,20 +78,17 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:alpha="127"
-        android:background="#80000000">
+        android:background="#40ffffff">
 
-        <EditText
-            android:id="@+id/editTextTenant"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/editTextUsername"
+        <ImageView
+            android:id="@+id/imageViewLoginLogo"
+            android:layout_width="110dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:hint="Tenant"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="@string/default_tenant" />
+            android:layout_marginTop="3dp"
+            android:src="@drawable/bosch_logo" />
 
         <EditText
             android:id="@+id/editTextUsername"
@@ -131,9 +130,8 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/editTextTenant"
             android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/editTextTenant"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:onClick="onLoginButtonClicked"

@@ -3,6 +3,7 @@ package com.bosch.si.emobility.bstp.activity;
 import android.os.Bundle;
 
 import com.bosch.si.emobility.bstp.app.Event;
+import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
 
 import de.greenrobot.event.EventBus;
@@ -36,8 +37,9 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     // method that will be called when someone posts an event NetworkStateChanged
     @Override
     public void onEventMainThread(Event event) {
-        if (event.getType() == Event.TYPE.MESSAGE) {
-            Utils.Notifier.notify(event.getMessage());
+        String message = event.getMessage();
+        if (message != null || !message.isEmpty()) {
+            Utils.Notifier.notify(message);
         }
     }
 }

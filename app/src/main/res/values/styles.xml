@@ -3,11 +3,20 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+        <item name="colorPrimary">@color/BoschColorPrimary</item>
+        <item name="colorPrimaryDark">@color/BoschColorPrimaryDark</item>
+        <item name="colorAccent">@color/BoschColorAccent</item>
     </style>
 
     <style name="NoTitleFullscreenTheme" parent="android:Theme.Holo.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
 </resources>

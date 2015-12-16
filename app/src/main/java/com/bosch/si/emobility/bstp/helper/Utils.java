@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.app.Application;
+import com.bosch.si.emobility.bstp.app.Event;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,6 +24,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by sgp0458 on 4/12/15.

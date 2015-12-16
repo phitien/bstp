@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black_overlay">#66000000</color>
+
+    <color name="BoschColorPrimary">#225577</color>
+    <color name="BoschColorPrimaryDark">#225577</color>
+    <color name="BoschColorAccent">#225577</color>
+    <color name="background">#ffffff</color>
+
+    <color name="Unselected">#505052</color>
+    <color name="Selected">#225577</color>
+
+    <color name="ButtonPressed">#116688</color>
+    <color name="ButtonPressedStroke">#116688</color>
+    <color name="ButtonFocused">#116688</color>
+    <color name="ButtonFocusedStroke">#116688</color>
+    <color name="Button">#225577</color>
+    <color name="ButtonStroke">#225577</color>
+
+    <color name="button_text_color">#ffffff</color>
+
+    <color name="edittext_text_color">#505052</color>
+    <color name="edittext_text_color_hint">#767678</color>
+
+    <color name="switch_text_color">#665C56</color>
+    <color name="checkbox_text_color">#665C56</color>
+
+</resources>

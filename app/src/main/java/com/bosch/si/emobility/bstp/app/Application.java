@@ -1,6 +1,7 @@
 package com.bosch.si.emobility.bstp.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 /**
@@ -29,6 +30,13 @@ public class Application extends android.app.Application {
 
     public Activity getCurrentContext() {
         return currentContext;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks());
     }
 
     private final class ActivityLifecycleCallbacks implements android.app.Application.ActivityLifecycleCallbacks {

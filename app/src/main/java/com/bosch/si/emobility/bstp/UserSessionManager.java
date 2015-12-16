@@ -1,52 +1,23 @@
 package com.bosch.si.emobility.bstp;
 
+import android.util.Base64;
+
+import com.bosch.si.emobility.bstp.helper.Utils;
+import com.bosch.si.emobility.bstp.model.User;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.security.KeyStore;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
 /**
  * Created by sgp0458 on 8/12/15.
  */
 public class UserSessionManager {
-
-    private class Credential {
-        private String username;
-        private String password;
-        private String tenant;
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getTenant() {
-            return tenant;
-        }
-
-        public void setTenant(String tenant) {
-            this.tenant = tenant;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public boolean isValid() {
-            if (this.username == null || this.username.length() <= 0) {
-                return false;
-            }
-            if (this.password == null || this.password.length() <= 0) {
-                return false;
-            }
-            if (this.tenant == null || this.tenant.length() <= 0) {
-                return false;
-            }
-            return true;
-        }
-    }
 
     private static UserSessionManager ourInstance = new UserSessionManager();
 
@@ -55,19 +26,147 @@ public class UserSessionManager {
     }
 
     private UserSessionManager() {
+        restoreSession();
     }
 
-    protected Credential credential;
+    public void clearUserSession() {
+        setUserSession(null);
+    }
 
-    public Credential getCredential() {
-        return credential;
+    private User user;
+    private static final String CREDENTIALS_FILE_NAME = "config.dat";
+    private static final String CREDENTIALS_FOLDER_NAME = "Credentials";
+    private File credentialsFile = Utils.getFile(CREDENTIALS_FOLDER_NAME, CREDENTIALS_FILE_NAME);
+
+    public void setUserSession(User user) {
+        try {
+            this.user = user;
+            deleteCredentialsFile();//delete old file
+            String base64EncryptedCredentialsData = new AESCryptor().encryptData(this.user.toJsonString());
+            FileOutputStream outputStream = new FileOutputStream(this.credentialsFile);
+            outputStream.write(base64EncryptedCredentialsData.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            Utils.Log.e("BSTP_UserSessionManager_setUser", e.getMessage());
+        }
+    }
+
+
+    private void restoreSession() {
+        try {
+            if (user == null) {
+                String base64EncryptedCredentialsData = Utils.getFileContent(CREDENTIALS_FOLDER_NAME, CREDENTIALS_FILE_NAME);
+                if (base64EncryptedCredentialsData != null) {
+                    String decryptedCredentialsData = new AESCryptor().decryptData(base64EncryptedCredentialsData);
+                    setUserSession(User.parseUser(decryptedCredentialsData));
+                }
+            }
+        } catch (Exception e) {
+            Utils.Log.e("BSTP_UserSessionManager_restoreSession", e.getMessage());
+        }
+    }
+
+    private void deleteCredentialsFile() {
+        if (this.credentialsFile.exists()) {
+            this.credentialsFile.delete();
+        }
     }
 
     public boolean isLogged() {
+        if (user != null) {
+            return this.user.isValid();
+        }
         return false;
-//        if (credential != null) {
-//            return this.credential.isValid();
-//        }
-//        return false;
     }
+
+    public static class AESCryptor {
+
+        private static final String AES_ALGORITHM_SPEC = "AES/CBC/PKCS5Padding";
+        private static final String ANDROID_OPEN_SSL = "AndroidOpenSSL";
+        private static final byte[] ivBytes = {0x77, 0x05, 0x40, 0x70, 0x65, 0x32, 0x54, 0x68, 0x39, 0x28, 0x18, 0x47, 0x35, 0x09, 0x23, 0x20};
+
+        public static String encryptData(String input) {
+            try {
+                SecretKey secretKey = KeyStoreManager.getSecretKey();
+                byte[] inputDataBytes = input.getBytes();
+                Cipher cipher = Cipher.getInstance(AES_ALGORITHM_SPEC, "BC");
+                IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+                byte[] encryptedDataBytes = cipher.doFinal(inputDataBytes, 0, inputDataBytes.length);
+                String base64EncodedDataBytes = Base64.encodeToString(encryptedDataBytes, Base64.DEFAULT);
+                return base64EncodedDataBytes;
+            } catch (Exception e) {
+                Utils.Log.e("BSTP_AESCryptor_encryptData", e.getMessage());
+            }
+            return null;
+        }
+
+        public String decryptData(String input) {
+            try {
+                SecretKey secretKey = KeyStoreManager.getSecretKey();
+                byte[] decodedInputDataBytes = Base64.decode(input.getBytes(), Base64.DEFAULT);
+                Cipher cipher = Cipher.getInstance(AES_ALGORITHM_SPEC, "BC");
+                IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+                cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
+                byte[] decryptedDataBytes = cipher.doFinal(decodedInputDataBytes, 0, decodedInputDataBytes.length);
+                String decryptedString = new String(decryptedDataBytes, "UTF-8");
+                return decryptedString;
+            } catch (Exception e) {
+                Utils.Log.e("BSTP_AESCryptor_decryptData", e.getMessage());
+            }
+            return null;
+        }
+    }
+
+    public static class KeyStoreManager {
+
+        private static final String RSA_KEY_ALIAS = "APLM_RSA_KEY";
+        private static final String AES_KEY_ALIAS = "APLM_AES_KEY";
+        private static final String KEY_STORE_ALIAS = "AndroidKeyStore";
+        private static SecretKeyManager secretKeyManager = null;
+
+        //get secret key
+        public static SecretKey getSecretKey() {
+
+            if (secretKeyManager == null) {
+                secretKeyManager = new SecretKeyManager(AES_KEY_ALIAS);
+                secretKeyManager.generateOrRestoreSecretKey();
+            }
+            return secretKeyManager.getSecretKey();
+        }
+    }
+
+    public static class SecretKeyManager {
+        private SecretKey secretKey = null;
+        private String aesKey = null;
+        private static final byte[] aesSeedData = {0x75, 0x55, 0x34, 0x23, 0x62, 0x02, 0x26, 0x37, 0x49, 0x22, 0x58, 0x67, 0x45, 0x29, 0x43, 0x50};
+
+        public SecretKeyManager(String aesKey) {
+            this.aesKey = aesKey;
+        }
+
+        public SecretKey getSecretKey() {
+            if (secretKey == null) {
+                generateOrRestoreSecretKey();
+            }
+            return secretKey;
+        }
+
+        public void generateOrRestoreSecretKey() {
+            try {
+                KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                keyStore.load(null);
+                this.secretKey = (SecretKey) keyStore.getKey(this.aesKey, null);
+                if (this.secretKey == null) {
+                    SecretKey key = new SecretKeySpec(aesSeedData, "AES");
+                    KeyStore.SecretKeyEntry skEntry = new KeyStore.SecretKeyEntry(key);
+                    keyStore.setEntry(this.aesKey, skEntry, null);
+                    this.secretKey = key;
+                }
+            } catch (Exception e) {
+                Utils.Log.e("BSTP_SecretKeyManager_generateOrRestoreSecretKey", e.getMessage());
+            }
+        }
+    }
+
 }

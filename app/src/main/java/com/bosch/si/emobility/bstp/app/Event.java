@@ -8,16 +8,13 @@ import de.greenrobot.event.EventBus;
  * Created by sgp0458 on 8/12/15.
  */
 public class Event {
-    public enum TYPE {
-        MESSAGE
-    }
 
-    protected TYPE type;
+    protected String type;
     protected String message;
     protected Object reference;
 
     public Event() {
-        type = TYPE.MESSAGE;
+        type = "MESSAGE";
         message = "";
         reference = null;
     }
@@ -38,18 +35,18 @@ public class Event {
         this.reference = reference;
     }
 
-    public TYPE getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(TYPE type) {
+    public void setType(String type) {
         this.type = type;
     }
 
     /**
      * @param message
      */
-    public static void broadcastMessage(String message) {
+    public static void broadcast(String message) {
         try {
             Event event = new Event();
             event.setMessage(message);
@@ -63,7 +60,7 @@ public class Event {
      * @param message
      * @param type
      */
-    public static void broadcastMessage(String message, TYPE type) {
+    public static void broadcast(String message, String type) {
         try {
             Event event = new Event();
             event.setMessage(message);

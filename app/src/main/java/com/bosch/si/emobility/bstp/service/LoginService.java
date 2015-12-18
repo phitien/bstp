@@ -1,9 +1,12 @@
 package com.bosch.si.emobility.bstp.service;
 
 import com.bosch.si.emobility.bstp.model.User;
-import com.bosch.si.rest.method.POST;
+import com.bosch.si.rest.anno.ContentType;
+import com.bosch.si.rest.anno.POST;
+import com.google.gson.annotations.Expose;
 
-@POST(value = "http://10.55.112.10:8080/im-server/1/rest/authentication", contentType = "application/vnd.bosch-com.im+xml")
+@ContentType("application/vnd.bosch-com.im+xml")
+@POST("http://ivsrv034.bosch-si.com:8080/im-server/1/rest/authentication")
 public class LoginService extends BaseService {
 
     public User user;

@@ -10,7 +10,7 @@ public class Constants {
     public static final long MIN_TIME_BW_UPDATES = 1000;
     public static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 0F;
     public static final int PERMISSIONS_REQUEST_RESULT = 11;
-    public static final String BASE_URL = "http://10.55.112.10:8080/";
+    public static final String BASE_URL = "http://ivsrv034.bosch-si.com:9000";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String TENANT_NAME = "tenantName";

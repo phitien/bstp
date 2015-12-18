@@ -19,19 +19,20 @@ import com.bosch.si.emobility.bstp.model.User;
 import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
-import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONObject;
 import org.json.XML;
 
+import java.util.Date;
+
 public class MapsActivity extends Activity implements LocationListener {
 
-    MapComponent mapPart;
-    LoginComponent loginPart;
-    SearchComponent searchPart;
-    MenuComponent menuPart;
+    MapComponent mapComponent;
+    LoginComponent loginComponent;
+    SearchComponent searchComponent;
+    MenuComponent menuComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +40,14 @@ public class MapsActivity extends Activity implements LocationListener {
 
         setContentView(R.layout.activity_maps);
 
-        mapPart = MapComponent.getInstance(this);
-        loginPart = LoginComponent.getInstance(this);
-        searchPart = SearchComponent.getInstance(this);
-        menuPart = MenuComponent.getInstance(this);
-        menuPart.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mapComponent = MapComponent.getInstance(this);
+        loginComponent = LoginComponent.getInstance(this);
+        searchComponent = SearchComponent.getInstance(this);
+        menuComponent = MenuComponent.getInstance(this);
+        menuComponent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                menuPart.toggleView();
+                menuComponent.toggleView();
                 if (position == 0) {
 
                 } else if (position == 1) {
@@ -83,11 +84,11 @@ public class MapsActivity extends Activity implements LocationListener {
 
     @Override
     public void onBackPressed() {
-        if (searchPart.isShown()) {
-            searchPart.toggleView();
+        if (searchComponent.isShown()) {
+            searchComponent.toggleView();
         }
-        if (menuPart.isShown()) {
-            menuPart.toggleView();
+        if (menuComponent.isShown()) {
+            menuComponent.toggleView();
         }
     }
 
@@ -120,20 +121,20 @@ public class MapsActivity extends Activity implements LocationListener {
     }
 
     private void setEnabled(boolean enabled) {
-        mapPart.setEnabled(enabled);
-        searchPart.setEnabled(false);
-        menuPart.setEnabled(false);
+        mapComponent.setEnabled(enabled);
+        searchComponent.setEnabled(false);
+        menuComponent.setEnabled(false);
     }
 
     private void showLoginDialog() {
-        loginPart.setEnabled(true);
+        loginComponent.setEnabled(true);
         setEnabled(false);
     }
 
     public void onLoginButtonClicked(View view) {
         Utils.Indicator.show();
         //call login rest service and setup map after succeed
-        final User user = loginPart.getUser();
+        final User user = loginComponent.getUser();
 
         LoginService loginService = new LoginService();
         loginService.user = user;
@@ -167,39 +168,34 @@ public class MapsActivity extends Activity implements LocationListener {
     }
 
     private void openMap() {
-        loginPart.setEnabled(false);
+        loginComponent.setEnabled(false);
         setEnabled(true);
-        mapPart.setUpMap();
+        mapComponent.setUpMap();
     }
 
     public void onSearchButtonClicked(View view) {
-        searchPart.toggleView();
+        searchComponent.toggleView();
     }
 
     public void onMenuButtonClicked(View view) {
-        menuPart.toggleView();
+        menuComponent.toggleView();
     }
 
     public LatLngBounds getCurrentLatLngBounds() {
-        LatLngBounds bounds = mapPart.getCurrentLatLngBounds();
-        if (bounds == null) {
-            Location location = Utils.getMyLocation(this);
-            LatLng center;
-            if (location != null)
-                center = new LatLng(location.getLatitude(), location.getLongitude());
-            else
-                center = new LatLng(0, 0);
-            double radius = 5000;
-            LatLng southwest = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 225);
-            LatLng northeast = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 45);
-            bounds = new LatLngBounds(southwest, northeast);
-        }
-        return bounds;
+        return mapComponent.getCurrentLatLngBounds();
     }
 
-    public void moveCamera(LatLng latLng) {
+    public void moveCamera(Place place) {
         hideKeyboard();
-        mapPart.moveCamera(latLng);
-        //TODO display parking spaces
+        mapComponent.moveCamera(place.getLatLng());
     }
+
+    public Date getFromDate() {
+        return searchComponent.getFromDate();
+    }
+
+    public Date getToDate() {
+        return searchComponent.getToDate();
+    }
+
 }

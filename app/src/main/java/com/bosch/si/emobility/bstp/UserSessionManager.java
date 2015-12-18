@@ -53,6 +53,9 @@ public class UserSessionManager {
         }
     }
 
+    public User getUser() {
+        return user;
+    }
 
     private void restoreSession() {
         try {

@@ -2,19 +2,24 @@ package com.bosch.si.rest;
 
 import android.os.AsyncTask;
 
+import com.bosch.si.rest.anno.ContentType;
+import com.bosch.si.rest.anno.DELETE;
+import com.bosch.si.rest.anno.GET;
+import com.bosch.si.rest.anno.POST;
+import com.bosch.si.rest.anno.PUT;
 import com.bosch.si.rest.callback.IServiceCallback;
 import com.bosch.si.rest.connection.IServiceConnection;
 import com.bosch.si.rest.connection.ServiceConnection;
-import com.bosch.si.rest.method.DELETE;
-import com.bosch.si.rest.method.GET;
-import com.bosch.si.rest.method.POST;
-import com.bosch.si.rest.method.PUT;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -53,6 +58,8 @@ public abstract class AbstractService implements IService {
     protected IServiceConnection connection;
 
     protected Executor executor = AsyncTask.SERIAL_EXECUTOR;
+
+    protected String authorization = null;
 
     protected String responseString = null;
 
@@ -154,6 +161,13 @@ public abstract class AbstractService implements IService {
 
     @Override
     public String getBody() {
+        if (body == null) {
+            Gson gson = new GsonBuilder()
+                    .excludeFieldsWithModifiers(Modifier.PRIVATE)
+                    .excludeFieldsWithModifiers(Modifier.PROTECTED)
+                    .create();
+            return gson.toJson(this).toString();
+        }
         return body;
     }
 
@@ -213,6 +227,16 @@ public abstract class AbstractService implements IService {
     @Override
     public Executor getExecutor() {
         return executor;
+    }
+
+    @Override
+    public String getAuthorization() {
+        return authorization;
+    }
+
+    @Override
+    public void setAuthorization(String authorization) {
+        this.authorization = authorization;
     }
 
     @Override
@@ -425,14 +449,6 @@ public abstract class AbstractService implements IService {
         return responseString;
     }
 
-    @Override
-    public void setAuthorization(HttpURLConnection conn) {
-        String cookie = getRequestCookie();
-        if (cookie != null && !cookie.isEmpty()) {
-            conn.setRequestProperty(COOKIE, cookie);
-        }
-    }
-
     protected String getFieldValue(String fieldName) {
         try {
             Field field = this.getDeclaredClass().getField(fieldName);
@@ -450,40 +466,11 @@ public abstract class AbstractService implements IService {
             URLConnection conn = url.openConnection();
             if (conn instanceof HttpsURLConnection) {
                 HttpsURLConnection httpsConn = (HttpsURLConnection) conn;
-                httpsConn.setReadTimeout(getReadTimeout());
-                httpsConn.setConnectTimeout(getConnectTimeout());
-                httpsConn.setRequestMethod(getMethod().toString());
-                httpsConn.setRequestProperty(CONTENT_TYPE, getContentType());
-                httpsConn.setUseCaches(false);
-                httpsConn.setInstanceFollowRedirects(false);
-                setAuthorization(httpsConn);
-                //set params for non-get method
-                String body = getBody();
-                if (getMethod() != METHOD.GET && body != null && !body.isEmpty()) {
-                    byte[] postDataBytes = body.getBytes(UTF_8);
-                    httpsConn.setRequestProperty(CONTENT_LENGTH, "" + Integer.toString(postDataBytes.length));
-                    httpsConn.setDoInput(true);
-                    httpsConn.setDoOutput(true);
-                    httpsConn.getOutputStream().write(postDataBytes);
-                }
+                updateConnectionParams(httpsConn);
                 return new ServiceConnection(httpsConn);
             } else if (conn instanceof HttpURLConnection) {
                 HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
-                httpConn.setReadTimeout(getReadTimeout());
-                httpConn.setConnectTimeout(getConnectTimeout());
-                httpConn.setRequestMethod(getMethod().toString());
-                httpConn.setRequestProperty(CONTENT_TYPE, getContentType());
-                httpConn.setUseCaches(false);
-                setAuthorization(httpConn);
-                //set params for non-get method
-                String body = getBody();
-                if (getMethod() != METHOD.GET && body != null && !body.isEmpty()) {
-                    byte[] postDataBytes = body.getBytes(UTF_8);
-                    httpConn.setRequestProperty(CONTENT_LENGTH, "" + Integer.toString(postDataBytes.length));
-                    httpConn.setDoInput(true);
-                    httpConn.setDoOutput(true);
-                    httpConn.getOutputStream().write(postDataBytes);
-                }
+                updateConnectionParams(httpConn);
                 return new ServiceConnection(httpConn);
             } else {
                 System.out.print("REST_AbstractService_getURLConnection: " + "Could not find url connection");
@@ -492,6 +479,35 @@ public abstract class AbstractService implements IService {
             System.out.print("REST_AbstractService_getURLConnection: " + e.getMessage());
         }
         return null;
+    }
+
+    private void updateConnectionParams(HttpURLConnection conn) throws IOException {
+        conn.setReadTimeout(getReadTimeout());
+        conn.setConnectTimeout(getConnectTimeout());
+        conn.setRequestMethod(getMethod().toString());
+        conn.setRequestProperty(CONTENT_TYPE, getContentType());
+        conn.setUseCaches(false);
+        conn.setInstanceFollowRedirects(false);
+
+        String cookie = getRequestCookie();
+        if (cookie != null && !cookie.isEmpty()) {
+            conn.setRequestProperty(COOKIE, cookie);
+        }
+
+        String authorization = getAuthorization();
+        if (authorization != null && !authorization.isEmpty()) {
+            conn.setRequestProperty("Authorization", authorization);
+        }
+
+        //set params for non-get method
+        String body = getBody();
+        if (getMethod() != METHOD.GET && body != null && !body.isEmpty()) {
+            byte[] postDataBytes = body.getBytes(UTF_8);
+            conn.setRequestProperty(CONTENT_LENGTH, "" + Integer.toString(postDataBytes.length));
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.getOutputStream().write(postDataBytes);
+        }
     }
 
     protected Class<?> getDeclaredClass() {
@@ -504,32 +520,33 @@ public abstract class AbstractService implements IService {
 
     //Set servicePath and method, only proceed with the first one
     protected void updateParams() {
+        updateCoreParams();
+        updateURI();
+    }
+
+    protected void updateCoreParams() {
+        contentType = DEFAULT_CONTENT_TYPE;
         Annotation[] annotations = getDeclaredClass().getAnnotations();
         for (Annotation annotation : annotations) {
             if (annotation instanceof GET) {
-                GET anno = (GET) annotation;
-                servicePath = anno.value().trim().replaceFirst("^/", "");
+                servicePath = ((GET) annotation).value().trim().replaceFirst("^/", "");
                 method = METHOD.GET;
-                contentType = anno.contentType();
             } else if (annotation instanceof POST) {
-                POST anno = (POST) annotation;
-                servicePath = anno.value().trim().replaceFirst("^/", "");
+                servicePath = ((POST) annotation).value().trim().replaceFirst("^/", "");
                 method = METHOD.POST;
-                contentType = anno.contentType();
             } else if (annotation instanceof PUT) {
-                PUT anno = (PUT) annotation;
-                servicePath = anno.value().trim().replaceFirst("^/", "");
+                servicePath = ((PUT) annotation).value().trim().replaceFirst("^/", "");
                 method = METHOD.PUT;
-                contentType = anno.contentType();
             } else if (annotation instanceof DELETE) {
-                DELETE anno = (DELETE) annotation;
-                servicePath = anno.value().trim().replaceFirst("^/", "");
+                servicePath = ((DELETE) annotation).value().trim().replaceFirst("^/", "");
                 method = METHOD.DELETE;
-                contentType = anno.contentType();
+            } else if (annotation instanceof ContentType) {
+                contentType = ((ContentType) annotation).value();
             }
-            break;
         }
+    }
 
+    protected void updateURI() {
         URI = URI == null ? servicePath : URI;
 
         Pattern p = Pattern.compile("\\:(\\w+)");

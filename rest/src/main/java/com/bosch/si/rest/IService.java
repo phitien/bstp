@@ -16,6 +16,7 @@ public interface IService {
     public static final int REST_UNKNOWN_ERROR = -204;
     public static final String CONTENT_LENGTH = "Content-Length";
     public static final String CONTENT_TYPE = "Content-Type";
+    public static final String DEFAULT_CONTENT_TYPE = "application/json";
     public static final String SET_COOKIE = "set-cookie";
     public static final String COOKIE = "cookie";
     public static final String UTF_8 = "UTF-8";
@@ -72,6 +73,10 @@ public interface IService {
 
     public void setExecutor(Executor executor);
 
+    public String getAuthorization();
+
+    public void setAuthorization(String authorization);
+
     public String getResponseString();
 
     public String getResponseCookie();
@@ -79,8 +84,6 @@ public interface IService {
     public int getResponseCode();
 
     public boolean isOK();
-
-    public void setAuthorization(HttpURLConnection conn);
 
     public void executeAsync(IServiceCallback callback);
 

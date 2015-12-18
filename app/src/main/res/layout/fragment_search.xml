@@ -11,11 +11,11 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <!--<EditText-->
-        <!--android:id="@+id/editTextSearch"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:maxLines="1"-->
-        <!--android:singleLine="true" />-->
+    <!--android:id="@+id/editTextSearch"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:maxLines="1"-->
+    <!--android:singleLine="true" />-->
 
     <AutoCompleteTextView
         android:id="@+id/editTextSearch"
@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/textViewFrom"
-        android:layout_width="50dp"
+        android:layout_width="@dimen/date_label_width"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextSearch"
         android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/textViewFromDate"
-        android:layout_width="100dp"
+        android:layout_width="@dimen/date_textview_width"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextSearch"
         android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -62,7 +62,7 @@
 
     <TextView
         android:id="@+id/textViewTo"
-        android:layout_width="50dp"
+        android:layout_width="@dimen/date_label_width"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewFrom"
         android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -70,7 +70,7 @@
 
     <TextView
         android:id="@+id/textViewToDate"
-        android:layout_width="100dp"
+        android:layout_width="@dimen/date_textview_width"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewFrom"
         android:layout_marginTop="@dimen/activity_vertical_margin"

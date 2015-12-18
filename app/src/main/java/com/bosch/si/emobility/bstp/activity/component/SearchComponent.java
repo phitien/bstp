@@ -147,15 +147,13 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
+
         Calendar calendar = Calendar.getInstance();
+
         fromDate = calendar.getTime();
         toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(1));
 
-        textViewFromDate.setText(android.text.format.DateFormat.format("yyyy-MM-dd", fromDate));
-        textViewFromTime.setText(android.text.format.DateFormat.format("hh:mm:ss", fromDate));
-
-        textViewToDate.setText(android.text.format.DateFormat.format("yyyy-MM-dd", toDate));
-        textViewToTime.setText(android.text.format.DateFormat.format("hh:mm:ss", toDate));
+        updateTextViews();
     }
 
     private void validateDates() {
@@ -167,6 +165,15 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
         if (toDate.getTime() < fromDate.getTime()) {
             toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(1));
         }
+        updateTextViews();
+    }
+
+    protected void updateTextViews() {
+        textViewFromDate.setText(DateFormat.format("yyyy-MM-dd", fromDate));
+        textViewFromTime.setText(DateFormat.format("hh:mm:ss", fromDate));
+
+        textViewToDate.setText(DateFormat.format("yyyy-MM-dd", toDate));
+        textViewToTime.setText(DateFormat.format("hh:mm:ss", toDate));
     }
 
     @Override
@@ -189,13 +196,12 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
             toDate = date;
         }
         validateDates();
-        currentTextView.setText(android.text.format.DateFormat.format("yyyy-MM-dd", date));
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Date date;
-        if (currentTextView == textViewFromDate) {
+        if (currentTextView == textViewFromTime) {
             date = fromDate;
         } else {
             date = toDate;
@@ -205,13 +211,12 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
         date = calendar.getTime();
-        if (currentTextView == textViewFromDate) {
+        if (currentTextView == textViewFromTime) {
             fromDate = date;
         } else {
             toDate = date;
         }
         validateDates();
-        currentTextView.setText(android.text.format.DateFormat.format("hh:mm:ss", date));
     }
 
     public static class DatePickerFragment extends DialogFragment {
@@ -233,7 +238,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
-            Date date = currentTextView == textViewFromDate ? fromDate : toDate;
+            Date date = currentTextView == textViewFromTime ? fromDate : toDate;
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
 

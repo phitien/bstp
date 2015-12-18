@@ -4,12 +4,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
+import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
 import com.bosch.si.emobility.bstp.model.ParkingArea;
 import com.bosch.si.emobility.bstp.service.SearchService;
@@ -41,6 +43,16 @@ public class MapComponent extends Component {
     private LatLngBounds currentCameraBounds;
     private Marker myMarker;
     private List<Marker> markers = new ArrayList<>();
+    private LatLng currentLatLng;
+
+    public LatLng getCurrentLatLng() {
+        return currentLatLng;
+    }
+
+    public void setCurrentLatLng(LatLng currentLatLng) {
+        this.currentLatLng = currentLatLng;
+        moveCamera(this.currentLatLng);
+    }
 
     public static MapComponent getInstance(MapsActivity activity) {
         if (activity != null)
@@ -82,56 +94,54 @@ public class MapComponent extends Component {
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
             layoutParams.setMargins(30, 30, 30, 30);
-        }
-        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                currentCameraBounds = map.getProjection().getVisibleRegion().latLngBounds;
-                if (currentCameraBounds != null) {
-                    LatLng center = currentCameraBounds.getCenter();
-                    if (center != null) {
-                        displayParkingAreas(center);
+
+
+            map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                @Override
+                public void onCameraChange(CameraPosition cameraPosition) {
+                    currentCameraBounds = map.getProjection().getVisibleRegion().latLngBounds;
+                    if (currentCameraBounds != null) {
+                        LatLng center = currentCameraBounds.getCenter();
+                        if (center != null) {
+                            displayParkingAreas(center);
+                        }
                     }
                 }
-            }
-        });
-        map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-            @Override
-            public boolean onMyLocationButtonClick() {
-                zoomToMyLocation();
-                return true;
-            }
-        });
-        zoomToMyLocation();
+            });
+            map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                @Override
+                public boolean onMyLocationButtonClick() {
+                    currentLatLng = getMyLocationLatLng();
+                    zoomToLocation(currentLatLng);
+                    return true;
+                }
+            });
+            currentLatLng = Constants.DEFAULT_LOCATION != null ? Constants.DEFAULT_LOCATION : getMyLocationLatLng();
+            zoomToLocation(currentLatLng);
+        }
     }
 
-    private void zoomToMyLocation() {
-        LatLng myLatLng = getMyLocationLatLng();
-        drawMyLocationMarker(myLatLng);
-        moveCamera(myLatLng);
+    private void zoomToLocation(LatLng latLng) {
+        moveCamera(latLng);
     }
 
     private void drawMyLocationMarker(LatLng myLatLng) {
-        if (myMarker == null) {
-            myMarker = map.addMarker(new MarkerOptions().position(myLatLng).title(activity.getString(R.string.its_me)));
-        } else {
-            myMarker.setPosition(myLatLng);
-        }
+        myMarker = map.addMarker(new MarkerOptions().position(myLatLng).title(activity.getString(R.string.its_me)));
     }
 
     @NonNull
     private LatLng getMyLocationLatLng() {
         Location location = Utils.getMyLocation(this.activity);
-        LatLng myLatLng;
+        LatLng latLng;
         if (location != null)
-            myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            latLng = new LatLng(location.getLatitude(), location.getLongitude());
         else
-            myLatLng = new LatLng(0, 0);
-        return myLatLng;
+            latLng = new LatLng(0, 0);
+        return latLng;
     }
 
     public void moveCamera(LatLng latLng) {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0f));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, Constants.DEFAULT_ZOOM_LEVEL));
     }
 
     private void displayParkingAreas(LatLng latLng) {
@@ -157,10 +167,10 @@ public class MapComponent extends Component {
                         List<ParkingArea> parkingAreas = gson.fromJson(service.getResponseString(), new TypeToken<ArrayList<ParkingArea>>() {
                         }.getType());
                         map.clear();
+                        drawMyLocationMarker(currentLatLng);
                         for (ParkingArea parkingArea : parkingAreas) {
                             drawParkingAreaMarker(parkingArea);
                         }
-                        drawMyLocationMarker(getMyLocationLatLng());
                     }
 
                     @Override
@@ -178,10 +188,10 @@ public class MapComponent extends Component {
 
     private void drawParkingAreaMarker(ParkingArea parkingArea) {
         LatLng latLng = new LatLng(parkingArea.latitude, parkingArea.longitude);
-        markers.add(map.addMarker(new MarkerOptions()
+        map.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title(parkingArea.locationTitle)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking))));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)));
     }
 
     public LatLngBounds getCurrentLatLngBounds() {
@@ -198,7 +208,6 @@ public class MapComponent extends Component {
                 LatLng southwest = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 225);
                 LatLng northeast = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 45);
                 return new LatLngBounds(southwest, northeast);
-
             }
             currentCameraBounds = bounds;
         }

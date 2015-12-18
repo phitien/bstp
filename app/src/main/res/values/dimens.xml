@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="margin">16dp</dimen>
     <dimen name="nomargin">0dp</dimen>
+    <dimen name="date_textview_width">83dp</dimen>
+    <dimen name="date_label_width">50dp</dimen>
 </resources>

@@ -187,7 +187,7 @@ public class MapsActivity extends Activity implements LocationListener {
 
     public void moveCamera(Place place) {
         hideKeyboard();
-        mapComponent.moveCamera(place.getLatLng());
+        mapComponent.setCurrentLatLng(place.getLatLng());
     }
 
     public Date getFromDate() {

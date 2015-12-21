@@ -7,7 +7,7 @@ import com.bosch.si.emobility.bstp.activity.MapsActivity;
  */
 public interface IComponent {
 
-    void setEnabled(boolean enabled);
+    void setEnabled(boolean enabled, boolean noAnimation);
 
     void toggleView();
 

@@ -1,6 +1,9 @@
 package com.bosch.si.emobility.bstp.activity.component;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
@@ -10,6 +13,7 @@ import com.bosch.si.emobility.bstp.activity.MapsActivity;
  */
 public abstract class Component implements IComponent {
 
+    private static final long DURATION = 100;
     protected MapsActivity activity;
 
     protected RelativeLayout layout;
@@ -26,17 +30,106 @@ public abstract class Component implements IComponent {
     @Override
     public void toggleView() {
         if (isShown()) {
-            setEnabled(false);
+            setEnabled(false, false);
         } else {
-            setEnabled(true);
+            setEnabled(true, false);
         }
     }
 
+    protected ViewPropertyAnimator slideUp(final boolean enabled) {
+        return layout.animate().translationY(enabled ? 0 : -layout.getHeight())
+                .setDuration(DURATION)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        layout.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                        layout.setAlpha(enabled ? 0.0f : 1.0f);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        layout.setVisibility(enabled ? View.VISIBLE : View.GONE);
+                        layout.setAlpha(enabled ? 1.0f : 0.0f);
+                    }
+                });
+    }
+
+    protected ViewPropertyAnimator slideDown(final boolean enabled) {
+        return layout.animate().translationY(enabled ? 0 : layout.getHeight())
+                .setDuration(DURATION)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        layout.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                        layout.setAlpha(enabled ? 0.0f : 1.0f);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        layout.setVisibility(enabled ? View.VISIBLE : View.GONE);
+                        layout.setAlpha(enabled ? 1.0f : 0.0f);
+                    }
+                });
+    }
+
+    protected ViewPropertyAnimator slideLeft(final boolean enabled) {
+        return layout.animate().translationX(enabled ? 0 : layout.getWidth())
+                .setDuration(DURATION)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        layout.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                        layout.setAlpha(enabled ? 0.0f : 1.0f);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        layout.setVisibility(enabled ? View.VISIBLE : View.GONE);
+                        layout.setAlpha(enabled ? 1.0f : 0.0f);
+                    }
+                });
+    }
+
+    protected ViewPropertyAnimator slideRight(final boolean enabled) {
+        return layout.animate().translationX(enabled ? 0 : -layout.getWidth())
+                .setDuration(DURATION)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        layout.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                        layout.setAlpha(enabled ? 0.0f : 1.0f);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        layout.setVisibility(enabled ? View.VISIBLE : View.GONE);
+                        layout.setAlpha(enabled ? 1.0f : 0.0f);
+                    }
+                });
+    }
+
     @Override
-    public void setEnabled(boolean enabled) {
-        int visibility = enabled ? View.VISIBLE : View.GONE;
+    public void setEnabled(boolean enabled, boolean noAnimation) {
         layout.setEnabled(enabled);
-        layout.setVisibility(visibility);
+        if (!noAnimation && isSlideUp()) {
+            slideUp(enabled);
+        } else if (!noAnimation && isSlidDown()) {
+            slideDown(enabled);
+        } else if (!noAnimation && isSlideLeft()) {
+            slideLeft(enabled);
+        } else if (!noAnimation && isSlideRight()) {
+            slideRight(enabled);
+        } else {
+            layout.setVisibility(enabled ? View.VISIBLE : View.GONE);
+        }
     }
 
     @Override
@@ -45,4 +138,19 @@ public abstract class Component implements IComponent {
     }
 
 
+    protected boolean isSlideUp() {
+        return false;
+    }
+
+    protected boolean isSlidDown() {
+        return false;
+    }
+
+    protected boolean isSlideLeft() {
+        return false;
+    }
+
+    protected boolean isSlideRight() {
+        return false;
+    }
 }

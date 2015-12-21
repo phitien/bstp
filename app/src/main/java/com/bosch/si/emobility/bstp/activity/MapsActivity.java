@@ -97,10 +97,10 @@ public class MapsActivity extends Activity implements LocationListener {
     @Override
     public void onBackPressed() {
         if (searchComponent.isShown()) {
-            searchComponent.toggleView();
+            searchComponent.setEnabled(false, true);
         }
         if (menuComponent.isShown()) {
-            menuComponent.toggleView();
+            menuComponent.setEnabled(false, true);
         }
     }
 
@@ -133,13 +133,14 @@ public class MapsActivity extends Activity implements LocationListener {
     }
 
     private void setEnabled(boolean enabled) {
-        mapComponent.setEnabled(enabled);
-        searchComponent.setEnabled(false);
-        menuComponent.setEnabled(false);
+        mapComponent.setEnabled(enabled, true);
+        searchComponent.setEnabled(false, true);
+        menuComponent.setEnabled(false, true);
     }
 
     private void showLoginDialog() {
-        loginComponent.setEnabled(true);
+        hideKeyboard();
+        loginComponent.setEnabled(true, true);
         setEnabled(false);
     }
 
@@ -184,7 +185,8 @@ public class MapsActivity extends Activity implements LocationListener {
     }
 
     private void openMap() {
-        loginComponent.setEnabled(false);
+        hideKeyboard();
+        loginComponent.setEnabled(false, true);
         setEnabled(true);
     }
 

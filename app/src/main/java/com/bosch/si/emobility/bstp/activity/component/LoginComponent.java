@@ -1,7 +1,5 @@
 package com.bosch.si.emobility.bstp.activity.component;
 
-import android.view.KeyEvent;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,5 +45,10 @@ public class LoginComponent extends Component {
 
     public void setPasswordOnEditorActionListener(TextView.OnEditorActionListener onEditorActionListener) {
         editTextPassword.setOnEditorActionListener(onEditorActionListener);
+    }
+
+    @Override
+    protected boolean isSlidDown() {
+        return true;
     }
 }

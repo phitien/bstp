@@ -3,6 +3,7 @@ package com.bosch.si.emobility.bstp.activity.component;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
@@ -145,15 +147,27 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
+    public void setEnabled(boolean enabled, boolean noAnimation) {
+        super.setEnabled(enabled, noAnimation);
+        hideKeyboard();
+        if (enabled) {
+            Calendar calendar = Calendar.getInstance();
 
-        Calendar calendar = Calendar.getInstance();
+            fromDate = calendar.getTime();
+            toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(1));
 
-        fromDate = calendar.getTime();
-        toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(1));
+            updateTextViews();
+        }
+    }
 
-        updateTextViews();
+    @Override
+    protected boolean isSlideUp() {
+        return true;
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
     }
 
     private void validateDates() {

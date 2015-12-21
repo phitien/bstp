@@ -32,7 +32,7 @@ public class MenuComponent extends Component {
     public void setActivity(MapsActivity activity) {
         super.setActivity(activity);
         layout = (RelativeLayout) this.activity.findViewById(R.id.menuLayout);
-        setEnabled(false);
+        setEnabled(false, true);
         String[] values = new String[]{
                 this.activity.getString(R.string.home),
                 this.activity.getString(R.string.upcoming),
@@ -47,5 +47,10 @@ public class MenuComponent extends Component {
 
     public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
         listViewMenu.setOnItemClickListener(listener);
+    }
+
+    @Override
+    protected boolean isSlideLeft() {
+        return true;
     }
 }

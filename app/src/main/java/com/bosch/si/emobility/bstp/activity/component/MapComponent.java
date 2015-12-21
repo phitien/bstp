@@ -216,7 +216,7 @@ public class MapComponent extends Component {
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled, boolean noAnimation) {
         int visibility = enabled ? View.VISIBLE : View.GONE;
         if (enabled) {
             if (mapView != null && mapView.findViewById(1) != null) {

@@ -1,7 +1,10 @@
 package com.bosch.si.emobility.bstp.activity.component;
 
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
@@ -35,7 +38,6 @@ public class LoginComponent extends Component {
         editTextPassword = (EditText) this.activity.findViewById(R.id.editTextPassword);
     }
 
-
     public User getUser() {
         User user = new User();
         user.setUsername(editTextUsername.getText().toString());
@@ -43,4 +45,7 @@ public class LoginComponent extends Component {
         return user;
     }
 
+    public void setPasswordOnEditorActionListener(TextView.OnEditorActionListener onEditorActionListener) {
+        editTextPassword.setOnEditorActionListener(onEditorActionListener);
+    }
 }

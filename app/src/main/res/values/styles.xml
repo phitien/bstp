@@ -4,9 +4,10 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
-        <item name="colorPrimary">@color/BoschColorPrimary</item>
-        <item name="colorPrimaryDark">@color/BoschColorPrimaryDark</item>
-        <item name="colorAccent">@color/BoschColorAccent</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/primary</item>
+        <item name="android:editTextStyle">@style/App_EditTextStyle</item>
     </style>
 
     <style name="NoTitleFullscreenTheme" parent="android:Theme.Holo.NoActionBar">
@@ -17,6 +18,19 @@
     <style name="WindowAnimationTransition">
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <style name="App_EditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">@dimen/editText_textSize</item>
+    </style>
+
+    <style name="App_ButtonStyle" parent="@android:style/Widget.Button">
+        <item name="android:textColor">@color/button_text_color</item>
+        <item name="android:textSize">@dimen/button_textSize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/button</item>
+        <item name="android:layout_height">34dp</item>
     </style>
 
 </resources>

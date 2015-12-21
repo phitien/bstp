@@ -488,25 +488,26 @@ public abstract class AbstractService implements IService {
         conn.setRequestProperty(CONTENT_TYPE, getContentType());
         conn.setUseCaches(false);
         conn.setInstanceFollowRedirects(false);
-
+        //set cookie
         String cookie = getRequestCookie();
         if (cookie != null && !cookie.isEmpty()) {
             conn.setRequestProperty(COOKIE, cookie);
         }
-
-        String authorization = getAuthorization();
-        if (authorization != null && !authorization.isEmpty()) {
-            conn.setRequestProperty("Authorization", authorization);
-        }
-
         //set params for non-get method
-        String body = getBody();
-        if (getMethod() != METHOD.GET && body != null && !body.isEmpty()) {
-            byte[] postDataBytes = body.getBytes(UTF_8);
-            conn.setRequestProperty(CONTENT_LENGTH, "" + Integer.toString(postDataBytes.length));
+        if (getMethod() != METHOD.GET) {
             conn.setDoInput(true);
             conn.setDoOutput(true);
-            conn.getOutputStream().write(postDataBytes);
+            //set authorization
+            String authorization = getAuthorization();
+            if (authorization != null && !authorization.isEmpty()) {
+                conn.setRequestProperty("Authorization", authorization);
+            }
+            String body = getBody();
+            if (body != null && !body.isEmpty()) {
+                byte[] postDataBytes = body.getBytes(UTF_8);
+                conn.setRequestProperty(CONTENT_LENGTH, "" + Integer.toString(postDataBytes.length));
+                conn.getOutputStream().write(postDataBytes);
+            }
         }
     }
 

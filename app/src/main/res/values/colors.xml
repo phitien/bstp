@@ -2,8 +2,8 @@
 <resources>
     <color name="black_overlay">#66000000</color>
 
-    <color name="BoschColorPrimary">#225577</color>
-    <color name="BoschColorPrimaryDark">#225577</color>
+    <color name="primary">#225577</color>
+    <color name="primary_dark">#225577</color>
     <color name="BoschColorAccent">#225577</color>
     <color name="background">#ffffff</color>
 
@@ -24,5 +24,49 @@
 
     <color name="switch_text_color">#665C56</color>
     <color name="checkbox_text_color">#665C56</color>
+
+    <color name="bg_white_opacity_100">#ffffffff</color>
+    <color name="bg_white_opacity_95">#f2ffffff</color>
+    <color name="bg_white_opacity_90">#e6ffffff</color>
+    <color name="bg_white_opacity_85">#d9ffffff</color>
+    <color name="bg_white_opacity_80">#ccffffff</color>
+    <color name="bg_white_opacity_75">#bfffffff</color>
+    <color name="bg_white_opacity_70">#b3ffffff</color>
+    <color name="bg_white_opacity_65">#a6ffffff</color>
+    <color name="bg_white_opacity_60">#99ffffff</color>
+    <color name="bg_white_opacity_55">#8cffffff</color>
+    <color name="bg_white_opacity_50">#80ffffff</color>
+    <color name="bg_white_opacity_45">#73ffffff</color>
+    <color name="bg_white_opacity_40">#66ffffff</color>
+    <color name="bg_white_opacity_35">#59ffffff</color>
+    <color name="bg_white_opacity_30">#4dffffff</color>
+    <color name="bg_white_opacity_25">#40ffffff</color>
+    <color name="bg_white_opacity_20">#33ffffff</color>
+    <color name="bg_white_opacity_15">#26ffffff</color>
+    <color name="bg_white_opacity_10">#1affffff</color>
+    <color name="bg_white_opacity_5">#0dffffff</color>
+    <color name="bg_white_opacity_0">#00ffffff</color>
+
+    <color name="bg_black_opacity_100">#ff000000</color>
+    <color name="bg_black_opacity_95">#f2000000</color>
+    <color name="bg_black_opacity_90">#e6000000</color>
+    <color name="bg_black_opacity_85">#d9000000</color>
+    <color name="bg_black_opacity_80">#cc000000</color>
+    <color name="bg_black_opacity_75">#b000000f</color>
+    <color name="bg_black_opacity_70">#b3000000</color>
+    <color name="bg_black_opacity_65">#a6000000</color>
+    <color name="bg_black_opacity_60">#99000000</color>
+    <color name="bg_black_opacity_55">#8c000000</color>
+    <color name="bg_black_opacity_50">#80000000</color>
+    <color name="bg_black_opacity_45">#73000000</color>
+    <color name="bg_black_opacity_40">#66000000</color>
+    <color name="bg_black_opacity_35">#59000000</color>
+    <color name="bg_black_opacity_30">#4d000000</color>
+    <color name="bg_black_opacity_25">#40000000</color>
+    <color name="bg_black_opacity_20">#33000000</color>
+    <color name="bg_black_opacity_15">#26000000</color>
+    <color name="bg_black_opacity_10">#1a000000</color>
+    <color name="bg_black_opacity_5">#0d000000</color>
+    <color name="bg_black_opacity_0">#00000000</color>
 
 </resources>

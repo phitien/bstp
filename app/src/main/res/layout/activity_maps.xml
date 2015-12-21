@@ -33,8 +33,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="#ffffffff" />
+        android:layout_alignParentTop="true" />
 
     <include
         android:id="@+id/menuLayout"

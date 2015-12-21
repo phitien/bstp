@@ -3,8 +3,11 @@ package com.bosch.si.emobility.bstp.activity;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.UserSessionManager;
@@ -42,6 +45,15 @@ public class MapsActivity extends Activity implements LocationListener {
 
         mapComponent = MapComponent.getInstance(this);
         loginComponent = LoginComponent.getInstance(this);
+        loginComponent.setPasswordOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    doLogin();
+                }
+                return false;
+            }
+        });
         searchComponent = SearchComponent.getInstance(this);
         menuComponent = MenuComponent.getInstance(this);
         menuComponent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -132,6 +144,10 @@ public class MapsActivity extends Activity implements LocationListener {
     }
 
     public void onLoginButtonClicked(View view) {
+        doLogin();
+    }
+
+    private void doLogin() {
         Utils.Indicator.show();
         //call login rest service and setup map after succeed
         final User user = loginComponent.getUser();
@@ -170,7 +186,6 @@ public class MapsActivity extends Activity implements LocationListener {
     private void openMap() {
         loginComponent.setEnabled(false);
         setEnabled(true);
-        mapComponent.setUpMap();
     }
 
     public void onSearchButtonClicked(View view) {
@@ -187,7 +202,7 @@ public class MapsActivity extends Activity implements LocationListener {
 
     public void moveCamera(Place place) {
         hideKeyboard();
-        mapComponent.setCurrentLatLng(place.getLatLng());
+        mapComponent.setSearchingLatLng(place.getLatLng());
     }
 
     public Date getFromDate() {

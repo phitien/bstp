@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg_white_opacity_70">
 
     <ImageView
         android:id="@+id/imageViewLoginLogo"
@@ -44,7 +45,7 @@
         android:id="@+id/chkBoxSaveCredentials"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/loginButton"
+        android:layout_above="@+id/loginButton"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:checked="true"
         android:paddingLeft="10dp"
@@ -52,12 +53,11 @@
 
     <Button
         android:id="@+id/loginButton"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/App_ButtonStyle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="40dp"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:onClick="onLoginButtonClicked"
         android:text="@string/action_login" />

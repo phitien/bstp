@@ -41,17 +41,23 @@ public class MapComponent extends Component {
 
     private static MapComponent ourInstance = new MapComponent();
     private LatLngBounds currentCameraBounds;
-    private Marker myMarker;
-    private List<Marker> markers = new ArrayList<>();
-    private LatLng currentLatLng;
+    private Marker myLocationMarker;
 
-    public LatLng getCurrentLatLng() {
-        return currentLatLng;
+    private LatLng searchingLatLng;
+    private Marker mySearchingMarker;
+
+    private List<Marker> markers = new ArrayList<>();
+
+    private LatLng prevLatLng = null;
+    private LatLng currLatLng = null;
+
+    public LatLng getSearchingLatLng() {
+        return searchingLatLng;
     }
 
-    public void setCurrentLatLng(LatLng currentLatLng) {
-        this.currentLatLng = currentLatLng;
-        moveCamera(this.currentLatLng);
+    public void setSearchingLatLng(LatLng searchingLatLng) {
+        this.searchingLatLng = searchingLatLng;
+        moveCamera(this.searchingLatLng);
     }
 
     public static MapComponent getInstance(MapsActivity activity) {
@@ -79,54 +85,32 @@ public class MapComponent extends Component {
         mapView = this.activity.findViewById(R.id.map);
         imageButtonSearch = (ImageButton) this.activity.findViewById(R.id.imageButtonSearch);
         imageButtonMenu = (ImageButton) this.activity.findViewById(R.id.imageButtonMenu);
-    }
-
-    public void setUpMap() {
         map = mapFragment.getMap();
-        map.setMyLocationEnabled(true);
-        if (mapView != null && mapView.findViewById(1) != null) {
-            // Get the button view
-            View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
-            // and next place it, on bottom right (as Google Maps app)
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-            // position on right bottom
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-            layoutParams.setMargins(30, 30, 30, 30);
-
-
-            map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                @Override
-                public void onCameraChange(CameraPosition cameraPosition) {
-                    currentCameraBounds = map.getProjection().getVisibleRegion().latLngBounds;
-                    if (currentCameraBounds != null) {
-                        LatLng center = currentCameraBounds.getCenter();
-                        if (center != null) {
-                            displayParkingAreas(center);
-                        }
-                    }
-                }
-            });
-            map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                @Override
-                public boolean onMyLocationButtonClick() {
-                    currentLatLng = getMyLocationLatLng();
-                    zoomToLocation(currentLatLng);
-                    return true;
-                }
-            });
-            currentLatLng = Constants.DEFAULT_LOCATION != null ? Constants.DEFAULT_LOCATION : getMyLocationLatLng();
-            zoomToLocation(currentLatLng);
-        }
     }
 
     private void zoomToLocation(LatLng latLng) {
         moveCamera(latLng);
     }
 
-    private void drawMyLocationMarker(LatLng myLatLng) {
-        myMarker = map.addMarker(new MarkerOptions().position(myLatLng).title(activity.getString(R.string.its_me)));
+    private void drawMySearchingMarker(LatLng latLng) {
+        if (mySearchingMarker == null)
+            mySearchingMarker = map.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(activity.getString(R.string.current_search_location)));
+        else
+            mySearchingMarker.setPosition(latLng);
+    }
+
+    private LatLng drawMyLocationMarker() {
+        LatLng latLng = getMyLocationLatLng();
+        if (myLocationMarker == null) {
+            myLocationMarker = map.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(activity.getString(R.string.your_location))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        } else
+            myLocationMarker.setPosition(latLng);
+        return latLng;
     }
 
     @NonNull
@@ -144,54 +128,71 @@ public class MapComponent extends Component {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, Constants.DEFAULT_ZOOM_LEVEL));
     }
 
-    private void displayParkingAreas(LatLng latLng) {
+    private void displayParkingAreas() {
         try {
-            Geocoder geocoder;
-            List<Address> addresses;
-            geocoder = new Geocoder(this.activity, Locale.getDefault());
-
-            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            if (addresses.size() > 0) {
-
-                Address address = addresses.get(0);
-                SearchService searchService = new SearchService();
-                searchService.locationName = address.getFeatureName();
-                searchService.latitude = String.valueOf(latLng.latitude);
-                searchService.longitude = String.valueOf(latLng.longitude);
-                searchService.startTime = this.activity.getFromDate().toString();
-                searchService.endTime = this.activity.getToDate().toString();
-                searchService.executeAsync(new ServiceCallback() {
-                    @Override
-                    public void success(IService service) {
-                        Gson gson = new Gson();
-                        List<ParkingArea> parkingAreas = gson.fromJson(service.getResponseString(), new TypeToken<ArrayList<ParkingArea>>() {
-                        }.getType());
-                        map.clear();
-                        drawMyLocationMarker(currentLatLng);
-                        for (ParkingArea parkingArea : parkingAreas) {
-                            drawParkingAreaMarker(parkingArea);
+            if (shouldRefreshMap()) {
+                Geocoder geocoder;
+                List<Address> addresses;
+                geocoder = new Geocoder(this.activity, Locale.getDefault());
+                addresses = geocoder.getFromLocation(currLatLng.latitude, currLatLng.longitude, 1);
+                if (addresses.size() > 0) {
+                    Address address = addresses.get(0);
+                    SearchService searchService = new SearchService();
+                    searchService.locationName = address.getFeatureName();
+                    searchService.latitude = String.valueOf(currLatLng.latitude);
+                    searchService.longitude = String.valueOf(currLatLng.longitude);
+                    searchService.startTime = this.activity.getFromDate().toString();
+                    searchService.endTime = this.activity.getToDate().toString();
+                    searchService.executeAsync(new ServiceCallback() {
+                        @Override
+                        public void success(IService service) {
+                            Gson gson = new Gson();
+                            List<ParkingArea> parkingAreas = gson.fromJson(service.getResponseString(),
+                                    new TypeToken<ArrayList<ParkingArea>>() {
+                                    }.getType());
+                            clearMarkers();
+                            drawMyLocationMarker();
+                            drawMySearchingMarker(searchingLatLng);
+                            for (ParkingArea parkingArea : parkingAreas) {
+                                drawParkingAreaMarker(parkingArea);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void failure(IService service) {
-                        service.getResponseCode();
-                    }
-                });
-            } else {
-
+                        @Override
+                        public void failure(IService service) {
+                            service.getResponseCode();
+                        }
+                    });
+                }
             }
         } catch (Exception e) {
             Utils.Log.e("BSTP_MapComponent_displayParkingAreas: ", e.getMessage());
         }
     }
 
+    //refresh map if the distance between the current location and searching location is greater than 1000 km
+    private boolean shouldRefreshMap() {
+        if (currLatLng != null && prevLatLng != null) {
+            float[] results = new float[1];
+            Location.distanceBetween(prevLatLng.latitude, prevLatLng.longitude, currLatLng.latitude, currLatLng.longitude, results);
+            return results[0] > 1000000;
+        }
+        return prevLatLng == null;
+    }
+
+    private void clearMarkers() {
+        map.clear();
+        mySearchingMarker = null;
+        myLocationMarker = null;
+        markers = new ArrayList<>();
+    }
+
     private void drawParkingAreaMarker(ParkingArea parkingArea) {
         LatLng latLng = new LatLng(parkingArea.latitude, parkingArea.longitude);
-        map.addMarker(new MarkerOptions()
+        markers.add(map.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title(parkingArea.locationTitle)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking))));
     }
 
     public LatLngBounds getCurrentLatLngBounds() {
@@ -216,8 +217,60 @@ public class MapComponent extends Component {
 
     @Override
     public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
         int visibility = enabled ? View.VISIBLE : View.GONE;
+        if (enabled) {
+            if (mapView != null && mapView.findViewById(1) != null) {
+                // Get the button view
+                View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
+                // and next place it, on bottom right (as Google Maps app)
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+                // position on right bottom
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+                layoutParams.setMargins(30, 30, 30, 30);
+
+                mapView.setOnDragListener(new View.OnDragListener() {
+                    @Override
+                    public boolean onDrag(View v, DragEvent event) {
+                        currentCameraBounds = map.getProjection().getVisibleRegion().latLngBounds;
+                        prevLatLng = currentCameraBounds.getCenter();
+                        return true;
+                    }
+                });
+                map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                    @Override
+                    public void onCameraChange(CameraPosition cameraPosition) {
+                        currentCameraBounds = map.getProjection().getVisibleRegion().latLngBounds;
+                        if (currentCameraBounds != null) {
+                            LatLng center = currentCameraBounds.getCenter();
+                            if (center != null) {
+                                currLatLng = center;
+                                displayParkingAreas();
+                            }
+                        }
+                    }
+                });
+                map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                    @Override
+                    public boolean onMyLocationButtonClick() {
+                        searchingLatLng = getMyLocationLatLng();
+                        zoomToLocation(searchingLatLng);
+                        return true;
+                    }
+                });
+                searchingLatLng = Constants.DEFAULT_LOCATION != null ? Constants.DEFAULT_LOCATION : drawMyLocationMarker();
+                zoomToLocation(searchingLatLng);
+            }
+        } else {
+
+        }
+        map.setMyLocationEnabled(enabled);
+        map.getUiSettings().setMyLocationButtonEnabled(enabled);
+        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setScrollGesturesEnabled(enabled);
+        map.getUiSettings().setTiltGesturesEnabled(enabled);
+        map.getUiSettings().setRotateGesturesEnabled(enabled);
         imageButtonSearch.setEnabled(enabled);
         imageButtonSearch.setVisibility(visibility);
         imageButtonMenu.setEnabled(enabled);

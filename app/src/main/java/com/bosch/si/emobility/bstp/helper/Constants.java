@@ -17,5 +17,8 @@ public class Constants {
         MESSAGE,
         LOGIN_OK,
         LOGIN_FAILED,
+        SESSION_EXPIRED,
+        RE_LOGIN_OK,
+        RE_LOGIN_FAILED,
     }
 }

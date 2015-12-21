@@ -32,7 +32,7 @@
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/chkBoxSaveCredentials"
+        android:layout_above="@+id/checkBoxSaveCredentials"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:hint="Password"
@@ -42,7 +42,7 @@
         android:text="@string/default_password" />
 
     <CheckBox
-        android:id="@+id/chkBoxSaveCredentials"
+        android:id="@+id/checkBoxSaveCredentials"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/loginButton"

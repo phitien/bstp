@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -130,6 +131,8 @@ public class MapComponent extends Component {
 
     private void displayParkingAreas() {
         try {
+            drawMyLocationMarker();
+            drawMySearchingMarker(searchingLatLng);
             if (shouldRefreshMap()) {
                 Geocoder geocoder;
                 List<Address> addresses;
@@ -137,7 +140,7 @@ public class MapComponent extends Component {
                 addresses = geocoder.getFromLocation(currLatLng.latitude, currLatLng.longitude, 1);
                 if (addresses.size() > 0) {
                     Address address = addresses.get(0);
-                    SearchService searchService = new SearchService();
+                    final SearchService searchService = new SearchService();
                     searchService.locationName = address.getFeatureName();
                     searchService.latitude = String.valueOf(currLatLng.latitude);
                     searchService.longitude = String.valueOf(currLatLng.longitude);
@@ -160,7 +163,6 @@ public class MapComponent extends Component {
 
                         @Override
                         public void failure(IService service) {
-                            service.getResponseCode();
                         }
                     });
                 }
@@ -170,12 +172,12 @@ public class MapComponent extends Component {
         }
     }
 
-    //refresh map if the distance between the current location and searching location is greater than 1000 km
+    //refresh map if the distance between the current location and searching location is greater than 100 km
     private boolean shouldRefreshMap() {
         if (currLatLng != null && prevLatLng != null) {
             float[] results = new float[1];
             Location.distanceBetween(prevLatLng.latitude, prevLatLng.longitude, currLatLng.latitude, currLatLng.longitude, results);
-            return results[0] > 1000000;
+            return results[0] > 100000;
         }
         return prevLatLng == null;
     }
@@ -205,7 +207,7 @@ public class MapComponent extends Component {
             }
             if (bounds == null) {
                 LatLng center = getMyLocationLatLng();
-                double radius = 5000;
+                double radius = 50000;//50km
                 LatLng southwest = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 225);
                 LatLng northeast = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 45);
                 return new LatLngBounds(southwest, northeast);

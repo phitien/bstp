@@ -2,9 +2,12 @@ package com.bosch.si.rest;
 
 import android.os.AsyncTask;
 
+import com.bosch.si.rest.anno.Authorization;
 import com.bosch.si.rest.anno.ContentType;
+import com.bosch.si.rest.anno.Cookie;
 import com.bosch.si.rest.anno.DELETE;
 import com.bosch.si.rest.anno.GET;
+import com.bosch.si.rest.anno.Header;
 import com.bosch.si.rest.anno.POST;
 import com.bosch.si.rest.anno.PUT;
 import com.bosch.si.rest.callback.IServiceCallback;
@@ -23,6 +26,8 @@ import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
@@ -51,8 +56,6 @@ public abstract class AbstractService implements IService {
 
     protected String queryString = "";
 
-    protected String contentType = "text/html";
-
     protected METHOD method = METHOD.GET;
 
     protected IServiceConnection connection;
@@ -60,6 +63,8 @@ public abstract class AbstractService implements IService {
     protected Executor executor = AsyncTask.SERIAL_EXECUTOR;
 
     protected String authorization = null;
+
+    protected Map<String, String> headers = new HashMap<>();
 
     protected String responseString = null;
 
@@ -178,7 +183,7 @@ public abstract class AbstractService implements IService {
 
     @Override
     public String getQueryString() {
-        return null;
+        return queryString;
     }
 
     @Override
@@ -188,16 +193,22 @@ public abstract class AbstractService implements IService {
 
     @Override
     public String getContentType() {
-        return contentType;
+        if (URI == null) {
+            updateParams();
+        }
+        return getHeader(CONTENT_TYPE);
     }
 
     @Override
     public void setContentType(String contentType) {
-        this.contentType = contentType;
+        addHeader(CONTENT_TYPE, contentType);
     }
 
     @Override
     public METHOD getMethod() {
+        if (URI == null) {
+            updateParams();
+        }
         return method;
     }
 
@@ -237,6 +248,31 @@ public abstract class AbstractService implements IService {
     @Override
     public void setAuthorization(String authorization) {
         this.authorization = authorization;
+    }
+
+    @Override
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    @Override
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
+    }
+
+    @Override
+    public void addHeader(String key, String value) {
+        this.headers.put(key, value);
+    }
+
+    @Override
+    public void removeHeader(String key) {
+        this.headers.remove(key);
+    }
+
+    @Override
+    public String getHeader(String key) {
+        return headers.get(key);
     }
 
     @Override
@@ -371,7 +407,6 @@ public abstract class AbstractService implements IService {
         task.executeOnExecutor(executor);
     }
 
-
     @Override
     public final String executeSync(IServiceCallback serviceCallback) {
         final IService me = this;
@@ -485,13 +520,22 @@ public abstract class AbstractService implements IService {
         conn.setReadTimeout(getReadTimeout());
         conn.setConnectTimeout(getConnectTimeout());
         conn.setRequestMethod(getMethod().toString());
-        conn.setRequestProperty(CONTENT_TYPE, getContentType());
         conn.setUseCaches(false);
         conn.setInstanceFollowRedirects(false);
         //set cookie
         String cookie = getRequestCookie();
         if (cookie != null && !cookie.isEmpty()) {
-            conn.setRequestProperty(COOKIE, cookie);
+            addHeader(COOKIE, cookie);
+        }
+        removeHeader(AUTHORIZATION);
+        Map<String, String> headers = getHeaders();
+        if (headers != null && headers.size() > 0) {
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                try {
+                    conn.setRequestProperty(header.getKey(), header.getValue());
+                } catch (Exception e) {
+                }
+            }
         }
         //set params for non-get method
         if (getMethod() != METHOD.GET) {
@@ -500,7 +544,7 @@ public abstract class AbstractService implements IService {
             //set authorization
             String authorization = getAuthorization();
             if (authorization != null && !authorization.isEmpty()) {
-                conn.setRequestProperty("Authorization", authorization);
+                conn.setRequestProperty(AUTHORIZATION, authorization);
             }
             String body = getBody();
             if (body != null && !body.isEmpty()) {
@@ -526,7 +570,6 @@ public abstract class AbstractService implements IService {
     }
 
     protected void updateCoreParams() {
-        contentType = DEFAULT_CONTENT_TYPE;
         Annotation[] annotations = getDeclaredClass().getAnnotations();
         for (Annotation annotation : annotations) {
             if (annotation instanceof GET) {
@@ -541,8 +584,18 @@ public abstract class AbstractService implements IService {
             } else if (annotation instanceof DELETE) {
                 servicePath = ((DELETE) annotation).value().trim().replaceFirst("^/", "");
                 method = METHOD.DELETE;
+            } else if (annotation instanceof Authorization) {
+                authorization = ((Authorization) annotation).value();
             } else if (annotation instanceof ContentType) {
-                contentType = ((ContentType) annotation).value();
+                addHeader(CONTENT_TYPE, ((ContentType) annotation).value());
+            } else if (annotation instanceof Cookie) {
+                addHeader(COOKIE, ((Cookie) annotation).value());
+            } else if (annotation instanceof Header) {
+                Header ann = (Header) annotation;
+                String name = ann.name();
+                String value = ann.value();
+                if (name != null && value != null)
+                    addHeader(name, value);
             }
         }
     }

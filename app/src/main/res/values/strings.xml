@@ -23,4 +23,7 @@
     <string name="autocomplete_hint">Enter place name or address</string>
     <string name="your_location">Your location</string>
     <string name="current_search_location">Searching location</string>
+    <string name="session_expired">Session expired</string>
+    <string name="re_login_ok">Re-Login successfully</string>
+    <string name="re_login_failed">Re-Login failed</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.activity.component;
 
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ public class LoginComponent extends Component {
 
     EditText editTextUsername;
     EditText editTextPassword;
+    CheckBox checkBoxSaveCredentials;
 
     @Override
     public void setActivity(MapsActivity activity) {
@@ -34,12 +36,14 @@ public class LoginComponent extends Component {
         layout = (RelativeLayout) this.activity.findViewById(R.id.loginLayout);
         editTextUsername = (EditText) this.activity.findViewById(R.id.editTextUsername);
         editTextPassword = (EditText) this.activity.findViewById(R.id.editTextPassword);
+        checkBoxSaveCredentials = (CheckBox) this.activity.findViewById(R.id.checkBoxSaveCredentials);
     }
 
     public User getUser() {
         User user = new User();
         user.setUsername(editTextUsername.getText().toString());
         user.setPassword(editTextPassword.getText().toString());
+        user.setSaveCredentials(checkBoxSaveCredentials.isChecked());
         return user;
     }
 

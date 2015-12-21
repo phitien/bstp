@@ -1,15 +1,18 @@
 package com.bosch.si.emobility.bstp.service;
 
-import android.util.Base64;
-
+import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.UserSessionManager;
+import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.helper.Constants;
+import com.bosch.si.emobility.bstp.helper.Utils;
 import com.bosch.si.rest.AbstractService;
 import com.bosch.si.rest.IService;
+import com.bosch.si.rest.anno.Header;
 import com.bosch.si.rest.callback.IServiceCallback;
 import com.bosch.si.rest.callback.ServiceCallback;
 
-import java.net.HttpURLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseService extends AbstractService {
 
@@ -34,21 +37,16 @@ public class BaseService extends AbstractService {
 
                 @Override
                 public void onSessionExpiry(IService service) {
-                    //TODO re-login
-
+                    Event.broadcast(Utils.getString(R.string.session_expired), Constants.EventType.SESSION_EXPIRED.toString());
                 }
             };
         return callback;
     }
 
     @Override
-    public String getRequestCookie() {
-        return UserSessionManager.getInstance().getUser().getAuthorizationCookie();
+    public Map<String, String> getHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("x-im-context-id", UserSessionManager.getInstance().getUser().getApiKey());
+        return headers;
     }
-
-    @Override
-    public String getAuthorization() {
-        return "Basic " + Base64.encodeToString(("x-im-context-id:" + getRequestCookie()).getBytes(), Base64.NO_WRAP);
-    }
-
 }

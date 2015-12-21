@@ -4,6 +4,7 @@ import com.bosch.si.rest.callback.IServiceCallback;
 import com.bosch.si.rest.connection.IServiceConnection;
 
 import java.net.HttpURLConnection;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 /**
@@ -19,6 +20,7 @@ public interface IService {
     public static final String DEFAULT_CONTENT_TYPE = "application/json";
     public static final String SET_COOKIE = "set-cookie";
     public static final String COOKIE = "cookie";
+    public static final String AUTHORIZATION = "Authorization";
     public static final String UTF_8 = "UTF-8";
 
     public enum METHOD {
@@ -76,6 +78,16 @@ public interface IService {
     public String getAuthorization();
 
     public void setAuthorization(String authorization);
+
+    public Map<String, String> getHeaders();
+
+    public void setHeaders(Map<String, String> headers);
+
+    public void addHeader(String key, String value);
+
+    public void removeHeader(String key);
+
+    public String getHeader(String key);
 
     public String getResponseString();
 

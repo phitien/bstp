@@ -42,7 +42,7 @@ public class UserSessionManager {
         try {
             this.user = user;
             deleteCredentialsFile();//delete old file
-            if (this.user != null && this.user.isValid()) {
+            if (this.user != null && this.user.isValid() && this.user.isSaveCredentials()) {
                 String base64EncryptedCredentialsData = new AESCryptor().encryptData(this.user.toJsonString());
                 FileOutputStream outputStream = new FileOutputStream(this.credentialsFile);
                 outputStream.write(base64EncryptedCredentialsData.getBytes());

@@ -150,14 +150,10 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     public void setEnabled(boolean enabled, boolean noAnimation) {
         super.setEnabled(enabled, noAnimation);
         hideKeyboard();
-        if (enabled) {
-            Calendar calendar = Calendar.getInstance();
-
-            fromDate = calendar.getTime();
-            toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(1));
-
-            updateTextViews();
-        }
+        Calendar calendar = Calendar.getInstance();
+        fromDate = calendar.getTime();
+        toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(1));
+        updateTextViews();
     }
 
     @Override

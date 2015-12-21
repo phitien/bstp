@@ -18,14 +18,15 @@ public class User extends Model {
     protected String tenantName = "DEFAULT";
     protected String username;
     protected String password;
-    protected String authorizationCookie;
+    protected String apiKey;
+    protected boolean saveCredentials;
 
-    public String getAuthorizationCookie() {
-        return authorizationCookie;
+    public String getApiKey() {
+        return apiKey;
     }
 
-    public void setAuthorizationCookie(String authorizationCookie) {
-        this.authorizationCookie = authorizationCookie;
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 
     public String getPassword() {
@@ -52,6 +53,14 @@ public class User extends Model {
         this.username = username;
     }
 
+    public boolean isSaveCredentials() {
+        return saveCredentials;
+    }
+
+    public void setSaveCredentials(boolean saveCredentials) {
+        this.saveCredentials = saveCredentials;
+    }
+
     public boolean isValid() {
         if (this.username == null || this.username.isEmpty()) {
             return false;
@@ -62,13 +71,13 @@ public class User extends Model {
         if (this.tenantName == null || this.tenantName.isEmpty()) {
             return false;
         }
-        if (this.authorizationCookie == null || this.authorizationCookie.isEmpty()) {
+        if (this.apiKey == null || this.apiKey.isEmpty()) {
             return false;
         }
         return true;
     }
 
     public String toXMLString() {
-        return "<im:authentication xmlns:im='http://www.bosch.com/IAP/im1_1_0'><im:userNamePassword><im:tenantName>" + tenantName + "</im:tenantName><im:userName>" + username + "</im:userName><im:password>" + password + "</im:password><im:authorizationCookie>" + authorizationCookie + "</im:authorizationCookie></im:userNamePassword></im:authentication>";
+        return "<im:authentication xmlns:im='http://www.bosch.com/IAP/im1_1_0'><im:userNamePassword><im:tenantName>" + tenantName + "</im:tenantName><im:userName>" + username + "</im:userName><im:password>" + password + "</im:password><im:apiKey>" + apiKey + "</im:apiKey></im:userNamePassword></im:authentication>";
     }
 }

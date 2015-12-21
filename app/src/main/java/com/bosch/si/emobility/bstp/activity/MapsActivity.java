@@ -86,12 +86,51 @@ public class MapsActivity extends Activity implements LocationListener {
         if (event.getType() == Constants.EventType.LOGIN_OK.toString()) {
             Utils.Indicator.hide();
             openMap();
+        } else if (event.getType() == Constants.EventType.RE_LOGIN_OK.toString()) {
+            Utils.Indicator.hide();
         } else if (event.getType() == Constants.EventType.LOGIN_FAILED.toString()) {
             Utils.Indicator.hide();
             super.onEventMainThread(event);
+        } else if (event.getType() == Constants.EventType.RE_LOGIN_FAILED.toString()) {
+            Utils.Indicator.hide();
+            super.onEventMainThread(event);
+        } else if (event.getType() == Constants.EventType.SESSION_EXPIRED.toString()) {
+            if (UserSessionManager.getInstance().getUser().isSaveCredentials()) {//if save credentials
+                doReLogin();
+            } else {//else open login dialog
+                showLoginDialog();
+            }
         } else {
             super.onEventMainThread(event);
         }
+    }
+
+    private void doReLogin() {
+        final User user = UserSessionManager.getInstance().getUser();
+        LoginService loginService = new LoginService();
+        loginService.user = user;
+
+        loginService.executeAsync(new ServiceCallback() {
+            @Override
+            public void success(IService service) {
+                //Save Authorization Cookie
+                try {
+                    JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
+                    user.setApiKey(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
+                    UserSessionManager.getInstance().setUserSession(user);
+                    Event.broadcast(Utils.getString(R.string.re_login_ok), Constants.EventType.RE_LOGIN_OK.toString());
+                } catch (Exception e) {
+                    logout();
+                    Event.broadcast(Utils.getString(R.string.re_login_failed), Constants.EventType.RE_LOGIN_FAILED.toString());
+                }
+            }
+
+            @Override
+            public void failure(IService service) {
+                logout();
+                Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
+            }
+        });
     }
 
     @Override
@@ -162,7 +201,7 @@ public class MapsActivity extends Activity implements LocationListener {
                 //Save Authorization Cookie
                 try {
                     JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
-                    user.setAuthorizationCookie(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
+                    user.setApiKey(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
                     UserSessionManager.getInstance().setUserSession(user);
                     Event.broadcast(Utils.getString(R.string.login_ok), Constants.EventType.LOGIN_OK.toString());
                 } catch (Exception e) {

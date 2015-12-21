@@ -30,7 +30,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -130,45 +129,10 @@ public class MapComponent extends Component {
     }
 
     private void displayParkingAreas() {
-        try {
-            drawMyLocationMarker();
-            drawMySearchingMarker(searchingLatLng);
-            if (shouldRefreshMap()) {
-                Geocoder geocoder;
-                List<Address> addresses;
-                geocoder = new Geocoder(this.activity, Locale.getDefault());
-                addresses = geocoder.getFromLocation(currLatLng.latitude, currLatLng.longitude, 1);
-                if (addresses.size() > 0) {
-                    Address address = addresses.get(0);
-                    final SearchService searchService = new SearchService();
-                    searchService.locationName = address.getFeatureName();
-                    searchService.latitude = String.valueOf(currLatLng.latitude);
-                    searchService.longitude = String.valueOf(currLatLng.longitude);
-                    searchService.startTime = this.activity.getFromDate().toString();
-                    searchService.endTime = this.activity.getToDate().toString();
-                    searchService.executeAsync(new ServiceCallback() {
-                        @Override
-                        public void success(IService service) {
-                            Gson gson = new Gson();
-                            List<ParkingArea> parkingAreas = gson.fromJson(service.getResponseString(),
-                                    new TypeToken<ArrayList<ParkingArea>>() {
-                                    }.getType());
-                            clearMarkers();
-                            drawMyLocationMarker();
-                            drawMySearchingMarker(searchingLatLng);
-                            for (ParkingArea parkingArea : parkingAreas) {
-                                drawParkingAreaMarker(parkingArea);
-                            }
-                        }
-
-                        @Override
-                        public void failure(IService service) {
-                        }
-                    });
-                }
-            }
-        } catch (Exception e) {
-            Utils.Log.e("BSTP_MapComponent_displayParkingAreas: ", e.getMessage());
+        drawMyLocationMarker();
+        drawMySearchingMarker(searchingLatLng);
+        if (shouldRefreshMap()) {
+            refresh();
         }
     }
 
@@ -277,5 +241,45 @@ public class MapComponent extends Component {
         imageButtonSearch.setVisibility(visibility);
         imageButtonMenu.setEnabled(enabled);
         imageButtonMenu.setVisibility(visibility);
+    }
+
+    public void refresh() {
+        try {
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(this.activity, Locale.getDefault());
+            addresses = geocoder.getFromLocation(currLatLng.latitude, currLatLng.longitude, 1);
+            if (addresses.size() > 0) {
+                Address address = addresses.get(0);
+                final SearchService searchService = new SearchService();
+                searchService.locationName = address.getFeatureName();
+                searchService.latitude = String.valueOf(currLatLng.latitude);
+                searchService.longitude = String.valueOf(currLatLng.longitude);
+                searchService.startTime = this.activity.getFromDate().toString();
+                searchService.endTime = this.activity.getToDate().toString();
+                searchService.executeAsync(new ServiceCallback() {
+                    @Override
+                    public void success(IService service) {
+                        Gson gson = new Gson();
+                        List<ParkingArea> parkingAreas = gson.fromJson(service.getResponseString(),
+                                new TypeToken<ArrayList<ParkingArea>>() {
+                                }.getType());
+                        clearMarkers();
+                        drawMyLocationMarker();
+                        drawMySearchingMarker(searchingLatLng);
+                        for (ParkingArea parkingArea : parkingAreas) {
+                            drawParkingAreaMarker(parkingArea);
+                        }
+                    }
+
+                    @Override
+                    public void failure(IService service) {
+                        service.getResponseCode();
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Utils.Log.e("BSTP_MapComponent_displayParkingAreas: ", e.getMessage());
+        }
     }
 }

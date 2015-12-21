@@ -87,7 +87,7 @@ public class MapsActivity extends Activity implements LocationListener {
             Utils.Indicator.hide();
             openMap();
         } else if (event.getType() == Constants.EventType.RE_LOGIN_OK.toString()) {
-            Utils.Indicator.hide();
+            mapComponent.refresh();
         } else if (event.getType() == Constants.EventType.LOGIN_FAILED.toString()) {
             Utils.Indicator.hide();
             super.onEventMainThread(event);

@@ -7,13 +7,12 @@
     android:background="@color/bg_white_opacity_70">
 
     <ImageView
-        android:id="@+id/imageViewLoginLogo"
-        android:layout_width="110dp"
-        android:layout_height="70dp"
+        android:id="@+id/imageViewLogo"
+        android:layout_width="@dimen/log_width"
+        android:layout_height="@dimen/log_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="1dp"
         android:src="@drawable/bosch_logo" />
 
     <EditText

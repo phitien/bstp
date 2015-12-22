@@ -13,8 +13,8 @@
 
     <ImageView
         android:id="@+id/imageViewLogo"
-        android:layout_width="115dp"
-        android:layout_height="75dp"
+        android:layout_width="@dimen/log_width"
+        android:layout_height="@dimen/log_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="50dp"
             android:background="@android:color/transparent"
             android:onClick="onSearchButtonClicked"
             android:src="@drawable/search_black" />

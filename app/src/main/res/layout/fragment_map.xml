@@ -13,34 +13,44 @@
 
     <ImageView
         android:id="@+id/imageViewLogo"
-        android:layout_width="110dp"
-        android:layout_height="70dp"
+        android:layout_width="115dp"
+        android:layout_height="75dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:src="@drawable/bosch_logo" />
 
-    <ImageButton
-        android:id="@+id/imageButtonSearch"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="60dp"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:onClick="onSearchButtonClicked"
-        android:src="@drawable/search_black" />
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/imageViewLogo"
+        android:background="@color/bg_menu_color"
+        android:paddingBottom="10dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="10dp">
 
-    <ImageButton
-        android:id="@+id/imageButtonMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:onClick="onMenuButtonClicked"
-        android:src="@drawable/menu" />
+        <ImageButton
+            android:id="@+id/imageButtonSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="40dp"
+            android:background="@android:color/transparent"
+            android:onClick="onSearchButtonClicked"
+            android:src="@drawable/search_black" />
+
+        <ImageButton
+            android:id="@+id/imageButtonMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:onClick="onMenuButtonClicked"
+            android:src="@drawable/menu" />
+    </RelativeLayout>
 
 </RelativeLayout>

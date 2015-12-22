@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.activity.component;
 
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -32,6 +33,14 @@ public class MenuComponent extends Component {
     public void setActivity(MapsActivity activity) {
         super.setActivity(activity);
         layout = (RelativeLayout) this.activity.findViewById(R.id.menuLayout);
+
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setEnabled(false, false);
+            }
+        });
+
         setEnabled(false, true);
         String[] values = new String[]{
                 this.activity.getString(R.string.home),

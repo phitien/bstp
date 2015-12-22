@@ -10,8 +10,9 @@ public class Constants {
     public static final long MIN_TIME_BW_UPDATES = 1000;
     public static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 0F;
     public static final String BASE_URL = "http://ivsrv034.bosch-si.com:9000";
-    public static final LatLng DEFAULT_LOCATION = new LatLng(48.82935, 9.31857);
-    public static final float DEFAULT_ZOOM_LEVEL = 10.0f;
+    public static final LatLng DEFAULT_LOCATION = new LatLng(50.1211277, 8.4964787);//Frankfurt
+    public static final float DEFAULT_ZOOM_LEVEL = 11.0f;
+    public static final double DEFAULT_ZOOM_RADIUS = 50000;
 
     public enum EventType {
         MESSAGE,

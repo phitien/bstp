@@ -17,6 +17,7 @@ import com.bosch.si.emobility.bstp.model.ParkingArea;
 import com.bosch.si.emobility.bstp.service.SearchService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -124,8 +125,17 @@ public class MapComponent extends Component {
         return latLng;
     }
 
+    private CameraUpdate getZoomForDistance(LatLng originalPosition, double distance) {
+        LatLng rightBottom = SphericalUtil.computeOffset(originalPosition, distance, 135);
+        LatLng leftTop = SphericalUtil.computeOffset(originalPosition, distance, -45);
+        LatLngBounds sBounds = new LatLngBounds(new LatLng(rightBottom.latitude, leftTop.longitude), new LatLng(leftTop.latitude, rightBottom.longitude));
+        return CameraUpdateFactory.newLatLngBounds(sBounds, 50);
+
+    }
+
     public void moveCamera(LatLng latLng) {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, Constants.DEFAULT_ZOOM_LEVEL));
+//        map.moveCamera(getZoomForDistance(latLng, Constants.DEFAULT_ZOOM_RADIUS));
     }
 
     private void displayParkingAreas() {
@@ -225,7 +235,7 @@ public class MapComponent extends Component {
                         return true;
                     }
                 });
-                searchingLatLng = Constants.DEFAULT_LOCATION != null ? Constants.DEFAULT_LOCATION : drawMyLocationMarker();
+                searchingLatLng = Utils.isLocationServiceDisabled(this.activity) ? Constants.DEFAULT_LOCATION : drawMyLocationMarker();
                 zoomToLocation(searchingLatLng);
             }
         } else {

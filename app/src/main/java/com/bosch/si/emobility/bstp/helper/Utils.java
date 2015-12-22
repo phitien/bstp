@@ -1,22 +1,17 @@
 package com.bosch.si.emobility.bstp.helper;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.app.Application;
-import com.bosch.si.emobility.bstp.app.Event;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,8 +19,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by sgp0458 on 4/12/15.
@@ -221,5 +214,23 @@ public class Utils {
             Log.e("BSTP_Utils_getMyLocation", e.getMessage());
         }
         return location;
+    }
+
+    public static boolean isLocationServiceDisabled(Context context) {
+        Location location = null;
+        try {
+            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            // getting GPS status
+            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            // getting network status
+            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (!isGPSEnabled && !isNetworkEnabled) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            Log.e("BSTP_Utils_getMyLocation", e.getMessage());
+        }
+        return true;
     }
 }

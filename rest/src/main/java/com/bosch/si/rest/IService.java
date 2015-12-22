@@ -3,6 +3,7 @@ package com.bosch.si.rest;
 import com.bosch.si.rest.callback.IServiceCallback;
 import com.bosch.si.rest.connection.IServiceConnection;
 
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -22,7 +23,8 @@ public interface IService {
     public static final String SET_COOKIE = "set-cookie";
     public static final String COOKIE = "cookie";
     public static final String AUTHORIZATION = "Authorization";
-    public static final String UTF_8 = "UTF-8";
+    public static final String CHARSET = "UTF-8";
+    public static final String LINE_FEED = "\r\n";
 
     public enum METHOD {
         GET, POST, PUT, DELETE
@@ -57,6 +59,10 @@ public interface IService {
     public Map<String, String> getHeaders();
 
     public String getHeader(String key);
+
+    public Map<String, String> getFormFields();
+
+    public Map<String, File> getFiles();
 
     public String getResponseString();
 

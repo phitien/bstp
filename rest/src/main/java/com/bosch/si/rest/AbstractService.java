@@ -18,9 +18,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -66,6 +72,10 @@ public abstract class AbstractService implements IService {
     protected String authorization = null;
 
     protected Map<String, String> headers = new HashMap<>();
+
+    protected Map<String, String> formFields = new HashMap<>();
+
+    protected Map<String, File> files = new HashMap<>();
 
     protected String responseString = null;
 
@@ -197,6 +207,16 @@ public abstract class AbstractService implements IService {
     @Override
     public String getHeader(String key) {
         return headers.get(key);
+    }
+
+    @Override
+    public Map<String, String> getFormFields() {
+        return formFields;
+    }
+
+    @Override
+    public Map<String, File> getFiles() {
+        return files;
     }
 
     @Override
@@ -440,6 +460,10 @@ public abstract class AbstractService implements IService {
         return null;
     }
 
+    protected PrintWriter writer = null;
+    protected String boundary = null;
+    protected OutputStream outputStream = null;
+
     private void updateConnectionParams(HttpURLConnection conn) throws IOException {
         conn.setReadTimeout(getReadTimeout());
         conn.setConnectTimeout(getConnectTimeout());
@@ -469,12 +493,70 @@ public abstract class AbstractService implements IService {
             if (authorization != null && !authorization.isEmpty()) {
                 conn.setRequestProperty(AUTHORIZATION, authorization);
             }
-            String body = getBody();
-            if (body != null && !body.isEmpty()) {
-                byte[] postDataBytes = body.getBytes(UTF_8);
-                conn.setRequestProperty(CONTENT_LENGTH, "" + Integer.toString(postDataBytes.length));
-                conn.getOutputStream().write(postDataBytes);
+            if ((formFields != null && formFields.size() > 0) || (files != null && files.size() > 0)) {
+                boundary = "===" + System.currentTimeMillis() + "===";
+                conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+                outputStream = conn.getOutputStream();
+                writer = new PrintWriter(new OutputStreamWriter(outputStream, CHARSET), true);
+                setParamsForFormFields(conn);
+                setParamsForFiles(conn);
+                writer.append(LINE_FEED).flush();
+                writer.append("--" + boundary + "--").append(LINE_FEED);
+                writer.close();
+            } else {
+                String body = getBody();
+                if (body != null && !body.isEmpty()) {
+                    byte[] postDataBytes = body.getBytes(CHARSET);
+                    conn.setRequestProperty(CONTENT_LENGTH, "" + Integer.toString(postDataBytes.length));
+                    conn.getOutputStream().write(postDataBytes);
+                }
             }
+        }
+    }
+
+    protected void setParamsForFormFields(HttpURLConnection conn) {
+        for (Map.Entry<String, String> field : formFields.entrySet()) {
+            addFormField(conn, field.getKey(), field.getValue());
+        }
+    }
+
+    protected void addFormField(HttpURLConnection conn, String name, String value) {
+        writer.append("--" + boundary).append(LINE_FEED);
+        writer.append("Content-Disposition: form-data; name=\"" + name + "\"").append(LINE_FEED);
+        writer.append("Content-Type: text/plain; charset=" + CHARSET).append(LINE_FEED);
+        writer.append(LINE_FEED);
+        writer.append(value).append(LINE_FEED);
+        writer.flush();
+    }
+
+    protected void setParamsForFiles(HttpURLConnection conn) {
+        for (Map.Entry<String, File> field : files.entrySet()) {
+            addFile(conn, field.getKey(), field.getValue());
+        }
+    }
+
+    protected void addFile(HttpURLConnection conn, String fieldName, File uploadFile) {
+        try {
+            String fileName = uploadFile.getName();
+            writer.append("--" + boundary).append(LINE_FEED);
+            writer.append("Content-Disposition: form-data; name=\"" + fieldName + "\"; filename=\"" + fileName + "\"").append(LINE_FEED);
+            writer.append("Content-Type: " + URLConnection.guessContentTypeFromName(fileName)).append(LINE_FEED);
+            writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
+            writer.append(LINE_FEED);
+            writer.flush();
+
+            FileInputStream inputStream = new FileInputStream(uploadFile);
+            byte[] buffer = new byte[4096];
+            int bytesRead = -1;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            outputStream.flush();
+            inputStream.close();
+            writer.append(LINE_FEED);
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

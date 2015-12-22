@@ -45,8 +45,7 @@ public class BaseService extends AbstractService {
 
     @Override
     public Map<String, String> getHeaders() {
-        Map<String, String> headers = new HashMap<>();
         headers.put("x-im-context-id", UserSessionManager.getInstance().getUser().getApiKey());
-        return headers;
+        return super.getHeaders();
     }
 }

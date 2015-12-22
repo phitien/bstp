@@ -6,6 +6,7 @@ import com.bosch.si.rest.anno.Authorization;
 import com.bosch.si.rest.anno.ContentType;
 import com.bosch.si.rest.anno.Cookie;
 import com.bosch.si.rest.anno.DELETE;
+import com.bosch.si.rest.anno.FormUrlEncoded;
 import com.bosch.si.rest.anno.GET;
 import com.bosch.si.rest.anno.Header;
 import com.bosch.si.rest.anno.POST;
@@ -75,8 +76,8 @@ public abstract class AbstractService implements IService {
     protected String servicePath = "";
 
     @Override
-    public void setBaseURI(String baseURI) {
-        this.baseURI = baseURI;
+    public String getBaseURI() {
+        return baseURI;
     }
 
     @Override
@@ -85,11 +86,6 @@ public abstract class AbstractService implements IService {
             updateParams();
         }
         return URI;
-    }
-
-    @Override
-    public void setURI(String URI) {
-        this.URI = URI;
     }
 
     @Override
@@ -130,18 +126,8 @@ public abstract class AbstractService implements IService {
     }
 
     @Override
-    public void setCallback(IServiceCallback callback) {
-        this.callback = callback;
-    }
-
-    @Override
     public String getRequestCookie() {
         return requestCookie;
-    }
-
-    @Override
-    public void setRequestCookie(String requestCookie) {
-        this.requestCookie = requestCookie;
     }
 
     @Override
@@ -150,18 +136,8 @@ public abstract class AbstractService implements IService {
     }
 
     @Override
-    public void setReadTimeout(int readTimeout) {
-        this.readTimeout = readTimeout;
-    }
-
-    @Override
     public int getConnectTimeout() {
         return connectTimeout;
-    }
-
-    @Override
-    public void setConnectTimeout(int connectTimeout) {
-        this.connectTimeout = connectTimeout;
     }
 
     @Override
@@ -177,18 +153,8 @@ public abstract class AbstractService implements IService {
     }
 
     @Override
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    @Override
     public String getQueryString() {
         return queryString;
-    }
-
-    @Override
-    public void setQueryString(String queryString) {
-        this.queryString = queryString;
     }
 
     @Override
@@ -200,11 +166,6 @@ public abstract class AbstractService implements IService {
     }
 
     @Override
-    public void setContentType(String contentType) {
-        addHeader(CONTENT_TYPE, contentType);
-    }
-
-    @Override
     public METHOD getMethod() {
         if (URI == null) {
             updateParams();
@@ -213,26 +174,9 @@ public abstract class AbstractService implements IService {
     }
 
     @Override
-    public void setMethod(METHOD method) {
-        this.method = method;
-    }
-
-    @Override
     public IServiceConnection getConnection() {
-        if (connection == null) {
-            connection = getServiceConnection();
-        }
+        connection = getServiceConnection();
         return connection;
-    }
-
-    @Override
-    public void setConnection(IServiceConnection connection) {
-        this.connection = connection;
-    }
-
-    @Override
-    public void setExecutor(Executor executor) {
-        this.executor = executor;
     }
 
     @Override
@@ -246,28 +190,8 @@ public abstract class AbstractService implements IService {
     }
 
     @Override
-    public void setAuthorization(String authorization) {
-        this.authorization = authorization;
-    }
-
-    @Override
     public Map<String, String> getHeaders() {
         return headers;
-    }
-
-    @Override
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
-    }
-
-    @Override
-    public void addHeader(String key, String value) {
-        this.headers.put(key, value);
-    }
-
-    @Override
-    public void removeHeader(String key) {
-        this.headers.remove(key);
     }
 
     @Override
@@ -525,10 +449,9 @@ public abstract class AbstractService implements IService {
         //set cookie
         String cookie = getRequestCookie();
         if (cookie != null && !cookie.isEmpty()) {
-            addHeader(COOKIE, cookie);
+            headers.put(COOKIE, cookie);
         }
-        removeHeader(AUTHORIZATION);
-        Map<String, String> headers = getHeaders();
+        headers.remove(AUTHORIZATION);
         if (headers != null && headers.size() > 0) {
             for (Map.Entry<String, String> header : headers.entrySet()) {
                 try {
@@ -565,11 +488,18 @@ public abstract class AbstractService implements IService {
 
     //Set servicePath and method, only proceed with the first one
     protected void updateParams() {
-        updateCoreParams();
-        updateURI();
+        applyAnnotationsValues();
+
+        URI = URI == null ? servicePath : URI;
+
+        applyPublicPropertiesValues();
+
+        applyQueryString();
     }
 
-    protected void updateCoreParams() {
+    protected void applyAnnotationsValues() {
+        headers = getHeaders();
+        headers.put(CONTENT_TYPE, CONTENT_TYPE_DEFAULT);
         Annotation[] annotations = getDeclaredClass().getAnnotations();
         for (Annotation annotation : annotations) {
             if (annotation instanceof GET) {
@@ -587,39 +517,22 @@ public abstract class AbstractService implements IService {
             } else if (annotation instanceof Authorization) {
                 authorization = ((Authorization) annotation).value();
             } else if (annotation instanceof ContentType) {
-                addHeader(CONTENT_TYPE, ((ContentType) annotation).value());
+                headers.put(CONTENT_TYPE, ((ContentType) annotation).value());
+            } else if (annotation instanceof FormUrlEncoded) {
+                headers.put(CONTENT_TYPE, CONTENT_TYPE_FORM_URL_ENCODED);
             } else if (annotation instanceof Cookie) {
-                addHeader(COOKIE, ((Cookie) annotation).value());
+                headers.put(COOKIE, ((Cookie) annotation).value());
             } else if (annotation instanceof Header) {
                 Header ann = (Header) annotation;
                 String name = ann.name();
                 String value = ann.value();
                 if (name != null && value != null)
-                    addHeader(name, value);
+                    headers.put(name, value);
             }
         }
     }
 
-    protected void updateURI() {
-        URI = URI == null ? servicePath : URI;
-
-        Pattern p = Pattern.compile("\\:(\\w+)");
-        Matcher m = p.matcher(URI);
-
-        while (m.find()) {
-            String fieldName = m.group(1);
-            String value = getFieldValue(fieldName);
-            if (value != null) {
-                URI = URI.replaceAll(String.format("\\:%s", fieldName), value);
-            } else {
-                try {
-                    throw new Exception(String.format("Class %s Value for field %s is null", getDeclaredClass().getName(), fieldName));
-                } catch (Exception e) {
-                    System.out.print("REST_AbstractService_updateParams: " + e.getMessage());
-                }
-            }
-        }
-
+    protected void applyQueryString() {
         String getQueryString = getQueryString();
         if (getQueryString != null && !getQueryString.isEmpty()) {
             getQueryString = String.format("?%s", getQueryString);
@@ -633,6 +546,24 @@ public abstract class AbstractService implements IService {
                 URI = String.format("%s/%s%s", baseURI, URI, getQueryString);
             } else {
                 URI = String.format("%s%s", URI, getQueryString);
+            }
+        }
+    }
+
+    protected void applyPublicPropertiesValues() {
+        Pattern p = Pattern.compile("\\:(\\w+)");
+        Matcher m = p.matcher(URI);
+        while (m.find()) {
+            String fieldName = m.group(1);
+            String value = getFieldValue(fieldName);
+            if (value != null) {
+                URI = URI.replaceAll(String.format("\\:%s", fieldName), value);
+            } else {
+                try {
+                    throw new Exception(String.format("Class %s Value for field %s is null", getDeclaredClass().getName(), fieldName));
+                } catch (Exception e) {
+                    System.out.print("REST_AbstractService_updateParams: " + e.getMessage());
+                }
             }
         }
     }

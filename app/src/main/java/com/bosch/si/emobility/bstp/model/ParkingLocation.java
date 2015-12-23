@@ -10,7 +10,7 @@ public class ParkingLocation extends Model {
     private double longitude;
     private String locationTitle;
     private int availabilityCount;
-    private int totalCapacity;
+    private int totalCapacityCount;
     private String parkingType;
 
     public int getAvailabilityCount() {
@@ -61,11 +61,11 @@ public class ParkingLocation extends Model {
         this.parkingType = parkingType;
     }
 
-    public int getTotalCapacity() {
-        return totalCapacity;
+    public int getTotalCapacityCount() {
+        return totalCapacityCount;
     }
 
-    public void setTotalCapacity(int totalCapacity) {
-        this.totalCapacity = totalCapacity;
+    public void setTotalCapacityCount(int totalCapacityCount) {
+        this.totalCapacityCount = totalCapacityCount;
     }
 }

@@ -23,9 +23,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="21dp"
         android:layout_toRightOf="@id/imageViewLogo"
-        android:background="@color/bg_menu_color"
+        android:background="@color/bg_action_bar_color"
         android:paddingBottom="10dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"

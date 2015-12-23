@@ -69,7 +69,7 @@
     <color name="bg_black_opacity_5">#0d000000</color>
     <color name="bg_black_opacity_0">#00000000</color>
 
-    <color name="bg_menu_color">#80ffffff</color>
+    <color name="bg_action_bar_color">#ccffffff</color>
     <color name="menu_item_color">#ffffff</color>
 
 </resources>

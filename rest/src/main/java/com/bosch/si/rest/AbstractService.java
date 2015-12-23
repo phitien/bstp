@@ -1,6 +1,7 @@
 package com.bosch.si.rest;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import com.bosch.si.rest.anno.Authorization;
 import com.bosch.si.rest.anno.ContentType;
@@ -81,9 +82,11 @@ public abstract class AbstractService implements IService {
 
     protected String responseCookie = null;
 
-    protected int responseCode = -1;
+    protected int responseCode = REST_ERROR;
 
     protected String servicePath = "";
+
+    protected Exception exception = null;
 
     @Override
     public String getBaseURI() {
@@ -184,7 +187,7 @@ public abstract class AbstractService implements IService {
     }
 
     @Override
-    public IServiceConnection getConnection() {
+    public IServiceConnection getConnection() throws Exception {
         connection = getServiceConnection();
         return connection;
     }
@@ -232,6 +235,11 @@ public abstract class AbstractService implements IService {
     @Override
     public int getResponseCode() {
         return responseCode;
+    }
+
+    @Override
+    public final Exception getException() {
+        return exception;
     }
 
     private IServiceCallback mergeCallbacks(final IServiceCallback serviceCallback) {
@@ -290,61 +298,22 @@ public abstract class AbstractService implements IService {
 
             @Override
             protected void onPreExecute() {
-                callback.onPreExecute(me);
+                doPreExecution(callback, me);
             }
 
             @Override
             protected Boolean doInBackground(Object... params) {
-                responseString = null;
-                BufferedReader reader = null;
-                try {
-                    IServiceConnection conn = getConnection();
-                    conn.connect();
-                    //set responseCode
-                    responseCode = conn.getResponseCode();
-                    if (isOK()) {
-                        InputStream inputStream = conn.getInputStream();
-                        StringBuilder builder = new StringBuilder();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            builder.append(line + "\n");
-                        }
-                        //set responseString
-                        responseString = builder.toString();
-                        responseCookie = conn.getURLConnection().getHeaderField(SET_COOKIE);
-                    } else {
-                        responseString = responseCode + ": " + conn.getResponseMessage();
-                    }
-                    conn.disconnect();
-
-                    if (reader != null) {
-                        reader.close();
-                    }
-
-                } catch (Exception e) {
-                    responseCode = REST_UNKNOWN_ERROR;
-                    responseString = responseCode + ": " + e.getMessage();
-                }
-
-                return me.isOK();
+                return doExecutionInBackground();
             }
 
             @Override
             protected void onProgressUpdate(Object... values) {
-                callback.onProgressUpdate(me);
+                doProgressUpdate(callback, me);
             }
 
             @Override
             protected void onPostExecute(Boolean isOK) {
-                if (isOK()) {
-                    callback.success(me);
-                } else if (isUnauthorized()) {
-                    callback.onSessionExpiry(me);
-                } else {
-                    callback.failure(me);
-                }
-                callback.onPostExecute(me);
+                doPostExecution(callback, me);
             }
         };
 
@@ -353,67 +322,28 @@ public abstract class AbstractService implements IService {
 
     @Override
     public final String executeSync(IServiceCallback serviceCallback) {
-        final IService me = this;
+        final AbstractService me = this;
         final CountDownLatch signal = new CountDownLatch(1);
         final IServiceCallback callback = mergeCallbacks(serviceCallback);
         AsyncTask<Object, Object, Boolean> task = new AsyncTask<Object, Object, Boolean>() {
             @Override
             protected void onPreExecute() {
-                callback.onPreExecute(me);
+                doPreExecution(callback, me);
             }
 
             @Override
             protected Boolean doInBackground(Object... params) {
-                responseString = null;
-                BufferedReader reader = null;
-                try {
-                    IServiceConnection conn = getConnection();
-                    conn.connect();
-                    //set responseCode
-                    responseCode = conn.getResponseCode();
-                    if (isOK()) {
-                        InputStream inputStream = conn.getInputStream();
-                        StringBuilder builder = new StringBuilder();
-                        reader = new BufferedReader(new InputStreamReader(inputStream));
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            builder.append(line + "\n");
-                        }
-                        //set responseString
-                        responseString = builder.toString();
-                        responseCookie = conn.getURLConnection().getHeaderField(SET_COOKIE);
-                    } else {
-                        responseString = responseCode + ": " + conn.getResponseMessage();
-                    }
-                    conn.disconnect();
-
-                    if (reader != null) {
-                        reader.close();
-                    }
-
-                } catch (Exception e) {
-                    responseCode = REST_UNKNOWN_ERROR;
-                    responseString = responseCode + ": " + e.getMessage();
-                }
-
-                return isOK();
+                return doExecutionInBackground();
             }
 
             @Override
             protected void onProgressUpdate(Object... values) {
-                callback.onProgressUpdate(me);
+                doProgressUpdate(callback, me);
             }
 
             @Override
             protected void onPostExecute(Boolean isOK) {
-                if (isOK()) {
-                    callback.success(me);
-                } else if (isUnauthorized()) {
-                    callback.onSessionExpiry(me);
-                } else {
-                    callback.failure(me);
-                }
-                callback.onPostExecute(me);
+                doPostExecution(callback, me);
                 signal.countDown();
             }
         };
@@ -423,39 +353,99 @@ public abstract class AbstractService implements IService {
         try {
             signal.await();
         } catch (InterruptedException e) {
-            System.out.print("REST_executeSync: " + e.getMessage());
+            exception = e;
         }
+
         return responseString;
     }
 
-    protected String getFieldValue(String fieldName) {
+    private void doProgressUpdate(IServiceCallback callback, AbstractService me) {
         try {
-            Field field = this.getDeclaredClass().getField(fieldName);
-            field.setAccessible(true);
-            return String.valueOf(field.get(this));
+            callback.onProgressUpdate(me);
         } catch (Exception e) {
-            System.out.print("REST_AbstractService_getFieldValue: " + e.getMessage());
+            exception = e;
         }
-        return null;
     }
 
-    protected IServiceConnection getServiceConnection() {
+    private void doPreExecution(IServiceCallback callback, AbstractService me) {
         try {
-            URL url = new URL(getURI());
-            URLConnection conn = url.openConnection();
-            if (conn instanceof HttpsURLConnection) {
-                HttpsURLConnection httpsConn = (HttpsURLConnection) conn;
-                updateConnectionParams(httpsConn);
-                return new ServiceConnection(httpsConn);
-            } else if (conn instanceof HttpURLConnection) {
-                HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
-                updateConnectionParams(httpConn);
-                return new ServiceConnection(httpConn);
-            } else {
-                System.out.print("REST_AbstractService_getURLConnection: " + "Could not find url connection");
-            }
+            callback.onPreExecute(me);
         } catch (Exception e) {
-            System.out.print("REST_AbstractService_getURLConnection: " + e.getMessage());
+            exception = e;
+        }
+    }
+
+    @NonNull
+    private Boolean doExecutionInBackground() {
+        responseString = null;
+        BufferedReader reader = null;
+        try {
+            IServiceConnection conn = getConnection();
+            conn.connect();
+            //set responseCode
+            responseCode = conn.getResponseCode();
+            if (isOK()) {
+                StringBuilder builder = new StringBuilder();
+                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line + "\n");
+                }
+                //set responseString
+                responseString = builder.toString();
+                responseCookie = conn.getURLConnection().getHeaderField(SET_COOKIE);
+            } else {
+                responseString = responseCode + ": " + conn.getResponseMessage();
+            }
+            conn.disconnect();
+        } catch (Exception e) {
+            exception = e;
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                exception = e;
+            }
+        }
+
+        return isOK();
+    }
+
+    private void doPostExecution(IServiceCallback callback, AbstractService me) {
+        try {
+            if (isOK()) {
+                callback.success(me);
+            } else if (isUnauthorized()) {
+                callback.onSessionExpiry(me);
+            } else {
+                callback.failure(me);
+            }
+            callback.onPostExecute(me);
+        } catch (Exception e) {
+            exception = e;
+        }
+        if (exception != null) {
+            System.out.print("REST:" + exception.getMessage());
+        }
+    }
+
+    protected String getFieldValue(String fieldName) throws Exception {
+        Field field = this.getDeclaredClass().getField(fieldName);
+        field.setAccessible(true);
+        return String.valueOf(field.get(this));
+    }
+
+    protected IServiceConnection getServiceConnection() throws Exception {
+        URL url = new URL(getURI());
+        URLConnection conn = url.openConnection();
+        if (conn instanceof HttpsURLConnection) {
+            HttpsURLConnection httpsConn = (HttpsURLConnection) conn;
+            updateConnectionParams(httpsConn);
+            return new ServiceConnection(httpsConn);
+        } else if (conn instanceof HttpURLConnection) {
+            HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+            updateConnectionParams(httpConn);
+            return new ServiceConnection(httpConn);
         }
         return null;
     }
@@ -464,7 +454,7 @@ public abstract class AbstractService implements IService {
     protected String boundary = null;
     protected OutputStream outputStream = null;
 
-    private void updateConnectionParams(HttpURLConnection conn) throws IOException {
+    private void updateConnectionParams(HttpURLConnection conn) throws Exception {
         conn.setReadTimeout(getReadTimeout());
         conn.setConnectTimeout(getConnectTimeout());
         conn.setRequestMethod(getMethod().toString());
@@ -478,10 +468,7 @@ public abstract class AbstractService implements IService {
         headers.remove(AUTHORIZATION);
         if (headers != null && headers.size() > 0) {
             for (Map.Entry<String, String> header : headers.entrySet()) {
-                try {
-                    conn.setRequestProperty(header.getKey(), header.getValue());
-                } catch (Exception e) {
-                }
+                conn.setRequestProperty(header.getKey(), header.getValue());
             }
         }
         //set params for non-get method
@@ -529,35 +516,31 @@ public abstract class AbstractService implements IService {
         writer.flush();
     }
 
-    protected void setParamsForFiles(HttpURLConnection conn) {
+    protected void setParamsForFiles(HttpURLConnection conn) throws Exception {
         for (Map.Entry<String, File> field : files.entrySet()) {
             addFile(conn, field.getKey(), field.getValue());
         }
     }
 
-    protected void addFile(HttpURLConnection conn, String fieldName, File uploadFile) {
-        try {
-            String fileName = uploadFile.getName();
-            writer.append("--" + boundary).append(LINE_FEED);
-            writer.append("Content-Disposition: form-data; name=\"" + fieldName + "\"; filename=\"" + fileName + "\"").append(LINE_FEED);
-            writer.append("Content-Type: " + URLConnection.guessContentTypeFromName(fileName)).append(LINE_FEED);
-            writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
-            writer.append(LINE_FEED);
-            writer.flush();
+    protected void addFile(HttpURLConnection conn, String fieldName, File uploadFile) throws Exception {
+        String fileName = uploadFile.getName();
+        writer.append("--" + boundary).append(LINE_FEED);
+        writer.append("Content-Disposition: form-data; name=\"" + fieldName + "\"; filename=\"" + fileName + "\"").append(LINE_FEED);
+        writer.append("Content-Type: " + URLConnection.guessContentTypeFromName(fileName)).append(LINE_FEED);
+        writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
+        writer.append(LINE_FEED);
+        writer.flush();
 
-            FileInputStream inputStream = new FileInputStream(uploadFile);
-            byte[] buffer = new byte[4096];
-            int bytesRead = -1;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-            outputStream.flush();
-            inputStream.close();
-            writer.append(LINE_FEED);
-            writer.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
+        FileInputStream inputStream = new FileInputStream(uploadFile);
+        byte[] buffer = new byte[4096];
+        int bytesRead = -1;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
         }
+        outputStream.flush();
+        inputStream.close();
+        writer.append(LINE_FEED);
+        writer.flush();
     }
 
     protected Class<?> getDeclaredClass() {
@@ -637,15 +620,11 @@ public abstract class AbstractService implements IService {
         Matcher m = p.matcher(URI);
         while (m.find()) {
             String fieldName = m.group(1);
-            String value = getFieldValue(fieldName);
-            if (value != null) {
+            try {
+                String value = getFieldValue(fieldName);
                 URI = URI.replaceAll(String.format("\\:%s", fieldName), value);
-            } else {
-                try {
-                    throw new Exception(String.format("Class %s Value for field %s is null", getDeclaredClass().getName(), fieldName));
-                } catch (Exception e) {
-                    System.out.print("REST_AbstractService_updateParams: " + e.getMessage());
-                }
+            } catch (Exception e) {
+                System.out.print(String.format("REST: Class %s -> Value for field %s is null", getDeclaredClass().getName(), fieldName));
             }
         }
     }

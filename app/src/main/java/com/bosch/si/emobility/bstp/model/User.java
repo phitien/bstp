@@ -15,18 +15,18 @@ public class User extends Model {
         }
     }
 
-    protected String tenantName = "DEFAULT";
-    protected String username;
-    protected String password;
-    protected String apiKey;
-    protected boolean saveCredentials;
+    private String tenantName = "DEFAULT";
+    private String username;
+    private String password;
+    private String contextId;
+    private boolean saveCredentials;
 
-    public String getApiKey() {
-        return apiKey;
+    public String getContextId() {
+        return contextId;
     }
 
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
+    public void setContextId(String contextId) {
+        this.contextId = contextId;
     }
 
     public String getPassword() {
@@ -71,13 +71,25 @@ public class User extends Model {
         if (this.tenantName == null || this.tenantName.isEmpty()) {
             return false;
         }
-        if (this.apiKey == null || this.apiKey.isEmpty()) {
+        if (this.contextId == null || this.contextId.isEmpty()) {
             return false;
         }
         return true;
     }
 
+    /**
+     * <im:authentication xmlns:im='http://www.bosch.com/IAP/im1_1_0'>
+     *     <im:userNamePassword>
+     *         <im:tenantName>DEFAULT</im:tenantName>
+     *         <im:userName>sgp0458</im:userName>
+     *         <im:password>Sgp04581234</im:password>
+     *         <im:contextId>contextId</im:contextId>
+     *     </im:userNamePassword>
+     * </im:authentication>
+     *
+     * @return user information in xml format
+     */
     public String toXMLString() {
-        return "<im:authentication xmlns:im='http://www.bosch.com/IAP/im1_1_0'><im:userNamePassword><im:tenantName>" + tenantName + "</im:tenantName><im:userName>" + username + "</im:userName><im:password>" + password + "</im:password><im:apiKey>" + apiKey + "</im:apiKey></im:userNamePassword></im:authentication>";
+        return "<im:authentication xmlns:im='http://www.bosch.com/IAP/im1_1_0'><im:userNamePassword><im:tenantName>" + tenantName + "</im:tenantName><im:userName>" + username + "</im:userName><im:password>" + password + "</im:password><im:contextId>" + contextId + "</im:contextId></im:userNamePassword></im:authentication>";
     }
 }

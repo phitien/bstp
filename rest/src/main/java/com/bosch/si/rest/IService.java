@@ -13,9 +13,9 @@ import java.util.concurrent.Executor;
  */
 public interface IService {
 
+    public static final int REST_ERROR = -1;
     public static final int READ_TIMEOUT = 10000;
     public static final int CONNECT_TIMEOUT = 15000;
-    public static final int REST_UNKNOWN_ERROR = -204;
     public static final String CONTENT_LENGTH = "Content-Length";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_TYPE_DEFAULT = "application/json";
@@ -50,7 +50,7 @@ public interface IService {
 
     public METHOD getMethod();
 
-    public IServiceConnection getConnection();
+    public IServiceConnection getConnection() throws Exception;
 
     public Executor getExecutor();
 
@@ -69,6 +69,8 @@ public interface IService {
     public String getResponseCookie();
 
     public int getResponseCode();
+
+    public Exception getException();
 
     public boolean isOK();
 

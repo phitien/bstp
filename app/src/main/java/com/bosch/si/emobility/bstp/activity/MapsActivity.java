@@ -18,6 +18,7 @@ import com.bosch.si.emobility.bstp.activity.component.SearchComponent;
 import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
+import com.bosch.si.emobility.bstp.model.SearchCriteria;
 import com.bosch.si.emobility.bstp.model.User;
 import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.IService;
@@ -116,7 +117,7 @@ public class MapsActivity extends Activity implements LocationListener {
                 //Save Authorization Cookie
                 try {
                     JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
-                    user.setApiKey(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
+                    user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
                     UserSessionManager.getInstance().setUserSession(user);
                     Event.broadcast(Utils.getString(R.string.re_login_ok), Constants.EventType.RE_LOGIN_OK.toString());
                 } catch (Exception e) {
@@ -201,7 +202,7 @@ public class MapsActivity extends Activity implements LocationListener {
                 //Save Authorization Cookie
                 try {
                     JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
-                    user.setApiKey(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
+                    user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
                     UserSessionManager.getInstance().setUserSession(user);
                     Event.broadcast(Utils.getString(R.string.login_ok), Constants.EventType.LOGIN_OK.toString());
                 } catch (Exception e) {
@@ -246,12 +247,8 @@ public class MapsActivity extends Activity implements LocationListener {
         mapComponent.setSearchingLatLng(place.getLatLng());
     }
 
-    public Date getFromDate() {
-        return searchComponent.getFromDate();
-    }
-
-    public Date getToDate() {
-        return searchComponent.getToDate();
+    public SearchCriteria getSearchCriteria() {
+        return searchComponent.getSearchCriteria();
     }
 
 }

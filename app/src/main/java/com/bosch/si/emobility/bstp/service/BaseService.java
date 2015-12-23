@@ -7,11 +7,9 @@ import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
 import com.bosch.si.rest.AbstractService;
 import com.bosch.si.rest.IService;
-import com.bosch.si.rest.anno.Header;
 import com.bosch.si.rest.callback.IServiceCallback;
 import com.bosch.si.rest.callback.ServiceCallback;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class BaseService extends AbstractService {
@@ -45,7 +43,7 @@ public class BaseService extends AbstractService {
 
     @Override
     public Map<String, String> getHeaders() {
-        headers.put("x-im-context-id", UserSessionManager.getInstance().getUser().getApiKey());
+        headers.put("x-im-context-id", UserSessionManager.getInstance().getUser().getContextId());
         return super.getHeaders();
     }
 }

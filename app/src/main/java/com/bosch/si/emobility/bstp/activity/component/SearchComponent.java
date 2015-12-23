@@ -23,6 +23,7 @@ import android.widget.TimePicker;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
+import com.bosch.si.emobility.bstp.model.SearchCriteria;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -70,6 +71,8 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     static Date fromDate;
     static Date toDate;
 
+    static SearchCriteria searchCriteria = new SearchCriteria();
+
     public Date getFromDate() {
         return fromDate;
     }
@@ -84,6 +87,10 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
 
     public ImageButton getImageButtonClear() {
         return imageButtonClear;
+    }
+
+    public SearchCriteria getSearchCriteria() {
+        return searchCriteria;
     }
 
     @Override
@@ -131,6 +138,10 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
             }
         });
 
+        Calendar calendar = Calendar.getInstance();
+        fromDate = calendar.getTime();
+        toDate = new Date(fromDate.getTime() + TimeUnit.SECONDS.toMillis(1));
+
         setSearchAutoComplete();
     }
 
@@ -150,10 +161,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     public void setEnabled(boolean enabled, boolean noAnimation) {
         super.setEnabled(enabled, noAnimation);
         hideKeyboard();
-        Calendar calendar = Calendar.getInstance();
-        fromDate = calendar.getTime();
-        toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(1));
-        updateTextViews();
+        updateComponent();
     }
 
     @Override
@@ -175,15 +183,17 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
         if (toDate.getTime() < fromDate.getTime()) {
             toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(1));
         }
-        updateTextViews();
+        updateComponent();
     }
 
-    protected void updateTextViews() {
+    protected void updateComponent() {
         textViewFromDate.setText(DateFormat.format("yyyy-MM-dd", fromDate));
         textViewFromTime.setText(DateFormat.format("hh:mm:ss", fromDate));
 
         textViewToDate.setText(DateFormat.format("yyyy-MM-dd", toDate));
         textViewToTime.setText(DateFormat.format("hh:mm:ss", toDate));
+
+        searchCriteria.setStartTime(fromDate.toString()).setEndTime(toDate.toString());
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.bosch.si.emobility.bstp.service;
 
-import com.bosch.si.rest.anno.ContentType;
 import com.bosch.si.rest.anno.POST;
 
 @POST("/rest/parking/search")

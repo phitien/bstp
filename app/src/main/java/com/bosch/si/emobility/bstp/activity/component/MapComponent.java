@@ -4,6 +4,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -202,11 +203,9 @@ public class MapComponent extends Component {
                 View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
                 // and next place it, on bottom right (as Google Maps app)
                 RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-                // position on right bottom
                 layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
                 layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-                layoutParams.setMargins(30, 30, 30, 30);
+                layoutParams.setMargins(0, 0, 0, 310);
 
                 mapView.setOnDragListener(new View.OnDragListener() {
                     @Override
@@ -252,7 +251,7 @@ public class MapComponent extends Component {
         }
         map.setMyLocationEnabled(enabled);
         map.getUiSettings().setMyLocationButtonEnabled(enabled);
-        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(enabled);
         map.getUiSettings().setScrollGesturesEnabled(enabled);
         map.getUiSettings().setTiltGesturesEnabled(enabled);
         map.getUiSettings().setRotateGesturesEnabled(enabled);

@@ -2,20 +2,20 @@
 <resources>
     <color name="black_overlay">#66000000</color>
 
-    <color name="primary">#225577</color>
-    <color name="primary_dark">#225577</color>
-    <color name="BoschColorAccent">#225577</color>
+    <color name="primary">#294d86</color>
+    <color name="primary_dark">#294d86</color>
+    <color name="BoschColorAccent">#294d86</color>
     <color name="background">#ffffff</color>
 
     <color name="Unselected">#505052</color>
-    <color name="Selected">#225577</color>
+    <color name="Selected">#294d86</color>
 
     <color name="ButtonPressed">#116688</color>
     <color name="ButtonPressedStroke">#116688</color>
     <color name="ButtonFocused">#116688</color>
     <color name="ButtonFocusedStroke">#116688</color>
-    <color name="Button">#225577</color>
-    <color name="ButtonStroke">#225577</color>
+    <color name="Button">#294d86</color>
+    <color name="ButtonStroke">#294d86</color>
 
     <color name="button_text_color">#ffffff</color>
 
@@ -70,5 +70,6 @@
     <color name="bg_black_opacity_0">#00000000</color>
 
     <color name="bg_menu_color">#80ffffff</color>
+    <color name="menu_item_color">#ffffff</color>
 
 </resources>

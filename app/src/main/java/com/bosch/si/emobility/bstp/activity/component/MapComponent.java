@@ -13,8 +13,8 @@ import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
 import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
-import com.bosch.si.emobility.bstp.model.ParkingArea;
-import com.bosch.si.emobility.bstp.service.SearchService;
+import com.bosch.si.emobility.bstp.model.ParkingLocation;
+import com.bosch.si.emobility.bstp.service.ParkingLocationInfoService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.android.gms.maps.CameraUpdate;
@@ -32,8 +32,10 @@ import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by sgp0458 on 16/12/15.
@@ -45,9 +47,9 @@ public class MapComponent extends Component {
     private Marker myLocationMarker;
 
     private LatLng searchingLatLng;
-    private Marker mySearchingMarker;
+    private Marker searchingMarker;
 
-    private List<Marker> markers = new ArrayList<>();
+    private Map<String, Marker> markers = new HashMap<>();
 
     private LatLng prevLatLng = null;
     private LatLng currLatLng = null;
@@ -94,12 +96,12 @@ public class MapComponent extends Component {
     }
 
     private void drawMySearchingMarker(LatLng latLng) {
-        if (mySearchingMarker == null)
-            mySearchingMarker = map.addMarker(new MarkerOptions()
+        if (searchingMarker == null)
+            searchingMarker = map.addMarker(new MarkerOptions()
                     .position(latLng)
                     .title(activity.getString(R.string.current_search_location)));
         else
-            mySearchingMarker.setPosition(latLng);
+            searchingMarker.setPosition(latLng);
     }
 
     private LatLng drawMyLocationMarker() {
@@ -158,16 +160,16 @@ public class MapComponent extends Component {
 
     private void clearMarkers() {
         map.clear();
-        mySearchingMarker = null;
+        searchingMarker = null;
         myLocationMarker = null;
-        markers = new ArrayList<>();
+        markers = new HashMap<>();
     }
 
-    private void drawParkingAreaMarker(ParkingArea parkingArea) {
-        LatLng latLng = new LatLng(parkingArea.latitude, parkingArea.longitude);
-        markers.add(map.addMarker(new MarkerOptions()
+    private void drawParkingAreaMarker(ParkingLocation parkingLocation) {
+        LatLng latLng = new LatLng(parkingLocation.getLatitude(), parkingLocation.getLongitude());
+        markers.put(parkingLocation.getParkingId(), map.addMarker(new MarkerOptions()
                 .position(latLng)
-                .title(parkingArea.locationTitle)
+                .title(parkingLocation.getLocationTitle())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking))));
     }
 
@@ -235,6 +237,13 @@ public class MapComponent extends Component {
                         return true;
                     }
                 });
+                map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        openLocationDetail(marker);
+                        return true;
+                    }
+                });
                 searchingLatLng = Utils.isLocationServiceDisabled(this.activity) ? Constants.DEFAULT_LOCATION : drawMyLocationMarker();
                 zoomToLocation(searchingLatLng);
             }
@@ -253,6 +262,32 @@ public class MapComponent extends Component {
         imageButtonMenu.setVisibility(visibility);
     }
 
+    private void openLocationDetail(Marker marker) {
+        if (marker.equals(myLocationMarker)) {
+            //do nothing
+        } else if (marker.equals(searchingMarker)) {
+            //do nothing
+        } else {
+            for (Map.Entry<String, Marker> entry : markers.entrySet()) {
+                if (marker.equals(entry.getValue())) {
+                    ParkingLocationInfoService service = new ParkingLocationInfoService();
+                    service.parkingid = entry.getKey();
+                    service.executeAsync(new ServiceCallback() {
+                        @Override
+                        public void success(IService service) {
+                            service.getResponseString();
+                        }
+
+                        @Override
+                        public void failure(IService service) {
+                            service.getResponseCode();
+                        }
+                    });
+                }
+            }
+        }
+    }
+
     public void refresh() {
         try {
             Geocoder geocoder;
@@ -269,13 +304,13 @@ public class MapComponent extends Component {
                             @Override
                             public void success(IService service) {
                                 Gson gson = new Gson();
-                                List<ParkingArea> parkingAreas = gson.fromJson(service.getResponseString(), new TypeToken<ArrayList<ParkingArea>>() {
+                                List<ParkingLocation> parkingLocations = gson.fromJson(service.getResponseString(), new TypeToken<ArrayList<ParkingLocation>>() {
                                 }.getType());
                                 clearMarkers();
                                 drawMyLocationMarker();
                                 drawMySearchingMarker(searchingLatLng);
-                                for (ParkingArea parkingArea : parkingAreas) {
-                                    drawParkingAreaMarker(parkingArea);
+                                for (ParkingLocation parkingLocation : parkingLocations) {
+                                    drawParkingAreaMarker(parkingLocation);
                                 }
                             }
 

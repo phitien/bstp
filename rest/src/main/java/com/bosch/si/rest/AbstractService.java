@@ -12,6 +12,7 @@ import com.bosch.si.rest.anno.GET;
 import com.bosch.si.rest.anno.Header;
 import com.bosch.si.rest.anno.POST;
 import com.bosch.si.rest.anno.PUT;
+import com.bosch.si.rest.anno.QueryParam;
 import com.bosch.si.rest.callback.IServiceCallback;
 import com.bosch.si.rest.connection.IServiceConnection;
 import com.bosch.si.rest.connection.ServiceConnection;
@@ -155,10 +156,9 @@ public abstract class AbstractService implements IService {
 
     @Override
     public String getBody() {
-        if (body == null) {
+        if (method != METHOD.GET && (body == null || body.isEmpty())) {
             Gson gson = new GsonBuilder()
-                    .excludeFieldsWithModifiers(Modifier.PRIVATE)
-                    .excludeFieldsWithModifiers(Modifier.PROTECTED)
+                    .excludeFieldsWithoutExposeAnnotation()
                     .create();
             return gson.toJson(this).toString();
         }
@@ -167,7 +167,34 @@ public abstract class AbstractService implements IService {
 
     @Override
     public String getQueryString() {
+        if (method == METHOD.GET && (queryString == null || queryString.isEmpty())) {
+            String queryString = "";
+            Field[] fields = getDeclaredClass().getFields();
+            for (Field field : fields) {
+                if (isQueryParam(field)) {
+                    String value = "";
+                    try {
+                        value = String.valueOf(field.get(this));
+                    } catch (IllegalAccessException e) {
+                        exception = e;
+                    }
+                    queryString += field.getName() + "=" + value + "&";
+                }
+            }
+            return queryString;
+        }
         return queryString;
+    }
+
+    private boolean isQueryParam(Field field) {
+        int modifiers = field.getModifiers();
+        if (!Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
+            Annotation[] annotations = field.getAnnotations();
+            if (annotations.length > 0) {
+                return annotations[annotations.length - 1] instanceof QueryParam;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -402,7 +429,8 @@ public abstract class AbstractService implements IService {
             exception = e;
         } finally {
             try {
-                reader.close();
+                if (reader != null)
+                    reader.close();
             } catch (IOException e) {
                 exception = e;
             }
@@ -498,6 +526,8 @@ public abstract class AbstractService implements IService {
                     conn.getOutputStream().write(postDataBytes);
                 }
             }
+        } else {
+
         }
     }
 
@@ -554,11 +584,8 @@ public abstract class AbstractService implements IService {
     //Set servicePath and method, only proceed with the first one
     protected void updateParams() {
         applyAnnotationsValues();
-
         URI = URI == null ? servicePath : URI;
-
         applyPublicPropertiesValues();
-
         applyQueryString();
     }
 
@@ -598,19 +625,19 @@ public abstract class AbstractService implements IService {
     }
 
     protected void applyQueryString() {
-        String getQueryString = getQueryString();
-        if (getQueryString != null && !getQueryString.isEmpty()) {
-            getQueryString = String.format("?%s", getQueryString);
+        String queryString = getQueryString();
+        if (queryString != null && !queryString.isEmpty()) {
+            queryString = String.format("?%s", queryString);
         } else {
-            getQueryString = "";
+            queryString = "";
         }
 
         if (!URI.toLowerCase().startsWith("http")) {
             String baseURI = getBaseURI();
             if (baseURI != null && !baseURI.isEmpty()) {
-                URI = String.format("%s/%s%s", baseURI, URI, getQueryString);
+                URI = String.format("%s/%s%s", baseURI, URI, queryString);
             } else {
-                URI = String.format("%s%s", URI, getQueryString);
+                URI = String.format("%s%s", URI, queryString);
             }
         }
     }

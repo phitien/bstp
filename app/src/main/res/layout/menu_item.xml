@@ -13,8 +13,12 @@
         android:focusableInTouchMode="false"
         android:gravity="center_vertical"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:text="Menu Item"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textIsSelectable="false" />
+        android:textColor="@color/menu_item_color"
+        android:textIsSelectable="false"
+        android:textSize="@dimen/menu_item_text_size"
+        android:textStyle="bold" />
 
 </RelativeLayout>
 

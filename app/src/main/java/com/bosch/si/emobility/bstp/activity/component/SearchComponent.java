@@ -316,6 +316,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
                 return;
             }
             // Get the Place object from the buffer.
+            setEnabled(false, false);
             Place place = places.get(0);
             activity.moveCamera(place);
             places.release();

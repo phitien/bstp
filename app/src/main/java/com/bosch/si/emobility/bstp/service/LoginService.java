@@ -16,6 +16,7 @@ public class LoginService extends AbstractService {
         return Constants.BASE_URL;
     }
 
+    @Expose
     public User user;
 
     @Override

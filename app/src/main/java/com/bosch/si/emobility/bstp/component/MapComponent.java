@@ -1,10 +1,9 @@
-package com.bosch.si.emobility.bstp.activity.component;
+package com.bosch.si.emobility.bstp.component;
 
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -29,6 +28,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
@@ -97,12 +97,12 @@ public class MapComponent extends Component {
     }
 
     private void drawMySearchingMarker(LatLng latLng) {
-        if (searchingMarker == null)
-            searchingMarker = map.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title(activity.getString(R.string.current_search_location)));
-        else
-            searchingMarker.setPosition(latLng);
+//        if (searchingMarker == null)
+//            searchingMarker = map.addMarker(new MarkerOptions()
+//                    .position(latLng)
+//                    .title(activity.getString(R.string.current_search_location)));
+//        else
+//            searchingMarker.setPosition(latLng);
     }
 
     private LatLng drawMyLocationMarker() {
@@ -128,12 +128,15 @@ public class MapComponent extends Component {
         return latLng;
     }
 
-    private CameraUpdate getZoomForDistance(LatLng originalPosition, double distance) {
-        LatLng rightBottom = SphericalUtil.computeOffset(originalPosition, distance, 135);
-        LatLng leftTop = SphericalUtil.computeOffset(originalPosition, distance, -45);
-        LatLngBounds sBounds = new LatLngBounds(new LatLng(rightBottom.latitude, leftTop.longitude), new LatLng(leftTop.latitude, rightBottom.longitude));
-        return CameraUpdateFactory.newLatLngBounds(sBounds, 50);
+    @NonNull
+    private LatLngBounds getLatLngBounds(LatLng latLng, double radius) {
+        LatLng southwest = SphericalUtil.computeOffset(latLng, radius * Math.sqrt(2.0), 225);
+        LatLng northeast = SphericalUtil.computeOffset(latLng, radius * Math.sqrt(2.0), 45);
+        return new LatLngBounds(southwest, northeast);
+    }
 
+    private CameraUpdate getZoomForDistance(LatLng latLng, double radius) {
+        return CameraUpdateFactory.newLatLngBounds(getLatLngBounds(latLng, radius), 0);
     }
 
     public void moveCamera(LatLng latLng) {
@@ -167,11 +170,23 @@ public class MapComponent extends Component {
     }
 
     private void drawParkingAreaMarker(ParkingLocation parkingLocation) {
+        String imageName = "parking_";
+        try {
+            float usedPercentage = 1 - (parkingLocation.getAvailabilityCount() / parkingLocation.getTotalCapacityCount());
+            if (usedPercentage < 0.7)
+                imageName += "green";
+            else if (usedPercentage == 0)
+                imageName += "red";
+            else
+                imageName += "orange";
+        } catch (Exception e) {
+            imageName += "grey";
+        }
         LatLng latLng = new LatLng(parkingLocation.getLatitude(), parkingLocation.getLongitude());
         markers.put(parkingLocation.getParkingId(), map.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title(parkingLocation.getLocationTitle())
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking))));
+                .icon(BitmapDescriptorFactory.fromResource(Utils.getImage(imageName)))));
     }
 
     public LatLngBounds getCurrentLatLngBounds() {
@@ -183,11 +198,7 @@ public class MapComponent extends Component {
                 Utils.Log.e("BSTP_MapComponent_getCurrentLatLngBounds: ", e.getMessage());
             }
             if (bounds == null) {
-                LatLng center = getMyLocationLatLng();
-                double radius = 50000;//50km
-                LatLng southwest = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 225);
-                LatLng northeast = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 45);
-                return new LatLngBounds(southwest, northeast);
+                return getLatLngBounds(getMyLocationLatLng(), Constants.DEFAULT_ZOOM_RADIUS);
             }
             currentCameraBounds = bounds;
         }
@@ -261,30 +272,33 @@ public class MapComponent extends Component {
         imageButtonMenu.setVisibility(visibility);
     }
 
-    private void openLocationDetail(Marker marker) {
+
+    private boolean openLocationDetail(Marker marker) {
+        for (Map.Entry<String, Marker> entry : markers.entrySet()) {
+            if (marker.equals(entry.getValue())) {
+                ParkingLocationInfoService service = new ParkingLocationInfoService();
+                service.parkingid = entry.getKey();
+                service.executeAsync(new ServiceCallback() {
+                    @Override
+                    public void success(IService service) {
+                        activity.openLocationDetail((new GsonBuilder().create()).fromJson(service.getResponseString(), ParkingLocation.class));
+                    }
+
+                    @Override
+                    public void failure(IService service) {
+                        service.getResponseCode();
+                    }
+                });
+                return true;
+            }
+        }
+
         if (marker.equals(myLocationMarker)) {
             //do nothing
         } else if (marker.equals(searchingMarker)) {
             //do nothing
-        } else {
-            for (Map.Entry<String, Marker> entry : markers.entrySet()) {
-                if (marker.equals(entry.getValue())) {
-                    ParkingLocationInfoService service = new ParkingLocationInfoService();
-                    service.parkingid = entry.getKey();
-                    service.executeAsync(new ServiceCallback() {
-                        @Override
-                        public void success(IService service) {
-                            service.getResponseString();
-                        }
-
-                        @Override
-                        public void failure(IService service) {
-                            service.getResponseCode();
-                        }
-                    });
-                }
-            }
         }
+        return false;
     }
 
     public void refresh() {

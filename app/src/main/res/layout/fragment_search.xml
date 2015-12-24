@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffffff"
+    android:background="@color/bg_search_panel_color"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
@@ -17,6 +17,7 @@
 
     <AutoCompleteTextView
         android:id="@+id/editTextSearch"
+        style="@style/App_EditTextDarkStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/autocomplete_hint"
@@ -33,6 +34,7 @@
 
     <TextView
         android:id="@+id/textViewFrom"
+        style="@style/App_TextViewDarkStyle"
         android:layout_width="@dimen/date_label_width"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextSearch"
@@ -42,26 +44,31 @@
 
     <TextView
         android:id="@+id/textViewFromDate"
+        style="@style/App_TextViewDarkStyle"
         android:layout_width="@dimen/date_textview_width"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextSearch"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_toRightOf="@id/textViewFrom"
         android:singleLine="true"
+        android:text="2015-12-24"
         android:textAlignment="center" />
 
     <TextView
         android:id="@+id/textViewFromTime"
+        style="@style/App_TextViewDarkStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextSearch"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_toRightOf="@id/textViewFromDate"
         android:singleLine="true"
+        android:text="23:59:59"
         android:textAlignment="center" />
 
     <TextView
         android:id="@+id/textViewTo"
+        style="@style/App_TextViewDarkStyle"
         android:layout_width="@dimen/date_label_width"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewFrom"
@@ -71,22 +78,26 @@
 
     <TextView
         android:id="@+id/textViewToDate"
+        style="@style/App_TextViewDarkStyle"
         android:layout_width="@dimen/date_textview_width"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewFrom"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_toRightOf="@id/textViewTo"
         android:singleLine="true"
+        android:text="2015-12-25"
         android:textAlignment="center" />
 
     <TextView
         android:id="@+id/textViewToTime"
+        style="@style/App_TextViewDarkStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewFrom"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_toRightOf="@id/textViewToDate"
         android:singleLine="true"
+        android:text="00:00:00"
         android:textAlignment="center" />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.bosch.si.emobility.bstp.activity.component;
+package com.bosch.si.emobility.bstp.component;
 
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
 

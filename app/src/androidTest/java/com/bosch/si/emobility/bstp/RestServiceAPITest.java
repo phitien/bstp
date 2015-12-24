@@ -11,7 +11,6 @@ import com.bosch.si.rest.IService;
 import junit.framework.TestCase;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,9 +59,9 @@ public class RestServiceAPITest extends TestCase {
                 OutputStream outputStream = null;
                 try {
                     // read this file into InputStream
-                    inputStream = Utils.getResources().openRawResource(R.drawable.booking);
+                    inputStream = Utils.getResources().openRawResource(R.drawable.parking_orange);
                     // write the inputStream to a FileOutputStream
-                    File file = Utils.getFile("test", "booking.png");
+                    File file = Utils.getFile("test", "parking_orange.pngnge.png");
                     outputStream = new FileOutputStream(file);
                     int read = 0;
                     byte[] bytes = new byte[1024];

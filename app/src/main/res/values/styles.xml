@@ -21,8 +21,24 @@
     </style>
 
     <style name="App_EditTextStyle" parent="@android:style/Widget.EditText">
-        <item name="android:textColor">@color/primary</item>
         <item name="android:textSize">@dimen/editText_textSize</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="App_EditTextDarkStyle" parent="@android:style/Widget.EditText">
+        <item name="android:textSize">@dimen/editText_textSize</item>
+        <item name="android:textColor">@color/dark_style_text_color</item>
+        <item name="android:textColorHint">@color/dark_style_text_hint_color</item>
+    </style>
+
+    <style name="App_TextViewDarkStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/textView_textSize</item>
+        <item name="android:textColor">@color/dark_style_text_color</item>
+    </style>
+
+    <style name="App_TextViewStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/textView_textSize</item>
+        <item name="android:textColor">@color/text_color</item>
     </style>
 
     <style name="App_ButtonStyle" parent="@android:style/Widget.Button">
@@ -32,5 +48,7 @@
         <item name="android:background">@drawable/button</item>
         <item name="android:layout_height">34dp</item>
     </style>
+
+    <dimen name="textView_textSize">14dp</dimen>
 
 </resources>

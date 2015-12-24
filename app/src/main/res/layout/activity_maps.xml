@@ -36,6 +36,12 @@
         android:layout_alignParentTop="true" />
 
     <include
+        android:id="@+id/detailLayout"
+        layout="@layout/fragment_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include
         android:id="@+id/menuLayout"
         layout="@layout/fragment_menu"
         android:layout_width="match_parent"
@@ -44,6 +50,5 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:background="@android:color/transparent" />
-
 
 </RelativeLayout>

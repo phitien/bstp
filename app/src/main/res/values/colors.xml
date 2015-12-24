@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black_overlay">#66000000</color>
 
     <color name="primary">#294d86</color>
     <color name="primary_dark">#294d86</color>
-    <color name="BoschColorAccent">#294d86</color>
-    <color name="background">#ffffff</color>
 
     <color name="Unselected">#505052</color>
     <color name="Selected">#294d86</color>
@@ -71,5 +68,15 @@
 
     <color name="bg_action_bar_color">#ccffffff</color>
     <color name="menu_item_color">#ffffff</color>
+    <color name="bg_search_panel_color">#cc294d86</color>
+
+    <color name="text_color">#000000</color>
+    <color name="text_hint_color">#73000000</color>
+
+    <color name="dark_style_text_color">#ffffff</color>
+    <color name="dark_style_text_hint_color">#73ffffff</color>
+
+    <color name="detail_header_bg_color">#e6cccccc</color>
+    <color name="detail_content_bg_color">#e6ffffff</color>
 
 </resources>

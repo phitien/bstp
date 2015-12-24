@@ -1,0 +1,36 @@
+<com.bosch.si.emobility.bstp.component.detail.DetailLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.bosch.si.emobility.bstp.component.detail.DetailFragment">
+
+    <RelativeLayout
+        android:id="@+id/viewHeader"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/detail_header_bg_color">
+
+        <TextView
+            android:id="@+id/textViewParkingTitle"
+            style="@style/App_TextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:text="Parking Title" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/viewContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/detail_content_bg_color"
+        android:gravity="center"
+        android:tag="desc"
+        android:text="Loreum Loreum"
+        android:textColor="@android:color/white"
+        android:textSize="35sp">
+
+    </RelativeLayout>
+
+</com.bosch.si.emobility.bstp.component.detail.DetailLayout>

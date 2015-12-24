@@ -11,25 +11,29 @@ import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.UserSessionManager;
-import com.bosch.si.emobility.bstp.activity.component.LoginComponent;
-import com.bosch.si.emobility.bstp.activity.component.MapComponent;
-import com.bosch.si.emobility.bstp.activity.component.MenuComponent;
-import com.bosch.si.emobility.bstp.activity.component.SearchComponent;
+import com.bosch.si.emobility.bstp.component.DetailComponent;
+import com.bosch.si.emobility.bstp.component.LoginComponent;
+import com.bosch.si.emobility.bstp.component.MapComponent;
+import com.bosch.si.emobility.bstp.component.MenuComponent;
+import com.bosch.si.emobility.bstp.component.SearchComponent;
 import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
+import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.SearchCriteria;
 import com.bosch.si.emobility.bstp.model.User;
 import com.bosch.si.emobility.bstp.service.LoginService;
+import com.bosch.si.emobility.bstp.service.ParkingLocationInfoService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 
 import org.json.JSONObject;
 import org.json.XML;
 
-import java.util.Date;
+import java.util.Map;
 
 public class MapsActivity extends Activity implements LocationListener {
 
@@ -37,6 +41,7 @@ public class MapsActivity extends Activity implements LocationListener {
     LoginComponent loginComponent;
     SearchComponent searchComponent;
     MenuComponent menuComponent;
+    DetailComponent detailComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class MapsActivity extends Activity implements LocationListener {
             }
         });
         searchComponent = SearchComponent.getInstance(this);
+        detailComponent = DetailComponent.getInstance(this);
         menuComponent = MenuComponent.getInstance(this);
         menuComponent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -249,6 +255,10 @@ public class MapsActivity extends Activity implements LocationListener {
 
     public SearchCriteria getSearchCriteria() {
         return searchComponent.getSearchCriteria();
+    }
+
+    public void openLocationDetail(ParkingLocation parkingLocation) {
+        detailComponent.setParkingLocation(parkingLocation);
     }
 
 }

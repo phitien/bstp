@@ -1,10 +1,10 @@
-package com.bosch.si.emobility.bstp.activity.component;
+package com.bosch.si.emobility.bstp.component;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
 
@@ -16,7 +16,7 @@ public abstract class Component implements IComponent {
     private static final long DURATION = 100;
     protected MapsActivity activity;
 
-    protected RelativeLayout layout;
+    protected ViewGroup layout;
 
     public Component() {
 

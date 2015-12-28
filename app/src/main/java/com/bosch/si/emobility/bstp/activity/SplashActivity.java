@@ -37,6 +37,7 @@ public class SplashActivity extends Activity implements LocationListener {
     private void openMapsActivity() {
         Intent intent = new Intent(SplashActivity.this, MapsActivity.class);
         startActivity(intent);
+        finish();
     }
 
 //    @Override

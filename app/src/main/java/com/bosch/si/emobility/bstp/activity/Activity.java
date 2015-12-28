@@ -1,6 +1,7 @@
 package com.bosch.si.emobility.bstp.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -28,6 +29,12 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
     public void registerEventBus() {
         EventBus.getDefault().register(this); // register EventBus
     }
@@ -41,7 +48,7 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     @Override
     public void onEventMainThread(Event event) {
         String message = event.getMessage();
-        if (message != null || !message.isEmpty()) {
+        if (message != null && !message.isEmpty()) {
             Utils.Notifier.notify(message);
         }
     }

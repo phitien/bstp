@@ -96,6 +96,8 @@ public class MapsActivity extends Activity implements LocationListener {
             super.onEventMainThread(event);
         } else if (event.getType() == Constants.EventType.RE_LOGIN_FAILED.toString()) {
             onLogout();
+        } else if (event.getType() == Constants.EventType.CAMERA_CHANGED.toString()) {
+            onCameraChanged();
         } else if (event.getType() == Constants.EventType.SESSION_EXPIRED.toString()) {
             if (UserSessionManager.getInstance().getUser().isSaveCredentials()) {//if save credentials
                 doReLogin();
@@ -105,6 +107,10 @@ public class MapsActivity extends Activity implements LocationListener {
         } else {
             super.onEventMainThread(event);
         }
+    }
+
+    private void onCameraChanged() {
+        detailComponent.setEnabled(false, false);
     }
 
     private void doReLogin() {

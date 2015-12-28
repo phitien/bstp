@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
+import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
@@ -169,7 +170,7 @@ public class MapComponent extends Component {
         markers = new HashMap<>();
     }
 
-    private void drawParkingAreaMarker(ParkingLocation parkingLocation) {
+    private void drawParkingLocationMarker(ParkingLocation parkingLocation) {
         String imageName = "parking_";
         try {
             float usedPercentage = 1 - (parkingLocation.getAvailabilityCount() / parkingLocation.getTotalCapacityCount());
@@ -216,19 +217,12 @@ public class MapComponent extends Component {
                 RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
                 layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
                 layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                layoutParams.setMargins(0, 0, 0, 310);
+                layoutParams.setMargins(0, 0, 30, 310);
 
-                mapView.setOnDragListener(new View.OnDragListener() {
-                    @Override
-                    public boolean onDrag(View v, DragEvent event) {
-                        currentCameraBounds = map.getProjection().getVisibleRegion().latLngBounds;
-                        prevLatLng = currentCameraBounds.getCenter();
-                        return true;
-                    }
-                });
                 map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                     @Override
                     public void onCameraChange(CameraPosition cameraPosition) {
+                        Event.broadcast("", Constants.EventType.CAMERA_CHANGED.toString());
                         currentCameraBounds = map.getProjection().getVisibleRegion().latLngBounds;
                         if (currentCameraBounds != null) {
                             LatLng center = currentCameraBounds.getCenter();
@@ -323,7 +317,7 @@ public class MapComponent extends Component {
                                 drawMyLocationMarker();
                                 drawMySearchingMarker(searchingLatLng);
                                 for (ParkingLocation parkingLocation : parkingLocations) {
-                                    drawParkingAreaMarker(parkingLocation);
+                                    drawParkingLocationMarker(parkingLocation);
                                 }
                             }
 

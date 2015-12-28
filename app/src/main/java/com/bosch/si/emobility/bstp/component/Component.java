@@ -43,14 +43,14 @@ public abstract class Component implements IComponent {
                     @Override
                     public void onAnimationStart(Animator animation) {
                         super.onAnimationStart(animation);
-                        layout.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                        layout.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
                         layout.setAlpha(enabled ? 0.0f : 1.0f);
                     }
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        layout.setVisibility(enabled ? View.VISIBLE : View.GONE);
+                        layout.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
                         layout.setAlpha(enabled ? 1.0f : 0.0f);
                     }
                 });
@@ -63,14 +63,14 @@ public abstract class Component implements IComponent {
                     @Override
                     public void onAnimationStart(Animator animation) {
                         super.onAnimationStart(animation);
-                        layout.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                        layout.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
                         layout.setAlpha(enabled ? 0.0f : 1.0f);
                     }
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        layout.setVisibility(enabled ? View.VISIBLE : View.GONE);
+                        layout.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
                         layout.setAlpha(enabled ? 1.0f : 0.0f);
                     }
                 });
@@ -83,14 +83,14 @@ public abstract class Component implements IComponent {
                     @Override
                     public void onAnimationStart(Animator animation) {
                         super.onAnimationStart(animation);
-                        layout.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                        layout.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
                         layout.setAlpha(enabled ? 0.0f : 1.0f);
                     }
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        layout.setVisibility(enabled ? View.VISIBLE : View.GONE);
+                        layout.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
                         layout.setAlpha(enabled ? 1.0f : 0.0f);
                     }
                 });
@@ -103,14 +103,14 @@ public abstract class Component implements IComponent {
                     @Override
                     public void onAnimationStart(Animator animation) {
                         super.onAnimationStart(animation);
-                        layout.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                        layout.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
                         layout.setAlpha(enabled ? 0.0f : 1.0f);
                     }
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        layout.setVisibility(enabled ? View.VISIBLE : View.GONE);
+                        layout.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
                         layout.setAlpha(enabled ? 1.0f : 0.0f);
                     }
                 });
@@ -128,7 +128,7 @@ public abstract class Component implements IComponent {
         } else if (!noAnimation && isSlideRight()) {
             slideRight(enabled);
         } else {
-            layout.setVisibility(enabled ? View.VISIBLE : View.GONE);
+            layout.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
         }
     }
 

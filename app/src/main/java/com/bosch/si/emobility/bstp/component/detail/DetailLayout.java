@@ -71,10 +71,18 @@ public class DetailLayout extends RelativeLayout {
     }
 
     public void minimize() {
-        smoothSlideTo(contentView.getHeight());
+        smoothSlideTo(1f);
+    }
+
+    public int getDragRange() {
+        if (mDragRange == 0)
+            return getPaddingTop() + ((View) getParent()).getMeasuredHeight() - headerView.getMeasuredHeight();
+        else
+            return mDragRange;
     }
 
     boolean smoothSlideTo(float slideOffset) {
+        int mDragRange = getDragRange();
         final int topBound = getPaddingTop();
         int y = (int) (topBound + slideOffset * mDragRange);
 
@@ -86,7 +94,6 @@ public class DetailLayout extends RelativeLayout {
     }
 
     private class DragHelperCallback extends ViewDragHelper.Callback {
-
         @Override
         public boolean tryCaptureView(View child, int pointerId) {
             return child == headerView;
@@ -95,10 +102,8 @@ public class DetailLayout extends RelativeLayout {
         @Override
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
             mTop = top;
-            mDragOffset = (float) top / mDragRange;
+            mDragOffset = (float) top / getDragRange();
             headerView.setPivotY(headerView.getHeight());
-            contentView.setAlpha(1 - mDragOffset);
-
             requestLayout();
         }
 
@@ -106,14 +111,14 @@ public class DetailLayout extends RelativeLayout {
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
             int top = getPaddingTop();
             if (yvel > 0 || (yvel == 0 && mDragOffset > 0.5f)) {
-                top += mDragRange;
+                top += getDragRange();
             }
             dragHelper.settleCapturedViewAt(releasedChild.getLeft(), top);
         }
 
         @Override
         public int getViewVerticalDragRange(View child) {
-            return mDragRange;
+            return getDragRange();
         }
 
         @Override
@@ -121,8 +126,7 @@ public class DetailLayout extends RelativeLayout {
             final int topBound = getPaddingTop();
             final int bottomBound = getHeight() - headerView.getHeight() - headerView.getPaddingBottom();
 
-            final int newTop = Math.min(Math.max(top, topBound), bottomBound);
-            return newTop;
+            return Math.min(Math.max(top, topBound), bottomBound);
         }
     }
 
@@ -232,7 +236,7 @@ public class DetailLayout extends RelativeLayout {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        mDragRange = getHeight() - headerView.getHeight();
+        mDragRange = getPaddingTop() + getHeight() - headerView.getHeight();
 
         headerView.layout(
                 0,

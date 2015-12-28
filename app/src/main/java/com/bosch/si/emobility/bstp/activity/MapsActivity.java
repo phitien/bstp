@@ -23,17 +23,13 @@ import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.SearchCriteria;
 import com.bosch.si.emobility.bstp.model.User;
 import com.bosch.si.emobility.bstp.service.LoginService;
-import com.bosch.si.emobility.bstp.service.ParkingLocationInfoService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 
 import org.json.JSONObject;
 import org.json.XML;
-
-import java.util.Map;
 
 public class MapsActivity extends Activity implements LocationListener {
 
@@ -74,7 +70,7 @@ public class MapsActivity extends Activity implements LocationListener {
                 } else if (position == 2) {
 
                 } else if (position == 3) {
-                    logout();
+                    onLogout();
                 }
             }
         });
@@ -99,8 +95,7 @@ public class MapsActivity extends Activity implements LocationListener {
             Utils.Indicator.hide();
             super.onEventMainThread(event);
         } else if (event.getType() == Constants.EventType.RE_LOGIN_FAILED.toString()) {
-            Utils.Indicator.hide();
-            super.onEventMainThread(event);
+            onLogout();
         } else if (event.getType() == Constants.EventType.SESSION_EXPIRED.toString()) {
             if (UserSessionManager.getInstance().getUser().isSaveCredentials()) {//if save credentials
                 doReLogin();
@@ -127,14 +122,14 @@ public class MapsActivity extends Activity implements LocationListener {
                     UserSessionManager.getInstance().setUserSession(user);
                     Event.broadcast(Utils.getString(R.string.re_login_ok), Constants.EventType.RE_LOGIN_OK.toString());
                 } catch (Exception e) {
-                    logout();
+                    onLogout();
                     Event.broadcast(Utils.getString(R.string.re_login_failed), Constants.EventType.RE_LOGIN_FAILED.toString());
                 }
             }
 
             @Override
             public void failure(IService service) {
-                logout();
+                onLogout();
                 Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
             }
         });
@@ -147,6 +142,9 @@ public class MapsActivity extends Activity implements LocationListener {
         }
         if (menuComponent.isShown()) {
             menuComponent.setEnabled(false, true);
+        }
+        if (detailComponent.isShown()) {
+            detailComponent.setEnabled(false, true);
         }
     }
 
@@ -182,6 +180,7 @@ public class MapsActivity extends Activity implements LocationListener {
         mapComponent.setEnabled(enabled, true);
         searchComponent.setEnabled(false, true);
         menuComponent.setEnabled(false, true);
+        detailComponent.setEnabled(false, true);
     }
 
     private void showLoginDialog() {
@@ -212,20 +211,20 @@ public class MapsActivity extends Activity implements LocationListener {
                     UserSessionManager.getInstance().setUserSession(user);
                     Event.broadcast(Utils.getString(R.string.login_ok), Constants.EventType.LOGIN_OK.toString());
                 } catch (Exception e) {
-                    logout();
+                    onLogout();
                     Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
                 }
             }
 
             @Override
             public void failure(IService service) {
-                logout();
+                onLogout();
                 Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
             }
         });
     }
 
-    private void logout() {
+    private void onLogout() {
         showLoginDialog();
         UserSessionManager.getInstance().clearUserSession();
     }
@@ -261,4 +260,7 @@ public class MapsActivity extends Activity implements LocationListener {
         detailComponent.setParkingLocation(parkingLocation);
     }
 
+    public void onReserveButtonClicked(View view) {
+        detailComponent.onReserveButtonClicked(view);
+    }
 }

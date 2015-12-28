@@ -11,4 +11,5 @@
     <dimen name="log_width">120dp</dimen>
     <dimen name="log_height">78dp</dimen>
     <dimen name="menu_item_text_size">14dp</dimen>
+    <dimen name="detail_view_header_height">104dp</dimen>
 </resources>

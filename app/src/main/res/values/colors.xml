@@ -79,4 +79,12 @@
     <color name="detail_header_bg_color">#e6cccccc</color>
     <color name="detail_content_bg_color">#e6ffffff</color>
 
+    <color name="status_bar_bg_color">#ffe1e1e1</color>
+    <color name="status_bar_item0_color">#ff709e04</color>
+    <color name="status_bar_item1_color">#ff8ace08</color>
+    <color name="status_bar_item2_color">#ffffbb00</color>
+    <color name="status_bar_item3_color">#ffff9100</color>
+    <color name="status_bar_item4_color">#ffc80404</color>
+    <color name="status_bar_item5_color">#ffe1e1e1</color>
+
 </resources>

@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.component;
 
+import android.view.View;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
@@ -34,9 +35,12 @@ public class DetailComponent extends Component {
 
     public void setParkingLocation(ParkingLocation parkingLocation) {
         this.parkingLocation = parkingLocation;
-        textViewParkingTitle.setText(this.parkingLocation.getLocationTitle());
-//        detailLayout.minimize();
         setEnabled(true, false);
+        populateData();
+    }
+
+    private void populateData() {
+        //TODO
     }
 
     @Override
@@ -54,4 +58,14 @@ public class DetailComponent extends Component {
         return true;
     }
 
+    @Override
+    public void setEnabled(boolean enabled, boolean noAnimation) {
+        if (enabled)
+            detailLayout.minimize();
+        super.setEnabled(enabled, noAnimation);
+    }
+
+    public void onReserveButtonClicked(View view) {
+
+    }
 }

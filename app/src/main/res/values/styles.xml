@@ -8,6 +8,8 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/primary</item>
         <item name="android:editTextStyle">@style/App_EditTextStyle</item>
+        <item name="android:datePickerDialogTheme">@style/App_DatePickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/App_DatePickerDialogTheme</item>
     </style>
 
     <style name="NoTitleFullscreenTheme" parent="android:Theme.Holo.NoActionBar">
@@ -50,5 +52,9 @@
     </style>
 
     <dimen name="textView_textSize">14dp</dimen>
+
+    <style name="App_DatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">@color/primary</item>
+    </style>
 
 </resources>

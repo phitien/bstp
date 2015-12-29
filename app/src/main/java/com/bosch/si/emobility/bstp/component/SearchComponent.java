@@ -323,11 +323,6 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
         }
     };
 
-    private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id, CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber, websiteUri));
-
-    }
-
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         //Do nothing

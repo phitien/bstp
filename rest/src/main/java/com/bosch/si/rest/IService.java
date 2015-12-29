@@ -78,4 +78,6 @@ public interface IService {
 
     public String executeSync(IServiceCallback callback);
 
+    public String getFieldValue(String fieldName);
+
 }

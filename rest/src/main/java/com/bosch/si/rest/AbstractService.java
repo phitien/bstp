@@ -455,10 +455,19 @@ public abstract class AbstractService implements IService {
         }
     }
 
-    protected String getFieldValue(String fieldName) throws Exception {
-        Field field = this.getDeclaredClass().getField(fieldName);
-        field.setAccessible(true);
-        return String.valueOf(field.get(this));
+    @Override
+    public String getFieldValue(String fieldName) {
+        try {
+            Field field = this.getDeclaredClass().getField(fieldName);
+            int modifiers = field.getModifiers();
+            if (!Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
+                field.setAccessible(true);
+                return String.valueOf(field.get(this));
+            }
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
     protected IServiceConnection getServiceConnection() throws Exception {

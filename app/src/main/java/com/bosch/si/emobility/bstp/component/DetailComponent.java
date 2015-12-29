@@ -1,6 +1,8 @@
 package com.bosch.si.emobility.bstp.component;
 
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
@@ -26,7 +28,12 @@ public class DetailComponent extends Component {
     }
 
     private ParkingLocation parkingLocation;
-    private TextView textViewParkingTitle;
+    private TextView textViewParkingName;
+    private TextView textViewParkingAddress;
+    private TextView textViewAvailability;
+    private TextView textViewSecurityLevel;
+    private ListView listViewSecurityDetails;
+
     private DetailLayout detailLayout;
 
     public ParkingLocation getParkingLocation() {
@@ -41,6 +48,15 @@ public class DetailComponent extends Component {
 
     private void populateData() {
         //TODO
+        textViewParkingName.setText(parkingLocation.getLocationTitle());
+        textViewParkingAddress.setText(parkingLocation.getAddress());
+        textViewAvailability.setText(String.format("%d/%d",
+                Integer.valueOf(parkingLocation.getAvailabilityCount()),
+                Integer.valueOf(parkingLocation.getTotalCapacityCount())));
+        textViewSecurityLevel.setText(parkingLocation.getSecurityLevel());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.activity, R.layout.security_item, R.id.text1, parkingLocation.getSecurityDetails());
+        listViewSecurityDetails.setAdapter(adapter);
     }
 
     @Override
@@ -49,7 +65,12 @@ public class DetailComponent extends Component {
         detailLayout = (DetailLayout) this.activity.findViewById(R.id.detailLayout);
         layout = detailLayout;
 
-        textViewParkingTitle = (TextView) this.activity.findViewById(R.id.textViewParkingTitle);
+        textViewParkingName = (TextView) this.activity.findViewById(R.id.textViewParkingName);
+        textViewParkingAddress = (TextView) this.activity.findViewById(R.id.textViewParkingAddress);
+        textViewAvailability = (TextView) this.activity.findViewById(R.id.textViewAvailability);
+        textViewSecurityLevel = (TextView) this.activity.findViewById(R.id.textViewSecurityLevel);
+        listViewSecurityDetails = (ListView) this.activity.findViewById(R.id.listViewSecurityDetails);
+
         setEnabled(false, true);
     }
 

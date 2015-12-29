@@ -4,7 +4,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -52,6 +51,7 @@ public class MapComponent extends Component {
     private Marker searchingMarker;
 
     private Map<String, Marker> markers = new HashMap<>();
+    private Map<String, ParkingLocation> parkingLocations = new HashMap<>();
 
     private LatLng prevLatLng = null;
     private LatLng currLatLng = null;
@@ -170,6 +170,12 @@ public class MapComponent extends Component {
         markers = new HashMap<>();
     }
 
+    private void drawLocationMarkers() {
+        for (Map.Entry<String, ParkingLocation> entry : parkingLocations.entrySet()) {
+            drawParkingLocationMarker(entry.getValue());
+        }
+    }
+
     private void drawParkingLocationMarker(ParkingLocation parkingLocation) {
         String imageName = "parking_";
         try {
@@ -270,12 +276,18 @@ public class MapComponent extends Component {
     private boolean openLocationDetail(Marker marker) {
         for (Map.Entry<String, Marker> entry : markers.entrySet()) {
             if (marker.equals(entry.getValue())) {
+                final String parkingid = entry.getKey();
                 ParkingLocationInfoService service = new ParkingLocationInfoService();
-                service.parkingid = entry.getKey();
+                service.parkingid = parkingid;
                 service.executeAsync(new ServiceCallback() {
                     @Override
                     public void success(IService service) {
-                        activity.openLocationDetail((new GsonBuilder().create()).fromJson(service.getResponseString(), ParkingLocation.class));
+                        ParkingLocation parkingLocation = parkingLocations.get(parkingid);
+                        parkingLocation.merge((new GsonBuilder().create()).fromJson(service.getResponseString(), ParkingLocation.class));
+                        parkingLocation.setSecurityLevel("3");
+                        parkingLocation.getSecurityDetails().add("CCTV");
+                        parkingLocation.getSecurityDetails().add("Security fence");
+                        activity.openLocationDetail(parkingLocation);
                     }
 
                     @Override
@@ -310,15 +322,17 @@ public class MapComponent extends Component {
                         .executeAsync(new ServiceCallback() {
                             @Override
                             public void success(IService service) {
+                                parkingLocations = new HashMap<>();
                                 Gson gson = new Gson();
-                                List<ParkingLocation> parkingLocations = gson.fromJson(service.getResponseString(), new TypeToken<ArrayList<ParkingLocation>>() {
+                                List<ParkingLocation> locations = gson.fromJson(service.getResponseString(), new TypeToken<ArrayList<ParkingLocation>>() {
                                 }.getType());
+                                for (ParkingLocation parkingLocation : locations) {
+                                    parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
+                                }
                                 clearMarkers();
                                 drawMyLocationMarker();
                                 drawMySearchingMarker(searchingLatLng);
-                                for (ParkingLocation parkingLocation : parkingLocations) {
-                                    drawParkingLocationMarker(parkingLocation);
-                                }
+                                drawLocationMarkers();
                             }
 
                             @Override

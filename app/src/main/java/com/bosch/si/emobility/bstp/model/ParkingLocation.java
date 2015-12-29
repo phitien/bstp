@@ -1,5 +1,8 @@
 package com.bosch.si.emobility.bstp.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by sgp0458 on 18/12/15.
  */
@@ -9,9 +12,45 @@ public class ParkingLocation extends Model {
     private double latitude;
     private double longitude;
     private String locationTitle;
+    private String address;
     private int availabilityCount;
     private int totalCapacityCount;
     private String parkingType;
+    private String securityLevel;
+    private List<Facility> facilities = new ArrayList<>();
+    private List<String> securityDetails = new ArrayList<>();
+
+    public List<String> getSecurityDetails() {
+        return securityDetails;
+    }
+
+    public void setSecurityDetails(List<String> securityDetails) {
+        this.securityDetails = securityDetails;
+    }
+
+    public List<Facility> getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(List<Facility> facilities) {
+        this.facilities = facilities;
+    }
+
+    public String getSecurityLevel() {
+        return securityLevel;
+    }
+
+    public void setSecurityLevel(String securityLevel) {
+        this.securityLevel = securityLevel;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public int getAvailabilityCount() {
         return availabilityCount;
@@ -68,4 +107,20 @@ public class ParkingLocation extends Model {
     public void setTotalCapacityCount(int totalCapacityCount) {
         this.totalCapacityCount = totalCapacityCount;
     }
+
+    public void merge(ParkingLocation parkingLocation) {
+        if (parkingLocation.locationTitle != null)
+            locationTitle = parkingLocation.locationTitle;
+        if (parkingLocation.address != null)
+            address = parkingLocation.address;
+        if (parkingLocation.availabilityCount >= 0)
+            availabilityCount = parkingLocation.availabilityCount;
+        if (parkingLocation.totalCapacityCount >= 0)
+            totalCapacityCount = parkingLocation.totalCapacityCount;
+        if (parkingLocation.securityLevel != null)
+            securityLevel = parkingLocation.securityLevel;
+        if (parkingLocation.facilities != null)
+            facilities = parkingLocation.facilities;
+    }
+
 }

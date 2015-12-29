@@ -75,26 +75,27 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textViewAvailabilityCount"
+            android:id="@+id/textViewAvailability"
             style="@style/App_TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/statusBarContainer"
-            android:text="20" />
+            android:text="20/24" />
 
         <TextView
-            android:id="@+id/textViewTotalCapacityCount"
+            android:id="@+id/textViewFreeLabel"
             style="@style/App_TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/textViewAvailabilityCount"
-            android:text="/24 free" />
+            android:layout_toRightOf="@+id/textViewAvailability"
+            android:text="@string/free" />
 
         <TextView
-            android:id="@+id/textViewParkingTitle"
+            android:id="@+id/textViewParkingName"
             style="@style/App_TextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -109,9 +110,9 @@
             style="@style/App_TextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textViewParkingTitle"
-            android:layout_alignStart="@+id/textViewParkingTitle"
-            android:layout_below="@+id/textViewParkingTitle"
+            android:layout_alignLeft="@+id/textViewParkingName"
+            android:layout_alignStart="@+id/textViewParkingName"
+            android:layout_below="@+id/textViewParkingName"
             android:text="Parking location address or description" />
 
     </RelativeLayout>
@@ -138,18 +139,21 @@
                 android:id="@+id/restaurantService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:src="@drawable/restaurant" />
 
             <ImageView
                 android:id="@+id/showerService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:src="@drawable/shower" />
 
             <ImageView
                 android:id="@+id/voucherService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:src="@drawable/voucher" />
 
         </LinearLayout>
@@ -175,12 +179,22 @@
             android:text="@string/security_level" />
 
         <TextView
+            android:id="@+id/textViewSecurityLevel"
             style="@style/App_TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/textViewSecurityLevelLabel"
+            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/textViewSecurityLevelLabel"
-            android:text=" 3" />
+            android:text="3" />
+
+        <ListView
+            android:id="@+id/listViewSecurityDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewSecurityLevel"
+            android:divider="@null"
+            android:dividerHeight="0dp" />
 
     </RelativeLayout>
 

@@ -19,7 +19,6 @@
     <string name="logout">Logout</string>
     <string name="about">About</string>
 
-    <string name="place_details">&lt;b&gt;%1$s&lt;/b&gt;&lt;br/&gt;&lt;i&gt;Place Id: %2$s&lt;/i&gt;&lt;br/&gt;Address: %3$s&lt;br/&gt;Phone: %4$s&lt;br/&gt;Website: %5$s</string>
     <string name="autocomplete_hint">Enter place name or address</string>
     <string name="your_location">Your location</string>
     <string name="current_search_location">Searching location</string>
@@ -27,8 +26,7 @@
     <string name="re_login_ok">Re-Login successfully</string>
     <string name="re_login_failed">Re-Login failed</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_reserve">Reserve</string>
     <string name="security_level">Security Level</string>
+    <string name="free">free</string>
 </resources>

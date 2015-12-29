@@ -6,7 +6,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.activity.MapsActivity;
+import com.bosch.si.emobility.bstp.activity.Activity;
 import com.bosch.si.emobility.bstp.component.detail.DetailLayout;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 
@@ -17,7 +17,7 @@ public class DetailComponent extends Component {
 
     private static DetailComponent ourInstance = new DetailComponent();
 
-    public static DetailComponent getInstance(MapsActivity activity) {
+    public static DetailComponent getInstance(Activity activity) {
         if (activity != null)
             ourInstance.setActivity(activity);
         return ourInstance;
@@ -60,7 +60,7 @@ public class DetailComponent extends Component {
     }
 
     @Override
-    public void setActivity(MapsActivity activity) {
+    public void setActivity(Activity activity) {
         super.setActivity(activity);
         detailLayout = (DetailLayout) this.activity.findViewById(R.id.detailLayout);
         layout = detailLayout;
@@ -81,9 +81,9 @@ public class DetailComponent extends Component {
 
     @Override
     public void setEnabled(boolean enabled, boolean noAnimation) {
+        super.setEnabled(enabled, noAnimation);
         if (enabled)
             detailLayout.minimize();
-        super.setEnabled(enabled, noAnimation);
     }
 
     public void onReserveButtonClicked(View view) {

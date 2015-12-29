@@ -456,16 +456,12 @@ public abstract class AbstractService implements IService {
     }
 
     @Override
-    public String getFieldValue(String fieldName) {
-        try {
-            Field field = this.getDeclaredClass().getField(fieldName);
-            int modifiers = field.getModifiers();
-            if (!Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
-                field.setAccessible(true);
-                return String.valueOf(field.get(this));
-            }
-        } catch (Exception e) {
-
+    public String getFieldValue(String fieldName) throws Exception {
+        Field field = this.getDeclaredClass().getField(fieldName);
+        int modifiers = field.getModifiers();
+        if (!Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
+            field.setAccessible(true);
+            return String.valueOf(field.get(this));
         }
         return null;
     }
@@ -650,7 +646,7 @@ public abstract class AbstractService implements IService {
     }
 
     protected void applyPublicPropertiesValues() {
-        Pattern p = Pattern.compile("\\:(\\w+)");
+        Pattern p = Pattern.compile("\\:([a-zA-Z_][a-zA-Z_0-9]*)");
         Matcher m = p.matcher(URI);
         while (m.find()) {
             String fieldName = m.group(1);

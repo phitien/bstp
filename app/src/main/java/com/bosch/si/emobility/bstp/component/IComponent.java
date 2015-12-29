@@ -1,6 +1,6 @@
 package com.bosch.si.emobility.bstp.component;
 
-import com.bosch.si.emobility.bstp.activity.MapsActivity;
+import com.bosch.si.emobility.bstp.activity.Activity;
 
 /**
  * Created by sgp0458 on 16/12/15.
@@ -13,5 +13,5 @@ public interface IComponent {
 
     boolean isShown();
 
-    void setActivity(MapsActivity activity);
+    void setActivity(Activity activity);
 }

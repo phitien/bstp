@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 
+import com.bosch.si.emobility.bstp.activity.Activity;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
 
 /**
@@ -14,7 +15,7 @@ import com.bosch.si.emobility.bstp.activity.MapsActivity;
 public abstract class Component implements IComponent {
 
     private static final long DURATION = 100;
-    protected MapsActivity activity;
+    protected Activity activity;
 
     protected ViewGroup layout;
 
@@ -23,7 +24,7 @@ public abstract class Component implements IComponent {
     }
 
     @Override
-    public void setActivity(MapsActivity activity) {
+    public void setActivity(Activity activity) {
         this.activity = activity;
     }
 

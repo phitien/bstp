@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.bosch.si.emobility.bstp.R;
+import com.bosch.si.emobility.bstp.activity.Activity;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
 import com.bosch.si.emobility.bstp.model.SearchCriteria;
 import com.google.android.gms.common.ConnectionResult;
@@ -41,7 +42,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
 
     private static SearchComponent ourInstance = new SearchComponent();
 
-    public static SearchComponent getInstance(MapsActivity activity) {
+    public static SearchComponent getInstance(Activity activity) {
         if (activity != null)
             ourInstance.setActivity(activity);
         return ourInstance;
@@ -90,7 +91,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     }
 
     @Override
-    public void setActivity(MapsActivity activity) {
+    public void setActivity(Activity activity) {
         super.setActivity(activity);
 
         layout = (RelativeLayout) this.activity.findViewById(R.id.searchLayout);
@@ -281,7 +282,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
 
         editTextSearch.setOnItemClickListener(mAutocompleteClickListener);
 
-        LatLngBounds bounds = this.activity.getCurrentLatLngBounds();
+        LatLngBounds bounds = ((MapsActivity) activity).getCurrentLatLngBounds();
         mAdapter = new PlaceAutocompleteAdapter(this.activity, mGoogleApiClient, bounds, null);
         editTextSearch.setAdapter(mAdapter);
         // Set up the 'clear text' button that clears the text in the autocomplete view
@@ -314,7 +315,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
             // Get the Place object from the buffer.
             setEnabled(false, false);
             Place place = places.get(0);
-            activity.moveCamera(place);
+            ((MapsActivity) activity).moveCamera(place);
             places.release();
         }
     };

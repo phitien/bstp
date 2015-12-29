@@ -29,4 +29,7 @@
     <string name="action_reserve">Reserve</string>
     <string name="security_level">Security Level</string>
     <string name="free">free</string>
+    <string name="title_activity_upcoming">Upcoming</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

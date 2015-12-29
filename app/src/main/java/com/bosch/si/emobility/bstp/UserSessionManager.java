@@ -2,6 +2,8 @@ package com.bosch.si.emobility.bstp;
 
 import android.util.Base64;
 
+import com.bosch.si.emobility.bstp.app.Event;
+import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
 import com.bosch.si.emobility.bstp.model.User;
 
@@ -47,6 +49,8 @@ public class UserSessionManager {
                 FileOutputStream outputStream = new FileOutputStream(this.credentialsFile);
                 outputStream.write(base64EncryptedCredentialsData.getBytes());
                 outputStream.close();
+            } else {
+                Event.broadcast("", Constants.EventType.LOGOUT_OK.toString());
             }
         } catch (Exception e) {
             Utils.Log.e("BSTP_UserSessionManager_setUser", e.getMessage());

@@ -7,7 +7,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.activity.MapsActivity;
+import com.bosch.si.emobility.bstp.activity.Activity;
 
 /**
  * Created by sgp0458 on 16/12/15.
@@ -16,7 +16,7 @@ public class MenuComponent extends Component {
 
     private static MenuComponent ourInstance = new MenuComponent();
 
-    public static MenuComponent getInstance(MapsActivity activity) {
+    public static MenuComponent getInstance(Activity activity) {
         if (activity != null)
             ourInstance.setActivity(activity);
         return ourInstance;
@@ -30,7 +30,7 @@ public class MenuComponent extends Component {
     ArrayAdapter<String> listViewMenuAdapter;
 
     @Override
-    public void setActivity(MapsActivity activity) {
+    public void setActivity(Activity activity) {
         super.setActivity(activity);
         layout = (RelativeLayout) this.activity.findViewById(R.id.menuLayout);
 

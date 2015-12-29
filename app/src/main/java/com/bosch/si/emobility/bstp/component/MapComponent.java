@@ -5,10 +5,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.R;
+import com.bosch.si.emobility.bstp.activity.Activity;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
 import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.helper.Constants;
@@ -65,7 +65,7 @@ public class MapComponent extends Component {
         moveCamera(this.searchingLatLng);
     }
 
-    public static MapComponent getInstance(MapsActivity activity) {
+    public static MapComponent getInstance(Activity activity) {
         if (activity != null)
             ourInstance.setActivity(activity);
         return ourInstance;
@@ -78,18 +78,13 @@ public class MapComponent extends Component {
     GoogleMap map;
     SupportMapFragment mapFragment;
     View mapView;
-    ImageButton imageButtonSearch;
-    ImageButton imageButtonMenu;
-
 
     @Override
-    public void setActivity(MapsActivity activity) {
+    public void setActivity(Activity activity) {
         super.setActivity(activity);
         layout = (RelativeLayout) this.activity.findViewById(R.id.mapLayout);
         mapFragment = (SupportMapFragment) this.activity.getSupportFragmentManager().findFragmentById(R.id.map);
         mapView = this.activity.findViewById(R.id.map);
-        imageButtonSearch = (ImageButton) this.activity.findViewById(R.id.imageButtonSearch);
-        imageButtonMenu = (ImageButton) this.activity.findViewById(R.id.imageButtonMenu);
         map = mapFragment.getMap();
     }
 
@@ -214,7 +209,6 @@ public class MapComponent extends Component {
 
     @Override
     public void setEnabled(boolean enabled, boolean noAnimation) {
-        int visibility = enabled ? View.VISIBLE : View.INVISIBLE;
         if (enabled) {
             if (mapView != null && mapView.findViewById(1) != null) {
                 // Get the button view
@@ -266,10 +260,6 @@ public class MapComponent extends Component {
         map.getUiSettings().setScrollGesturesEnabled(enabled);
         map.getUiSettings().setTiltGesturesEnabled(enabled);
         map.getUiSettings().setRotateGesturesEnabled(enabled);
-        imageButtonSearch.setEnabled(enabled);
-        imageButtonSearch.setVisibility(visibility);
-        imageButtonMenu.setEnabled(enabled);
-        imageButtonMenu.setVisibility(visibility);
     }
 
 
@@ -287,7 +277,7 @@ public class MapComponent extends Component {
                         parkingLocation.setSecurityLevel("3");
                         parkingLocation.getSecurityDetails().add("CCTV");
                         parkingLocation.getSecurityDetails().add("Security fence");
-                        activity.openLocationDetail(parkingLocation);
+                        ((MapsActivity) activity).openLocationDetail(parkingLocation);
                     }
 
                     @Override
@@ -315,7 +305,7 @@ public class MapComponent extends Component {
             addresses = geocoder.getFromLocation(currLatLng.latitude, currLatLng.longitude, 1);
             if (addresses.size() > 0) {
                 Address address = addresses.get(0);
-                this.activity.getSearchCriteria()
+                ((MapsActivity) activity).getSearchCriteria()
                         .setLocationName(address.getFeatureName())
                         .setLatLng(currLatLng)
                         .createSearchService()

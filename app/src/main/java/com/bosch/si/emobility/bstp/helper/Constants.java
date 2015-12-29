@@ -22,5 +22,6 @@ public class Constants {
         RE_LOGIN_OK,
         RE_LOGIN_FAILED,
         CAMERA_CHANGED,
+        LOGOUT_OK,
     }
 }

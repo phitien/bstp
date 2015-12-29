@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.activity;
 
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.UserSessionManager;
 import com.bosch.si.emobility.bstp.component.DetailComponent;
+import com.bosch.si.emobility.bstp.component.HeaderComponent;
 import com.bosch.si.emobility.bstp.component.LoginComponent;
 import com.bosch.si.emobility.bstp.component.MapComponent;
 import com.bosch.si.emobility.bstp.component.MenuComponent;
@@ -34,6 +36,7 @@ import org.json.XML;
 public class MapsActivity extends Activity implements LocationListener {
 
     MapComponent mapComponent;
+    HeaderComponent headerComponent;
     LoginComponent loginComponent;
     SearchComponent searchComponent;
     MenuComponent menuComponent;
@@ -58,6 +61,24 @@ public class MapsActivity extends Activity implements LocationListener {
         });
         searchComponent = SearchComponent.getInstance(this);
         detailComponent = DetailComponent.getInstance(this);
+    }
+
+    private void openAboutActivity() {
+        //TODO
+    }
+
+    private void openUpcomingActivity() {
+        setEnabled(true);
+        Intent intent = new Intent(MapsActivity.this, UpcomingActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        headerComponent = HeaderComponent.getInstance(this);
+
         menuComponent = MenuComponent.getInstance(this);
         menuComponent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,23 +87,17 @@ public class MapsActivity extends Activity implements LocationListener {
                 if (position == 0) {
 
                 } else if (position == 1) {
-
+                    //open Upcoming activity
+                    openUpcomingActivity();
                 } else if (position == 2) {
-
+                    openAboutActivity();
                 } else if (position == 3) {
                     onLogout();
                 }
             }
         });
-
         checkAuthentication();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
 
     @Override
     public void onEventMainThread(Event event) {
@@ -96,6 +111,8 @@ public class MapsActivity extends Activity implements LocationListener {
             super.onEventMainThread(event);
         } else if (event.getType() == Constants.EventType.RE_LOGIN_FAILED.toString()) {
             onLogout();
+        } else if (event.getType() == Constants.EventType.LOGOUT_OK.toString()) {
+            showLoginDialog();
         } else if (event.getType() == Constants.EventType.CAMERA_CHANGED.toString()) {
             onCameraChanged();
         } else if (event.getType() == Constants.EventType.SESSION_EXPIRED.toString()) {
@@ -111,34 +128,6 @@ public class MapsActivity extends Activity implements LocationListener {
 
     private void onCameraChanged() {
         detailComponent.setEnabled(false, false);
-    }
-
-    private void doReLogin() {
-        final User user = UserSessionManager.getInstance().getUser();
-        LoginService loginService = new LoginService();
-        loginService.user = user;
-
-        loginService.executeAsync(new ServiceCallback() {
-            @Override
-            public void success(IService service) {
-                //Save Authorization Cookie
-                try {
-                    JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
-                    user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
-                    UserSessionManager.getInstance().setUserSession(user);
-                    Event.broadcast(Utils.getString(R.string.re_login_ok), Constants.EventType.RE_LOGIN_OK.toString());
-                } catch (Exception e) {
-                    onLogout();
-                    Event.broadcast(Utils.getString(R.string.re_login_failed), Constants.EventType.RE_LOGIN_FAILED.toString());
-                }
-            }
-
-            @Override
-            public void failure(IService service) {
-                onLogout();
-                Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
-            }
-        });
     }
 
     @Override
@@ -183,14 +172,15 @@ public class MapsActivity extends Activity implements LocationListener {
     }
 
     private void setEnabled(boolean enabled) {
+        hideKeyboard();
         mapComponent.setEnabled(enabled, true);
+        headerComponent.setEnabled(enabled, true);
         searchComponent.setEnabled(false, true);
         menuComponent.setEnabled(false, true);
         detailComponent.setEnabled(false, true);
     }
 
     private void showLoginDialog() {
-        hideKeyboard();
         loginComponent.setEnabled(true, true);
         setEnabled(false);
     }
@@ -230,13 +220,39 @@ public class MapsActivity extends Activity implements LocationListener {
         });
     }
 
+    private void doReLogin() {
+        final User user = UserSessionManager.getInstance().getUser();
+        LoginService loginService = new LoginService();
+        loginService.user = user;
+
+        loginService.executeAsync(new ServiceCallback() {
+            @Override
+            public void success(IService service) {
+                //Save Authorization Cookie
+                try {
+                    JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
+                    user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
+                    UserSessionManager.getInstance().setUserSession(user);
+                    Event.broadcast(Utils.getString(R.string.re_login_ok), Constants.EventType.RE_LOGIN_OK.toString());
+                } catch (Exception e) {
+                    onLogout();
+                    Event.broadcast(Utils.getString(R.string.re_login_failed), Constants.EventType.RE_LOGIN_FAILED.toString());
+                }
+            }
+
+            @Override
+            public void failure(IService service) {
+                onLogout();
+                Event.broadcast(Utils.getString(R.string.re_login_failed), Constants.EventType.RE_LOGIN_FAILED.toString());
+            }
+        });
+    }
+
     private void onLogout() {
-        showLoginDialog();
         UserSessionManager.getInstance().clearUserSession();
     }
 
     private void openMap() {
-        hideKeyboard();
         loginComponent.setEnabled(false, true);
         setEnabled(true);
     }

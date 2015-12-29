@@ -12,46 +12,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageView
-        android:id="@+id/imageViewLogo"
-        android:layout_width="@dimen/log_width"
-        android:layout_height="@dimen/log_height"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:src="@drawable/bosch_logo" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:layout_toRightOf="@id/imageViewLogo"
-        android:background="@color/bg_action_bar_color"
-        android:paddingBottom="10dp"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="10dp">
-
-        <ImageButton
-            android:id="@+id/imageButtonSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="50dp"
-            android:background="@android:color/transparent"
-            android:onClick="onSearchButtonClicked"
-            android:src="@drawable/search_black" />
-
-        <ImageButton
-            android:id="@+id/imageButtonMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/transparent"
-            android:onClick="onMenuButtonClicked"
-            android:src="@drawable/menu" />
-    </RelativeLayout>
-
 </RelativeLayout>

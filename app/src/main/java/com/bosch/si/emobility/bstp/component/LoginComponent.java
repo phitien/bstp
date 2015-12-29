@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.activity.MapsActivity;
+import com.bosch.si.emobility.bstp.activity.Activity;
 import com.bosch.si.emobility.bstp.model.User;
 
 /**
@@ -16,7 +16,7 @@ public class LoginComponent extends Component {
 
     private static LoginComponent ourInstance = new LoginComponent();
 
-    public static LoginComponent getInstance(MapsActivity activity) {
+    public static LoginComponent getInstance(Activity activity) {
         if (activity != null)
             ourInstance.setActivity(activity);
         return ourInstance;
@@ -31,7 +31,7 @@ public class LoginComponent extends Component {
     CheckBox checkBoxSaveCredentials;
 
     @Override
-    public void setActivity(MapsActivity activity) {
+    public void setActivity(Activity activity) {
         super.setActivity(activity);
         layout = (RelativeLayout) this.activity.findViewById(R.id.loginLayout);
         editTextUsername = (EditText) this.activity.findViewById(R.id.editTextUsername);

@@ -16,29 +16,29 @@ public class BaseService extends AbstractService {
 
     @Override
     public String getBaseURI() {
-        return Constants.BASE_URL;
+        baseURI = Constants.BASE_URL;
+        return super.getBaseURI();
     }
 
     @Override
     public IServiceCallback getCallback() {
-        if (callback == null)
-            callback = new ServiceCallback() {
-                @Override
-                public void success(IService service) {
+        callback = new ServiceCallback() {
+            @Override
+            public void success(IService service) {
 
-                }
+            }
 
-                @Override
-                public void failure(IService service) {
+            @Override
+            public void failure(IService service) {
 
-                }
+            }
 
-                @Override
-                public void onSessionExpiry(IService service) {
-                    Event.broadcast(Utils.getString(R.string.session_expired), Constants.EventType.SESSION_EXPIRED.toString());
-                }
-            };
-        return callback;
+            @Override
+            public void onSessionExpiry(IService service) {
+                Event.broadcast(Utils.getString(R.string.session_expired), Constants.EventType.SESSION_EXPIRED.toString());
+            }
+        };
+        return super.getCallback();
     }
 
     @Override

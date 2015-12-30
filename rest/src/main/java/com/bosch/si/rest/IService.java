@@ -3,7 +3,11 @@ package com.bosch.si.rest;
 import com.bosch.si.rest.callback.IServiceCallback;
 import com.bosch.si.rest.connection.IServiceConnection;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -79,5 +83,9 @@ public interface IService {
     public String executeSync(IServiceCallback callback);
 
     public String getFieldValue(String fieldName) throws Exception;
+
+    public InputStream getInputStream();
+
+    public JSONObject getInfo() throws JSONException;
 
 }

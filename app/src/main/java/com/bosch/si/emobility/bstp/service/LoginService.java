@@ -21,6 +21,7 @@ public class LoginService extends AbstractService {
 
     @Override
     public String getBody() {
-        return user.toXMLString();
+        body = user.toXMLString();
+        return super.getBody();
     }
 }

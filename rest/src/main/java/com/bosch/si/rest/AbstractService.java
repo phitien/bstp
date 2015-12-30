@@ -19,10 +19,14 @@ import com.bosch.si.rest.connection.ServiceConnection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -33,7 +37,10 @@ import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
@@ -59,7 +66,7 @@ public abstract class AbstractService implements IService {
 
     protected int connectTimeout = CONNECT_TIMEOUT;
 
-    protected String body = null;
+    protected String body = "";
 
     protected String queryString = "";
 
@@ -83,9 +90,28 @@ public abstract class AbstractService implements IService {
 
     protected int responseCode = REST_ERROR;
 
-    protected String servicePath = "";
-
     protected Exception exception = null;
+
+    protected String boundary = null;
+
+    private String servicePath = "";
+    private PrintWriter writer = null;
+    private OutputStream outputStream = null;
+    private InputStream inputStream = null;
+
+    /**
+     * Show protected properties
+     *
+     * @return JSONObject
+     */
+    @Override
+    public JSONObject getInfo() throws JSONException {
+        updateParams();
+        Gson gson = new GsonBuilder()
+                .excludeFieldsWithModifiers(Modifier.PUBLIC, Modifier.PRIVATE)
+                .create();
+        return new JSONObject(gson.toJson(this).toString());
+    }
 
     @Override
     public String getBaseURI() {
@@ -94,9 +120,6 @@ public abstract class AbstractService implements IService {
 
     @Override
     public String getURI() {
-        if (URI == null) {
-            updateParams();
-        }
         return URI;
     }
 
@@ -154,9 +177,10 @@ public abstract class AbstractService implements IService {
 
     @Override
     public String getBody() {
-        if (method != METHOD.GET && (body == null || body.isEmpty())) {
+        if (body == null || body.isEmpty()) {
             Gson gson = new GsonBuilder()
                     .excludeFieldsWithoutExposeAnnotation()
+                    .excludeFieldsWithModifiers(Modifier.PROTECTED, Modifier.PRIVATE)
                     .create();
             return gson.toJson(this).toString();
         }
@@ -165,7 +189,7 @@ public abstract class AbstractService implements IService {
 
     @Override
     public String getQueryString() {
-        if (method == METHOD.GET && (queryString == null || queryString.isEmpty())) {
+        if (queryString == null || queryString.isEmpty()) {
             String queryString = "";
             Field[] fields = getDeclaredClass().getFields();
             for (Field field : fields) {
@@ -176,9 +200,11 @@ public abstract class AbstractService implements IService {
                     } catch (IllegalAccessException e) {
                         exception = e;
                     }
-                    queryString += field.getName() + "=" + value + "&";
+                    queryString += "&" + field.getName() + "=" + value;
                 }
             }
+            if (!queryString.isEmpty())
+                queryString = queryString.substring(1);
             return queryString;
         }
         return queryString;
@@ -187,27 +213,18 @@ public abstract class AbstractService implements IService {
     private boolean isQueryParam(Field field) {
         int modifiers = field.getModifiers();
         if (!Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
-            Annotation[] annotations = field.getAnnotations();
-            if (annotations.length > 0) {
-                return annotations[annotations.length - 1] instanceof QueryParam;
-            }
+            return field.getAnnotation(QueryParam.class) != null;
         }
         return false;
     }
 
     @Override
     public String getContentType() {
-        if (URI == null) {
-            updateParams();
-        }
         return getHeader(CONTENT_TYPE);
     }
 
     @Override
     public METHOD getMethod() {
-        if (URI == null) {
-            updateParams();
-        }
         return method;
     }
 
@@ -402,38 +419,40 @@ public abstract class AbstractService implements IService {
 
     @NonNull
     private Boolean doExecutionInBackground() {
-        responseString = null;
-        BufferedReader reader = null;
         try {
+            responseString = null;
             IServiceConnection conn = getConnection();
             conn.connect();
             //set responseCode
             responseCode = conn.getResponseCode();
+            inputStream = conn.getInputStream();
+            responseCookie = conn.getURLConnection().getHeaderField(SET_COOKIE);
             if (isOK()) {
-                StringBuilder builder = new StringBuilder();
-                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    builder.append(line + "\n");
+                BufferedReader reader = null;
+                try {
+                    StringBuilder builder = new StringBuilder();
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        builder.append(line + "\n");
+                    }
+                    //set responseString
+                    responseString = builder.toString();
+                } catch (IOException e) {
+                    exception = e;
+                } finally {
+                    try {
+                        if (reader != null)
+                            reader.close();
+                    } catch (IOException e) {
+                    }
                 }
-                //set responseString
-                responseString = builder.toString();
-                responseCookie = conn.getURLConnection().getHeaderField(SET_COOKIE);
-            } else {
-                responseString = responseCode + ": " + conn.getResponseMessage();
             }
             conn.disconnect();
         } catch (Exception e) {
             exception = e;
-        } finally {
-            try {
-                if (reader != null)
-                    reader.close();
-            } catch (IOException e) {
-                exception = e;
-            }
+            inputStream = null;
         }
-
         return isOK();
     }
 
@@ -456,6 +475,11 @@ public abstract class AbstractService implements IService {
     }
 
     @Override
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    @Override
     public String getFieldValue(String fieldName) throws Exception {
         Field field = this.getDeclaredClass().getField(fieldName);
         int modifiers = field.getModifiers();
@@ -467,6 +491,7 @@ public abstract class AbstractService implements IService {
     }
 
     protected IServiceConnection getServiceConnection() throws Exception {
+        updateParams();
         URL url = new URL(getURI());
         URLConnection conn = url.openConnection();
         if (conn instanceof HttpsURLConnection) {
@@ -480,10 +505,6 @@ public abstract class AbstractService implements IService {
         }
         return null;
     }
-
-    protected PrintWriter writer = null;
-    protected String boundary = null;
-    protected OutputStream outputStream = null;
 
     private void updateConnectionParams(HttpURLConnection conn) throws Exception {
         conn.setReadTimeout(getReadTimeout());
@@ -577,18 +598,19 @@ public abstract class AbstractService implements IService {
     }
 
     protected Class<?> getDeclaredClass() {
-        Class<?> klass = getClass();
-        if (klass.getName().contains("$")) {
-            return klass.getSuperclass();
-        }
-        return klass;
+        return getClass();
+//        Class<?> klass = getClass();
+//        if (klass.getName().contains("$")) {
+//            return klass.getSuperclass();
+//        }
+//        return klass;
     }
 
     //Set servicePath and method, only proceed with the first one
     protected void updateParams() {
         applyAnnotationsValues();
         URI = URI == null ? servicePath : URI;
-        applyPublicPropertiesValues();
+        applyPathVariables();
         applyQueryString();
     }
 
@@ -629,34 +651,38 @@ public abstract class AbstractService implements IService {
 
     protected void applyQueryString() {
         String queryString = getQueryString();
-        if (queryString != null && !queryString.isEmpty()) {
-            queryString = String.format("?%s", queryString);
-        } else {
-            queryString = "";
-        }
-
         if (!URI.toLowerCase().startsWith("http")) {
             String baseURI = getBaseURI();
             if (baseURI != null && !baseURI.isEmpty()) {
-                URI = String.format("%s/%s%s", baseURI, URI, queryString);
-            } else {
-                URI = String.format("%s%s", URI, queryString);
+                URI = String.format("%s/%s", baseURI, URI);
             }
+        }
+        queryString = URI.contains("?") ? "&" + queryString : "?" + queryString;
+        URI = String.format("%s%s", URI, queryString);
+    }
+
+    protected void applyPathVariables() {
+        List<String> fields = detachVariables(URI);
+        for (Iterator<String> iterator = fields.iterator(); iterator.hasNext(); ) {
+            String field = iterator.next();
+            String value = "";
+            try {
+                value = getFieldValue(field);
+            } catch (Exception e) {
+                exception = e;
+            }
+            URI = URI.replaceAll(String.format("\\:%s", field), value);
         }
     }
 
-    protected void applyPublicPropertiesValues() {
+    public static final List<String> detachVariables(String URI) {
+        List<String> rs = new ArrayList<>();
         Pattern p = Pattern.compile("\\:([a-zA-Z_][a-zA-Z_0-9]*)");
         Matcher m = p.matcher(URI);
         while (m.find()) {
-            String fieldName = m.group(1);
-            try {
-                String value = getFieldValue(fieldName);
-                URI = URI.replaceAll(String.format("\\:%s", fieldName), value);
-            } catch (Exception e) {
-                System.out.print(String.format("REST: Class %s -> Value for field %s is null", getDeclaredClass().getName(), fieldName));
-            }
+            rs.add(m.group(1));
         }
+        return rs;
     }
 
     @Override

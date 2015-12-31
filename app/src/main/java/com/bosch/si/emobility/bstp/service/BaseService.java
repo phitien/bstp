@@ -1,7 +1,7 @@
 package com.bosch.si.emobility.bstp.service;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.UserSessionManager;
+import com.bosch.si.emobility.bstp.manager.UserSessionManager;
 import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;

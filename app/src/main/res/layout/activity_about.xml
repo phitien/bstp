@@ -4,15 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:padding="@dimen/no_padding"
-    tools:context="com.bosch.si.emobility.bstp.activity.UpcomingActivity">
-
-    <ListView
-        android:id="@+id/listViewUpcoming"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/headerLayout"
-        android:layout_marginTop="@dimen/margin_top_from_header"
-        android:background="@color/bg_white_opacity_100" />
+    tools:context="com.bosch.si.emobility.bstp.activity.AboutActivity">
 
     <include
         android:id="@+id/headerLayout"

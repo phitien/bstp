@@ -14,21 +14,13 @@ import com.bosch.si.emobility.bstp.model.User;
  */
 public class LoginComponent extends Component {
 
-    private static LoginComponent ourInstance = new LoginComponent();
-
-    public static LoginComponent getInstance(Activity activity) {
-        if (activity != null)
-            ourInstance.setActivity(activity);
-        return ourInstance;
-    }
-
-    private LoginComponent() {
-        super();
-    }
-
     EditText editTextUsername;
     EditText editTextPassword;
     CheckBox checkBoxSaveCredentials;
+
+    public LoginComponent(Activity activity) {
+        super(activity);
+    }
 
     @Override
     public void setActivity(Activity activity) {

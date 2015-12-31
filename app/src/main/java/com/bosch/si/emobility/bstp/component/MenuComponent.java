@@ -14,20 +14,12 @@ import com.bosch.si.emobility.bstp.activity.Activity;
  */
 public class MenuComponent extends Component {
 
-    private static MenuComponent ourInstance = new MenuComponent();
-
-    public static MenuComponent getInstance(Activity activity) {
-        if (activity != null)
-            ourInstance.setActivity(activity);
-        return ourInstance;
-    }
-
-    private MenuComponent() {
-        super();
-    }
-
     ListView listViewMenu;
     ArrayAdapter<String> listViewMenuAdapter;
+
+    public MenuComponent(Activity activity) {
+        super(activity);
+    }
 
     @Override
     public void setActivity(Activity activity) {

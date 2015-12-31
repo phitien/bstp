@@ -1,101 +1,61 @@
 package com.bosch.si.emobility.bstp.activity;
 
-import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.UserSessionManager;
+import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.component.DetailComponent;
-import com.bosch.si.emobility.bstp.component.HeaderComponent;
 import com.bosch.si.emobility.bstp.component.LoginComponent;
 import com.bosch.si.emobility.bstp.component.MapComponent;
-import com.bosch.si.emobility.bstp.component.MenuComponent;
 import com.bosch.si.emobility.bstp.component.SearchComponent;
-import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
+import com.bosch.si.emobility.bstp.manager.DataManager;
+import com.bosch.si.emobility.bstp.manager.UserSessionManager;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.SearchCriteria;
-import com.bosch.si.emobility.bstp.model.User;
-import com.bosch.si.emobility.bstp.service.LoginService;
-import com.bosch.si.rest.IService;
-import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import org.json.JSONObject;
-import org.json.XML;
-
-public class MapsActivity extends Activity implements LocationListener {
+public class MapsActivity extends Activity {
 
     MapComponent mapComponent;
-    HeaderComponent headerComponent;
     LoginComponent loginComponent;
     SearchComponent searchComponent;
-    MenuComponent menuComponent;
     DetailComponent detailComponent;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int layoutResID() {
+        return R.layout.activity_maps;
+    }
 
-        setContentView(R.layout.activity_maps);
+    @Override
+    protected void setup() {
+        super.setup();
 
-        mapComponent = MapComponent.getInstance(this);
-        loginComponent = LoginComponent.getInstance(this);
+        mapComponent = new MapComponent(this);
+        loginComponent = new LoginComponent(this);
+        searchComponent = new SearchComponent(this);
+        detailComponent = new DetailComponent(this);
+
         loginComponent.setPasswordOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    doLogin();
+                    doLogin(loginComponent.getUser());
                 }
                 return false;
             }
         });
-        searchComponent = SearchComponent.getInstance(this);
-        detailComponent = DetailComponent.getInstance(this);
-    }
 
-    private void openAboutActivity() {
-        //TODO
-    }
-
-    private void openUpcomingActivity() {
-        setEnabled(true);
-        Intent intent = new Intent(MapsActivity.this, UpcomingActivity.class);
-        startActivity(intent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        headerComponent = HeaderComponent.getInstance(this);
-
-        menuComponent = MenuComponent.getInstance(this);
-        menuComponent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                menuComponent.toggleView();
-                if (position == 0) {
-
-                } else if (position == 1) {
-                    //open Upcoming activity
-                    openUpcomingActivity();
-                } else if (position == 2) {
-                    openAboutActivity();
-                } else if (position == 3) {
-                    onLogout();
-                }
-            }
-        });
         checkAuthentication();
     }
 
@@ -126,6 +86,21 @@ public class MapsActivity extends Activity implements LocationListener {
         }
     }
 
+    private void showLoginDialog() {
+        loginComponent.setEnabled(true, true);
+        setEnabled(false);
+    }
+
+    public void onLoginButtonClicked(View view) {
+        doLogin(loginComponent.getUser());
+    }
+
+    @Override
+    protected void openUpcomingActivity() {
+        setEnabled(true);
+        super.openUpcomingActivity();
+    }
+
     private void onCameraChanged() {
         detailComponent.setEnabled(false, false);
     }
@@ -134,33 +109,11 @@ public class MapsActivity extends Activity implements LocationListener {
     public void onBackPressed() {
         if (searchComponent.isShown()) {
             searchComponent.setEnabled(false, true);
-        }
-        if (menuComponent.isShown()) {
-            menuComponent.setEnabled(false, true);
-        }
-        if (detailComponent.isShown()) {
+        } else if (detailComponent.isShown()) {
             detailComponent.setEnabled(false, true);
+        } else {
+            super.onBackPressed();
         }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
     }
 
     private void checkAuthentication() {
@@ -180,78 +133,6 @@ public class MapsActivity extends Activity implements LocationListener {
         detailComponent.setEnabled(false, true);
     }
 
-    private void showLoginDialog() {
-        loginComponent.setEnabled(true, true);
-        setEnabled(false);
-    }
-
-    public void onLoginButtonClicked(View view) {
-        doLogin();
-    }
-
-    private void doLogin() {
-        Utils.Indicator.show();
-        //call login rest service and setup map after succeed
-        final User user = loginComponent.getUser();
-
-        LoginService loginService = new LoginService();
-        loginService.user = user;
-
-        loginService.executeAsync(new ServiceCallback() {
-            @Override
-            public void success(IService service) {
-                //Save Authorization Cookie
-                try {
-                    JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
-                    user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
-                    UserSessionManager.getInstance().setUserSession(user);
-                    Event.broadcast(Utils.getString(R.string.login_ok), Constants.EventType.LOGIN_OK.toString());
-                } catch (Exception e) {
-                    onLogout();
-                    Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
-                }
-            }
-
-            @Override
-            public void failure(IService service) {
-                onLogout();
-                Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
-            }
-        });
-    }
-
-    private void doReLogin() {
-        final User user = UserSessionManager.getInstance().getUser();
-        LoginService loginService = new LoginService();
-        loginService.user = user;
-
-        loginService.executeAsync(new ServiceCallback() {
-            @Override
-            public void success(IService service) {
-                //Save Authorization Cookie
-                try {
-                    JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
-                    user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
-                    UserSessionManager.getInstance().setUserSession(user);
-                    Event.broadcast(Utils.getString(R.string.re_login_ok), Constants.EventType.RE_LOGIN_OK.toString());
-                } catch (Exception e) {
-                    onLogout();
-                    Event.broadcast(Utils.getString(R.string.re_login_failed), Constants.EventType.RE_LOGIN_FAILED.toString());
-                }
-            }
-
-            @Override
-            public void failure(IService service) {
-                onLogout();
-                Event.broadcast(Utils.getString(R.string.re_login_failed), Constants.EventType.RE_LOGIN_FAILED.toString());
-            }
-        });
-    }
-
-    private void onLogout() {
-        UserSessionManager.getInstance().clearUserSession();
-    }
-
     private void openMap() {
         loginComponent.setEnabled(false, true);
         setEnabled(true);
@@ -261,16 +142,13 @@ public class MapsActivity extends Activity implements LocationListener {
         searchComponent.toggleView();
     }
 
-    public void onMenuButtonClicked(View view) {
-        menuComponent.toggleView();
-    }
-
     public LatLngBounds getCurrentLatLngBounds() {
         return mapComponent.getCurrentLatLngBounds();
     }
 
     public void moveCamera(Place place) {
         hideKeyboard();
+        DataManager.getInstance().setSearchLatLng(place.getLatLng());
         mapComponent.setSearchingLatLng(place.getLatLng());
     }
 
@@ -279,6 +157,7 @@ public class MapsActivity extends Activity implements LocationListener {
     }
 
     public void openLocationDetail(ParkingLocation parkingLocation) {
+        DataManager.getInstance().setCurrentParkingLocation(parkingLocation);
         detailComponent.setParkingLocation(parkingLocation);
     }
 

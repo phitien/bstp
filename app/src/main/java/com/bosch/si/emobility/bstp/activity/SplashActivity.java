@@ -1,22 +1,21 @@
 package com.bosch.si.emobility.bstp.activity;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
 import android.os.Handler;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
 
-public class SplashActivity extends Activity implements LocationListener {
+public class SplashActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+    public int layoutResID() {
+        return R.layout.activity_splash;
+    }
+
+    @Override
+    protected void setup() {
+        super.setup();
         checkPermissions();
     }
 
@@ -34,9 +33,9 @@ public class SplashActivity extends Activity implements LocationListener {
 
     }
 
-    private void openMapsActivity() {
-        Intent intent = new Intent(SplashActivity.this, MapsActivity.class);
-        startActivity(intent);
+    @Override
+    protected void openMapsActivity() {
+        super.openMapsActivity();
         finish();
     }
 
@@ -54,24 +53,4 @@ public class SplashActivity extends Activity implements LocationListener {
 //            }
 //        }
 //    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 }

@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.component;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -20,6 +21,7 @@ import android.widget.TimePicker;
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.activity.Activity;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
+import com.bosch.si.emobility.bstp.component.ux.PlaceAutocompleteAdapter;
 import com.bosch.si.emobility.bstp.model.SearchCriteria;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,18 +42,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class SearchComponent extends Component implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener {
 
-    private static SearchComponent ourInstance = new SearchComponent();
-
-    public static SearchComponent getInstance(Activity activity) {
-        if (activity != null)
-            ourInstance.setActivity(activity);
-        return ourInstance;
-    }
-
-    private SearchComponent() {
-        super();
-    }
-
     static AutoCompleteTextView editTextSearch;
     static ImageButton imageButtonClear;
 
@@ -69,6 +59,10 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     static Date toDate;
 
     static SearchCriteria searchCriteria = new SearchCriteria();
+
+    public SearchComponent(Activity activity) {
+        super(activity);
+    }
 
     public Date getFromDate() {
         return fromDate;
@@ -162,7 +156,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     }
 
     @Override
-    protected boolean isSlideUp() {
+    protected boolean isFade() {
         return true;
     }
 
@@ -184,11 +178,14 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     }
 
     protected void updateComponent() {
-        textViewFromDate.setText(DateFormat.format("yyyy-MM-dd", fromDate));
-        textViewFromTime.setText(DateFormat.format("hh:mm:ss", fromDate));
+        String dateFormat = this.activity.getString(R.string.date_format);
+        String timeFormat = this.activity.getString(R.string.time_format);
 
-        textViewToDate.setText(DateFormat.format("yyyy-MM-dd", toDate));
-        textViewToTime.setText(DateFormat.format("hh:mm:ss", toDate));
+        textViewFromDate.setText(DateFormat.format(dateFormat, fromDate));
+        textViewFromTime.setText(DateFormat.format(timeFormat, fromDate));
+
+        textViewToDate.setText(DateFormat.format(dateFormat, toDate));
+        textViewToTime.setText(DateFormat.format(timeFormat, toDate));
 
         searchCriteria.setStartTime(fromDate.toString()).setEndTime(toDate.toString());
     }
@@ -236,7 +233,8 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
         validateDates();
     }
 
-    public static class DatePickerFragment extends DialogFragment {
+    @SuppressLint("ValidFragment")
+    public class DatePickerFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             Date date = currentTextView == textViewFromDate ? fromDate : toDate;
@@ -247,11 +245,12 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
             // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), SearchComponent.getInstance(null), year, month, day);
+            return new DatePickerDialog(getActivity(), SearchComponent.this, year, month, day);
         }
     }
 
-    public static class TimePickerFragment extends DialogFragment {
+    @SuppressLint("ValidFragment")
+    public class TimePickerFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
@@ -263,7 +262,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
             int minute = calendar.get(Calendar.MINUTE);
 
             // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), SearchComponent.getInstance(null), hour, minute, DateFormat.is24HourFormat(getActivity()));
+            return new TimePickerDialog(getActivity(), SearchComponent.this, hour, minute, DateFormat.is24HourFormat(getActivity()));
         }
     }
 

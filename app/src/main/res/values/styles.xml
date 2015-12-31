@@ -43,6 +43,18 @@
         <item name="android:textColor">@color/text_color</item>
     </style>
 
+    <style name="App_TextViewUpcomingLabelStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/textView_textSize</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="App_TextViewUpcomingStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/textView_textSize</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
     <style name="App_ButtonStyle" parent="@android:style/Widget.Button">
         <item name="android:textColor">@color/button_text_color</item>
         <item name="android:textSize">@dimen/button_textSize</item>

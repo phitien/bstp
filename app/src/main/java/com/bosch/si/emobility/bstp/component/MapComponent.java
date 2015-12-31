@@ -43,7 +43,6 @@ import java.util.Map;
  */
 public class MapComponent extends Component {
 
-    private static MapComponent ourInstance = new MapComponent();
     private LatLngBounds currentCameraBounds;
     private Marker myLocationMarker;
 
@@ -56,6 +55,10 @@ public class MapComponent extends Component {
     private LatLng prevLatLng = null;
     private LatLng currLatLng = null;
 
+    public MapComponent(Activity activity) {
+        super(activity);
+    }
+
     public LatLng getSearchingLatLng() {
         return searchingLatLng;
     }
@@ -63,16 +66,6 @@ public class MapComponent extends Component {
     public void setSearchingLatLng(LatLng searchingLatLng) {
         this.searchingLatLng = searchingLatLng;
         moveCamera(this.searchingLatLng);
-    }
-
-    public static MapComponent getInstance(Activity activity) {
-        if (activity != null)
-            ourInstance.setActivity(activity);
-        return ourInstance;
-    }
-
-    private MapComponent() {
-        super();
     }
 
     GoogleMap map;

@@ -15,17 +15,6 @@ import com.bosch.si.emobility.bstp.model.ParkingLocation;
  */
 public class DetailComponent extends Component {
 
-    private static DetailComponent ourInstance = new DetailComponent();
-
-    public static DetailComponent getInstance(Activity activity) {
-        if (activity != null)
-            ourInstance.setActivity(activity);
-        return ourInstance;
-    }
-
-    private DetailComponent() {
-        super();
-    }
 
     private ParkingLocation parkingLocation;
     private TextView textViewParkingName;
@@ -35,6 +24,10 @@ public class DetailComponent extends Component {
     private ListView listViewSecurityDetails;
 
     private DetailLayout detailLayout;
+
+    public DetailComponent(Activity activity) {
+        super(activity);
+    }
 
     public ParkingLocation getParkingLocation() {
         return parkingLocation;
@@ -75,7 +68,7 @@ public class DetailComponent extends Component {
     }
 
     @Override
-    protected boolean isSlideUp() {
+    protected boolean isFade() {
         return true;
     }
 

@@ -3,45 +3,20 @@ package com.bosch.si.rest;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import com.bosch.si.rest.anno.Authorization;
-import com.bosch.si.rest.anno.ContentType;
-import com.bosch.si.rest.anno.Cookie;
-import com.bosch.si.rest.anno.DELETE;
-import com.bosch.si.rest.anno.FormUrlEncoded;
-import com.bosch.si.rest.anno.GET;
-import com.bosch.si.rest.anno.Header;
-import com.bosch.si.rest.anno.POST;
-import com.bosch.si.rest.anno.PUT;
-import com.bosch.si.rest.anno.QueryParam;
+import com.bosch.si.rest.anno.*;
 import com.bosch.si.rest.callback.IServiceCallback;
-import com.bosch.si.rest.connection.IServiceConnection;
-import com.bosch.si.rest.connection.ServiceConnection;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.bosch.si.rest.connection.*;
+import com.google.gson.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.net.*;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
@@ -191,7 +166,7 @@ public abstract class AbstractService implements IService {
     public String getQueryString() {
         if (queryString == null || queryString.isEmpty()) {
             String queryString = "";
-            Field[] fields = getDeclaredClass().getFields();
+            Field[] fields = getDeclaredClass().getDeclaredFields();
             for (Field field : fields) {
                 if (isQueryParam(field)) {
                     String value = "";
@@ -481,7 +456,7 @@ public abstract class AbstractService implements IService {
 
     @Override
     public String getFieldValue(String fieldName) throws Exception {
-        Field field = this.getDeclaredClass().getField(fieldName);
+        Field field = this.getDeclaredClass().getDeclaredField(fieldName);
         int modifiers = field.getModifiers();
         if (!Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
             field.setAccessible(true);

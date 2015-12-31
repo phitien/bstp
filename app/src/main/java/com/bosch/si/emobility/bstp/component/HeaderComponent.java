@@ -11,21 +11,12 @@ import com.bosch.si.emobility.bstp.activity.Activity;
  */
 public class HeaderComponent extends Component {
 
-    private static HeaderComponent ourInstance = new HeaderComponent();
-
-    public static HeaderComponent getInstance(Activity activity) {
-        if (activity != null)
-            ourInstance.setActivity(activity);
-        return ourInstance;
-    }
-
-    private HeaderComponent() {
-        super();
-    }
-
     ImageButton imageButtonSearch;
     ImageButton imageButtonMenu;
 
+    public HeaderComponent(Activity activity) {
+        super(activity);
+    }
 
     @Override
     public void setActivity(Activity activity) {

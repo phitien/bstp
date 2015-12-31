@@ -5,7 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
+import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.activity.Activity;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
 
@@ -19,8 +22,8 @@ public abstract class Component implements IComponent {
 
     protected ViewGroup layout;
 
-    public Component() {
-
+    public Component(Activity activity) {
+        setActivity(activity);
     }
 
     @Override
@@ -37,17 +40,10 @@ public abstract class Component implements IComponent {
         }
     }
 
-    protected ViewPropertyAnimator slideUp(final boolean enabled) {
-        return layout.animate().translationY(enabled ? 0 : -layout.getHeight())
+    protected void slideUp(final boolean enabled) {
+        layout.animate().translationY(enabled ? 0 : -layout.getHeight())
                 .setDuration(DURATION)
                 .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        super.onAnimationStart(animation);
-                        layout.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
-                        layout.setAlpha(enabled ? 0.0f : 1.0f);
-                    }
-
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
@@ -57,17 +53,10 @@ public abstract class Component implements IComponent {
                 });
     }
 
-    protected ViewPropertyAnimator slideDown(final boolean enabled) {
-        return layout.animate().translationY(enabled ? 0 : layout.getHeight())
+    protected void slideDown(final boolean enabled) {
+        layout.animate().translationY(enabled ? 0 : layout.getHeight())
                 .setDuration(DURATION)
                 .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        super.onAnimationStart(animation);
-                        layout.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
-                        layout.setAlpha(enabled ? 0.0f : 1.0f);
-                    }
-
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
@@ -77,17 +66,10 @@ public abstract class Component implements IComponent {
                 });
     }
 
-    protected ViewPropertyAnimator slideLeft(final boolean enabled) {
-        return layout.animate().translationX(enabled ? 0 : layout.getWidth())
+    protected void slideLeft(final boolean enabled) {
+        layout.animate().translationX(enabled ? 0 : layout.getWidth())
                 .setDuration(DURATION)
                 .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        super.onAnimationStart(animation);
-                        layout.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
-                        layout.setAlpha(enabled ? 0.0f : 1.0f);
-                    }
-
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
@@ -97,17 +79,10 @@ public abstract class Component implements IComponent {
                 });
     }
 
-    protected ViewPropertyAnimator slideRight(final boolean enabled) {
-        return layout.animate().translationX(enabled ? 0 : -layout.getWidth())
+    protected void slideRight(final boolean enabled) {
+        layout.animate().translationX(enabled ? 0 : -layout.getWidth())
                 .setDuration(DURATION)
                 .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        super.onAnimationStart(animation);
-                        layout.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
-                        layout.setAlpha(enabled ? 0.0f : 1.0f);
-                    }
-
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
@@ -115,6 +90,31 @@ public abstract class Component implements IComponent {
                         layout.setAlpha(enabled ? 1.0f : 0.0f);
                     }
                 });
+    }
+
+    protected void fade(final boolean enabled) {
+        Animation fadeAnimation = null;
+        if (enabled)
+            fadeAnimation = AnimationUtils.loadAnimation(this.activity, R.anim.fade_in);
+        else
+            fadeAnimation = AnimationUtils.loadAnimation(this.activity, R.anim.fade_out);
+        fadeAnimation.setDuration(DURATION);
+        fadeAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                layout.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        layout.startAnimation(fadeAnimation);
     }
 
     @Override
@@ -128,6 +128,8 @@ public abstract class Component implements IComponent {
             slideLeft(enabled);
         } else if (!noAnimation && isSlideRight()) {
             slideRight(enabled);
+        } else if (!noAnimation && isFade()) {
+            fade(enabled);
         } else {
             layout.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
         }
@@ -154,4 +156,9 @@ public abstract class Component implements IComponent {
     protected boolean isSlideRight() {
         return false;
     }
+
+    protected boolean isFade() {
+        return false;
+    }
+
 }

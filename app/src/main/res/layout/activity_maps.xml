@@ -3,7 +3,8 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/nomargin"
+    android:background="@color/background"
+    android:padding="@dimen/no_margin"
     tools:context=".activity.MapsActivity">
 
     <include

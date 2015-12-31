@@ -22,6 +22,8 @@
     <color name="switch_text_color">#665C56</color>
     <color name="checkbox_text_color">#665C56</color>
 
+    <color name="background">#ffADCFFF</color>
+
     <color name="bg_white_opacity_100">#ffffffff</color>
     <color name="bg_white_opacity_95">#f2ffffff</color>
     <color name="bg_white_opacity_90">#e6ffffff</color>

@@ -7,28 +7,36 @@ import com.bosch.si.emobility.bstp.app.Event;
  */
 public interface IActivity {
     /**
+     * View layout resource ID
+     * @return
+     */
+    int layoutResID();
+
+    /**
      * Register EventBus for the activity, this method should be called in onCreate method
-     *
+     * <p>
      * Below is how to implement this method
-     *
-     *  public void registerEventBus() {
-     *      EventBus.getDefault().register(this); // register EventBus
-     *  }
+     * <p>
+     * public void registerEventBus() {
+     * EventBus.getDefault().register(this); // register EventBus
+     * }
      */
     void registerEventBus();
+
     /**
      * Unregister EventBus for the activity, this method should be called in onDestroy method
-     *
+     * <p>
      * Below is how to implement this method
-     *
-     *  public void unregisterEventBus() {
-     *      EventBus.getDefault().unregister(this); // unregister EventBus
-     *  }
+     * <p>
+     * public void unregisterEventBus() {
+     * EventBus.getDefault().unregister(this); // unregister EventBus
+     * }
      */
     void unregisterEventBus();
 
     /**
      * Override this method to handle events
+     *
      * @param event
      */
     void onEventMainThread(Event event);

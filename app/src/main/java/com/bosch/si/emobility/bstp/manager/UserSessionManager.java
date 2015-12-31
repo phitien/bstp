@@ -1,4 +1,4 @@
-package com.bosch.si.emobility.bstp;
+package com.bosch.si.emobility.bstp.manager;
 
 import android.util.Base64;
 

@@ -1,97 +1,114 @@
 package com.bosch.si.emobility.bstp.activity;
 
-import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.UserSessionManager;
-import com.bosch.si.emobility.bstp.component.HeaderComponent;
-import com.bosch.si.emobility.bstp.component.MenuComponent;
+import com.bosch.si.emobility.bstp.component.ux.ReservationViewHolder;
+import com.bosch.si.emobility.bstp.manager.DataManager;
+import com.bosch.si.emobility.bstp.model.ParkingTransaction;
+import com.bosch.si.emobility.bstp.service.GetUpcomingReservationsService;
+import com.bosch.si.rest.IService;
+import com.bosch.si.rest.callback.ServiceCallback;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-public class UpcomingActivity extends Activity implements LocationListener {
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-    HeaderComponent headerComponent;
-    MenuComponent menuComponent;
+public class UpcomingActivity extends Activity {
+
+    ListView listViewUpcoming;
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public int layoutResID() {
+        return R.layout.activity_upcoming;
+    }
 
-        headerComponent = HeaderComponent.getInstance(this);
-        menuComponent = MenuComponent.getInstance(this);
-        menuComponent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    @Override
+    protected void setup() {
+        super.setup();
+
+        listViewUpcoming = (ListView) findViewById(R.id.listViewUpcoming);
+        listViewUpcoming.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                menuComponent.toggleView();
-                if (position == 0) {
-                    openMapActivity();
-                } else if (position == 1) {
-                    //do nothing
-                } else if (position == 2) {
-                    openAboutActivity();
-                } else if (position == 3) {
-                    onLogout();
-                }
+                openDetailActivity(position);
             }
         });
+
+        populateData();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (menuComponent.isShown()) {
-            menuComponent.setEnabled(false, true);
-        } else {
-            openMapActivity();
-        }
+    private void openDetailActivity(int position) {
+        DataManager.getInstance().setCurrentTransaction(DataManager.getInstance().getTransactions().get(position));
+        Intent intent = new Intent(UpcomingActivity.this, ReservationActivity.class);
+        startActivity(intent);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upcoming);
+    private void populateData() {
+        GetUpcomingReservationsService service = new GetUpcomingReservationsService();
+        Calendar calendar = Calendar.getInstance();
+        Date fromDate = calendar.getTime();
+        Date toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(24));
+
+        service.fromDate = fromDate.toString();
+        service.toDate = toDate.toString();
+        service.searchTerm = "";
+
+        service.executeAsync(new ServiceCallback() {
+                                 @Override
+                                 public void success(IService service) {
+                                     Gson gson = new Gson();
+                                     DataManager.getInstance().setTransactions(
+                                             (List<ParkingTransaction>) gson.fromJson(
+                                                     service.getResponseString(),
+                                                     new TypeToken<ArrayList<ParkingTransaction>>() {
+                                                     }.getType()));
+                                     UpcomingAdapter adapter = new UpcomingAdapter(UpcomingActivity.this);
+                                     listViewUpcoming.setAdapter(adapter);
+                                 }
+
+                                 @Override
+                                 public void failure(IService service) {
+                                     service.getResponseCode();
+                                 }
+                             }
+
+        );
     }
 
-    private void openAboutActivity() {
-        //TODO
-    }
-
-    private void openMapActivity() {
-        finish();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 
     public void onSearchButtonClicked(View view) {
     }
 
-    public void onMenuButtonClicked(View view) {
-        menuComponent.toggleView();
-    }
+    private class UpcomingAdapter extends ArrayAdapter<ParkingTransaction> {
 
-    private void onLogout() {
-        openMapActivity();
-        UserSessionManager.getInstance().clearUserSession();
-    }
+        public UpcomingAdapter(Context context) {
+            super(context, R.layout.upcoming_item, DataManager.getInstance().getTransactions());
+        }
 
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ReservationViewHolder holder;
+            if (convertView == null || convertView.getTag() == null) {
+                convertView = getLayoutInflater().inflate(R.layout.upcoming_item, parent, false);
+
+                holder = new ReservationViewHolder(convertView);
+                convertView.setTag(holder);
+            } else {
+                holder = (ReservationViewHolder) convertView.getTag();
+            }
+            holder.populateData(getItem(position));
+            return convertView;
+        }
+    }
 }

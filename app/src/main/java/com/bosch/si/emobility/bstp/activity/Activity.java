@@ -2,6 +2,8 @@ package com.bosch.si.emobility.bstp.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -54,8 +56,11 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
 
     protected void setup() {
         try {
-            menuComponent = new MenuComponent(this);
             headerComponent = new HeaderComponent(this);
+            ActivityInfo activityInfo = getPackageManager().getActivityInfo(getComponentName(), PackageManager.GET_META_DATA);
+            headerComponent.setTitle(activityInfo.loadLabel(getPackageManager()).toString());
+
+            menuComponent = new MenuComponent(this);
             menuComponent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

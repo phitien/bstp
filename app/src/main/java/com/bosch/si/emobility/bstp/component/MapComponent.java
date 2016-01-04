@@ -3,8 +3,10 @@ package com.bosch.si.emobility.bstp.component;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.R;
@@ -75,7 +77,7 @@ public class MapComponent extends Component {
     @Override
     public void setActivity(Activity activity) {
         super.setActivity(activity);
-        layout = (RelativeLayout) this.activity.findViewById(R.id.mapLayout);
+        layout = (ViewGroup) this.activity.findViewById(R.id.mapLayout);
         mapFragment = (SupportMapFragment) this.activity.getSupportFragmentManager().findFragmentById(R.id.map);
         mapView = this.activity.findViewById(R.id.map);
         map = mapFragment.getMap();
@@ -95,7 +97,7 @@ public class MapComponent extends Component {
     }
 
     private LatLng drawMyLocationMarker() {
-        LatLng latLng = getMyLocationLatLng();
+        LatLng latLng = Utils.getMyLocationLatLng(this.activity);
         if (myLocationMarker == null) {
             myLocationMarker = map.addMarker(new MarkerOptions()
                     .position(latLng)
@@ -103,17 +105,6 @@ public class MapComponent extends Component {
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         } else
             myLocationMarker.setPosition(latLng);
-        return latLng;
-    }
-
-    @NonNull
-    private LatLng getMyLocationLatLng() {
-        Location location = Utils.getMyLocation(this.activity);
-        LatLng latLng;
-        if (location != null)
-            latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        else
-            latLng = new LatLng(0, 0);
         return latLng;
     }
 
@@ -193,7 +184,7 @@ public class MapComponent extends Component {
                 Utils.Log.e("BSTP_MapComponent_getCurrentLatLngBounds: ", e.getMessage());
             }
             if (bounds == null) {
-                return getLatLngBounds(getMyLocationLatLng(), Constants.DEFAULT_ZOOM_RADIUS);
+                return getLatLngBounds(Utils.getMyLocationLatLng(this.activity), Constants.DEFAULT_ZOOM_RADIUS);
             }
             currentCameraBounds = bounds;
         }
@@ -229,7 +220,7 @@ public class MapComponent extends Component {
                 map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
                     @Override
                     public boolean onMyLocationButtonClick() {
-                        searchingLatLng = getMyLocationLatLng();
+                        searchingLatLng = Utils.getMyLocationLatLng(activity);
                         zoomToLocation(searchingLatLng);
                         return true;
                     }
@@ -259,18 +250,29 @@ public class MapComponent extends Component {
     private boolean openLocationDetail(Marker marker) {
         for (Map.Entry<String, Marker> entry : markers.entrySet()) {
             if (marker.equals(entry.getValue())) {
-                final String parkingid = entry.getKey();
+                final String parkingId = entry.getKey();
                 ParkingLocationInfoService service = new ParkingLocationInfoService();
-                service.parkingid = parkingid;
+                service.parkingid = parkingId;
                 service.executeAsync(new ServiceCallback() {
                     @Override
-                    public void success(IService service) {
-                        ParkingLocation parkingLocation = parkingLocations.get(parkingid);
-                        parkingLocation.merge((new GsonBuilder().create()).fromJson(service.getResponseString(), ParkingLocation.class));
-                        parkingLocation.setSecurityLevel("3");
-                        parkingLocation.getSecurityDetails().add("CCTV");
-                        parkingLocation.getSecurityDetails().add("Security fence");
-                        ((MapsActivity) activity).openLocationDetail(parkingLocation);
+                    public void success(final IService service) {
+                        final ParkingLocation parkingLocation = parkingLocations.get(parkingId);
+
+                        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                parkingLocation.merge((new GsonBuilder().create()).fromJson(service.getResponseString(), ParkingLocation.class));
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void aVoid) {
+                                ((MapsActivity) activity).openLocationDetail(parkingLocation);
+                            }
+                        };
+
+                        task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+
                     }
 
                     @Override
@@ -306,16 +308,31 @@ public class MapComponent extends Component {
                             @Override
                             public void success(IService service) {
                                 parkingLocations = new HashMap<>();
-                                Gson gson = new Gson();
-                                List<ParkingLocation> locations = gson.fromJson(service.getResponseString(), new TypeToken<ArrayList<ParkingLocation>>() {
-                                }.getType());
-                                for (ParkingLocation parkingLocation : locations) {
-                                    parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
-                                }
-                                clearMarkers();
-                                drawMyLocationMarker();
-                                drawMySearchingMarker(searchingLatLng);
-                                drawLocationMarkers();
+
+                                final String responseString = service.getResponseString();
+
+                                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                                    @Override
+                                    protected Void doInBackground(Void... params) {
+                                        Gson gson = new Gson();
+                                        List<ParkingLocation> locations = gson.fromJson(responseString, new TypeToken<ArrayList<ParkingLocation>>() {
+                                        }.getType());
+                                        for (ParkingLocation parkingLocation : locations) {
+                                            parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
+                                        }
+                                        return null;
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Void aVoid) {
+                                        clearMarkers();
+                                        drawMyLocationMarker();
+                                        drawMySearchingMarker(searchingLatLng);
+                                        drawLocationMarkers();
+                                    }
+                                };
+
+                                task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
                             }
 
                             @Override

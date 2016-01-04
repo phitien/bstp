@@ -64,15 +64,9 @@ public class MapsActivity extends Activity {
         if (event.getType() == Constants.EventType.LOGIN_OK.toString()) {
             Utils.Indicator.hide();
             openMap();
-        } else if (event.getType() == Constants.EventType.RE_LOGIN_OK.toString()) {
-            mapComponent.refresh();
         } else if (event.getType() == Constants.EventType.LOGIN_FAILED.toString()) {
             Utils.Indicator.hide();
             super.onEventMainThread(event);
-        } else if (event.getType() == Constants.EventType.RE_LOGIN_FAILED.toString()) {
-            onLogout();
-        } else if (event.getType() == Constants.EventType.LOGOUT_OK.toString()) {
-            showLoginDialog();
         } else if (event.getType() == Constants.EventType.CAMERA_CHANGED.toString()) {
             onCameraChanged();
         } else if (event.getType() == Constants.EventType.SESSION_EXPIRED.toString()) {
@@ -86,6 +80,16 @@ public class MapsActivity extends Activity {
         }
     }
 
+    @Override
+    public void onLogoutOk() {
+        showLoginDialog();
+    }
+
+    @Override
+    public void onReloginOk() {
+        mapComponent.refresh();
+    }
+
     private void showLoginDialog() {
         loginComponent.setEnabled(true, true);
         setEnabled(false);
@@ -93,12 +97,6 @@ public class MapsActivity extends Activity {
 
     public void onLoginButtonClicked(View view) {
         doLogin(loginComponent.getUser());
-    }
-
-    @Override
-    protected void openUpcomingActivity() {
-        setEnabled(true);
-        super.openUpcomingActivity();
     }
 
     private void onCameraChanged() {

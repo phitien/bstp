@@ -11,7 +11,7 @@ public class ParkingTransaction extends Model {
     private String additionalInfo;
     private String driverId;
     private String endTime;
-    private String parkingId;
+    private ParkingLocation parkingLocation;
     private String paymentMode;
     private String startTime;
     private String transactedBy;
@@ -19,6 +19,14 @@ public class ParkingTransaction extends Model {
     private String transactedDate;
     private String transactionId;
     private String vehicleId;
+
+    public ParkingLocation getParkingLocation() {
+        return parkingLocation;
+    }
+
+    public void setParkingLocation(ParkingLocation parkingLocation) {
+        this.parkingLocation = parkingLocation;
+    }
 
     public String getTransactedFare() {
         return transactedFare;
@@ -50,14 +58,6 @@ public class ParkingTransaction extends Model {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
-    }
-
-    public String getParkingId() {
-        return parkingId;
-    }
-
-    public void setParkingId(String parkingId) {
-        this.parkingId = parkingId;
     }
 
     public String getPaymentMode() {

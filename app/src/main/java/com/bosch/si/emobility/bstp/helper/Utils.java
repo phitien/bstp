@@ -8,10 +8,12 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.app.Application;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -214,6 +216,14 @@ public class Utils {
             Log.e("BSTP_Utils_getMyLocation", e.getMessage());
         }
         return location;
+    }
+
+    public static LatLng getMyLocationLatLng(Context context) {
+        Location location = Utils.getMyLocation(context);
+        if (location != null)
+            return new LatLng(location.getLatitude(), location.getLongitude());
+        else
+            return Constants.DEFAULT_LOCATION;
     }
 
     public static boolean isLocationServiceDisabled(Context context) {

@@ -180,7 +180,9 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
      */
     @Override
     public void registerEventBus() {
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     /**
@@ -197,13 +199,37 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     @Override
     public void onEventMainThread(Event event) {
         if (event.getType() == Constants.EventType.LOGOUT_OK.toString()) {
-            openMapsActivity();
+            onLogoutOk();
+        } else if (event.getType() == Constants.EventType.RE_LOGIN_OK.toString()) {
+            onReloginOk();
+        } else if (event.getType() == Constants.EventType.RE_LOGIN_FAILED.toString()) {
+            onLogout();
         } else {
-            String message = event.getMessage();
-            if (message != null && !message.isEmpty()) {
-                Utils.Notifier.notify(message);
-            }
+            showMessage(event);
         }
+    }
+
+    private void showMessage(Event event) {
+        String message = event.getMessage();
+        if (message != null && !message.isEmpty()) {
+            Utils.Notifier.notify(message);
+        }
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void onLogoutOk() {
+        openMapsActivity();
+    }
+
+    /**
+     * Should be overridden in sub class
+     */
+    @Override
+    public void onReloginOk() {
+        //do nothing
     }
 
     @Override

@@ -3,15 +3,25 @@ package com.bosch.si.emobility.bstp.activity;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.view.View;
+import android.widget.Button;
 
 import com.bosch.si.emobility.bstp.R;
+import com.bosch.si.emobility.bstp.app.Event;
+import com.bosch.si.emobility.bstp.component.DetailComponent;
 import com.bosch.si.emobility.bstp.component.ux.ReservationViewHolder;
+import com.bosch.si.emobility.bstp.helper.Constants;
 import com.bosch.si.emobility.bstp.helper.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
+import com.bosch.si.emobility.bstp.manager.UserSessionManager;
+import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.google.android.gms.maps.model.LatLng;
 
 public class ReservationActivity extends Activity {
+
+    Button reserveButton;
+    DetailComponent detailComponent;
 
     @Override
     public int layoutResID() {
@@ -21,15 +31,28 @@ public class ReservationActivity extends Activity {
     @Override
     protected void setup() {
         super.setup();
+
+        headerComponent.setDisableSearch(true);
+
+        detailComponent = new DetailComponent(this);
+        detailComponent.setParkingLocation(DataManager.getInstance().getCurrentTransaction().getParkingLocation());
+        reserveButton = (Button) findViewById(R.id.reserveButton);
+        reserveButton.setVisibility(View.GONE);
         populateData();
     }
 
     public void onRouteToLocationClicked(View view) {
-        Location myLocation = Utils.getMyLocation(this);
-        LatLng destLatLng = new LatLng(37.423156, -122.084917);
+
+        ParkingLocation parkingLocation = DataManager.getInstance().getCurrentTransaction().getParkingLocation();
+
+        LatLng s = Utils.getMyLocationLatLng(this);
+        LatLng d = new LatLng(37.423156, -122.084917);//TODO replace this line by parking location position
 
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse("http://maps.google.com/maps?saddr=20.344,34.34&daddr=20.5666,45.345"));
+                Uri.parse(String.format("http://maps.google.com/maps?saddr=%s,%s&daddr=%s,%s",
+                        s.latitude, s.longitude,
+                        d.latitude, d.longitude)));
+
         startActivity(intent);
     }
 

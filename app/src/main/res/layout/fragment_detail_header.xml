@@ -1,0 +1,110 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/viewHeader"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/detail_view_header_height"
+    android:layout_alignParentBottom="true"
+    android:background="@color/detail_header_bg_color"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/booking_green" />
+
+    <LinearLayout
+        android:id="@+id/statusBarContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="8dp"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/imageView"
+        android:background="@color/status_bar_bg_color"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/statusBarItem0"
+            android:layout_width="16dp"
+            android:layout_height="8dp"
+            android:background="@color/status_bar_item0_color" />
+
+        <RelativeLayout
+            android:id="@+id/statusBarItem1"
+            android:layout_width="16dp"
+            android:layout_height="8dp"
+            android:background="@color/status_bar_item1_color" />
+
+        <RelativeLayout
+            android:id="@+id/statusBarItem2"
+            android:layout_width="16dp"
+            android:layout_height="8dp"
+            android:background="@color/status_bar_item2_color" />
+
+        <RelativeLayout
+            android:id="@+id/statusBarItem3"
+            android:layout_width="16dp"
+            android:layout_height="8dp"
+            android:background="@color/status_bar_item3_color" />
+
+        <RelativeLayout
+            android:id="@+id/statusBarItem4"
+            android:layout_width="16dp"
+            android:layout_height="8dp"
+            android:background="@color/status_bar_item4_color" />
+
+        <RelativeLayout
+            android:id="@+id/statusBarItem5"
+            android:layout_width="16dp"
+            android:layout_height="8dp"
+            android:background="@color/status_bar_item5_color" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewAvailability"
+        style="@style/App_TextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/statusBarContainer"
+        android:text="20/24" />
+
+    <TextView
+        android:id="@+id/textViewFreeLabel"
+        style="@style/App_TextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/textViewAvailability"
+        android:text="@string/free" />
+
+    <TextView
+        android:id="@+id/textViewParkingName"
+        style="@style/App_TextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/statusBarContainer"
+        android:layout_alignStart="@+id/statusBarContainer"
+        android:layout_below="@+id/statusBarContainer"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="Autohof Lutterberg" />
+
+    <TextView
+        android:id="@+id/textViewParkingAddress"
+        style="@style/App_TextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewParkingName"
+        android:layout_alignStart="@+id/textViewParkingName"
+        android:layout_below="@+id/textViewParkingName"
+        android:text="Parking location address or description" />
+
+</RelativeLayout>

@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
+import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.ParkingTransaction;
 
 /**
@@ -11,7 +12,8 @@ import com.bosch.si.emobility.bstp.model.ParkingTransaction;
  */
 public class ReservationViewHolder {
 
-    TextView textViewParkingId;
+    TextView textViewParkingTitle;
+    TextView textViewParkingAddress;
     TextView textViewTransactedBy;
     TextView textViewTransactedFare;
     TextView textViewPaymentMode;
@@ -29,7 +31,8 @@ public class ReservationViewHolder {
         textViewStartTime = (TextView) convertView.findViewById(R.id.textViewStartTime);
         textViewEndTime = (TextView) convertView.findViewById(R.id.textViewEndTime);
 
-        textViewParkingId = (TextView) convertView.findViewById(R.id.textViewParkingId);
+        textViewParkingTitle = (TextView) convertView.findViewById(R.id.textViewParkingTitle);
+        textViewParkingAddress = (TextView) convertView.findViewById(R.id.textViewParkingAddress);
         textViewTransactedBy = (TextView) convertView.findViewById(R.id.textViewTransactedBy);
         textViewTransactedFare = (TextView) convertView.findViewById(R.id.textViewTransactedFare);
         textViewPaymentMode = (TextView) convertView.findViewById(R.id.textViewPaymentMode);
@@ -39,12 +42,16 @@ public class ReservationViewHolder {
     }
 
     public void populateData(ParkingTransaction transaction) {
-        textViewTransactionId.setText(transaction.getTransactionId());
         textViewTransactedDate.setText(transaction.getTransactedDate());
         textViewStartTime.setText(transaction.getStartTime());
         textViewEndTime.setText(transaction.getEndTime());
+        ParkingLocation parkingLocation = transaction.getParkingLocation();
+        if (parkingLocation != null) {
+            textViewParkingTitle.setText(parkingLocation.getLocationTitle());
+            textViewParkingAddress.setText(parkingLocation.getAddress());
+        }
         try {
-            textViewParkingId.setText(transaction.getParkingId());
+            textViewTransactionId.setText(transaction.getTransactionId());
             textViewTransactedBy.setText(transaction.getTransactedBy());
             textViewTransactedFare.setText(transaction.getTransactedFare());
             textViewPaymentMode.setText(transaction.getPaymentMode());

@@ -1,8 +1,8 @@
 package com.bosch.si.emobility.bstp.component;
 
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
@@ -25,7 +25,7 @@ public class LoginComponent extends Component {
     @Override
     public void setActivity(Activity activity) {
         super.setActivity(activity);
-        layout = (RelativeLayout) this.activity.findViewById(R.id.loginLayout);
+        layout = (ViewGroup) this.activity.findViewById(R.id.loginLayout);
         editTextUsername = (EditText) this.activity.findViewById(R.id.editTextUsername);
         editTextPassword = (EditText) this.activity.findViewById(R.id.editTextPassword);
         checkBoxSaveCredentials = (CheckBox) this.activity.findViewById(R.id.checkBoxSaveCredentials);

@@ -6,34 +6,6 @@
     android:orientation="vertical"
     android:padding="@dimen/padding">
 
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="@dimen/upcoming_item_row_margin_bottom"-->
-    <!--android:layout_marginLeft="@dimen/upcoming_item_row_margin_left"-->
-    <!--android:layout_marginRight="@dimen/upcoming_item_row_margin_right"-->
-    <!--android:layout_marginTop="@dimen/upcoming_item_row_margin_top"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingBottom="@dimen/upcoming_item_row_padding_bottom"-->
-    <!--android:paddingLeft="@dimen/upcoming_item_row_padding_left"-->
-    <!--android:paddingRight="@dimen/upcoming_item_row_padding_right"-->
-    <!--android:paddingTop="@dimen/upcoming_item_row_padding_top">-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewLabelParkingId"-->
-    <!--style="@style/App_TextViewUpcomingLabelStyle"-->
-    <!--android:layout_width="@dimen/upcoming_item_label_width"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="ParkingId:" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewParkingId"-->
-    <!--style="@style/App_TextViewUpcomingStyle"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="2" />-->
-    <!--</LinearLayout>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,18 +20,18 @@
         android:paddingTop="@dimen/upcoming_item_row_padding_top">
 
         <TextView
-            android:id="@+id/textViewLabelTransactionId"
+            android:id="@+id/textViewLabelParkingTitle"
             style="@style/App_TextViewUpcomingLabelStyle"
             android:layout_width="@dimen/upcoming_item_label_width"
             android:layout_height="wrap_content"
-            android:text="TransactionId:" />
+            android:text="Parking:" />
 
         <TextView
-            android:id="@+id/textViewTransactionId"
+            android:id="@+id/textViewParkingTitle"
             style="@style/App_TextViewUpcomingStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TRANS-2" />
+            android:text="Autohof Lutterberg" />
     </LinearLayout>
 
     <LinearLayout
@@ -76,187 +48,19 @@
         android:paddingTop="@dimen/upcoming_item_row_padding_top">
 
         <TextView
-            android:id="@+id/textViewLabelTransactedDate"
+            android:id="@+id/textViewLabelParkingAddress"
             style="@style/App_TextViewUpcomingLabelStyle"
             android:layout_width="@dimen/upcoming_item_label_width"
             android:layout_height="wrap_content"
-            android:text="TransactedDate:" />
+            android:text="Address:" />
 
         <TextView
-            android:id="@+id/textViewTransactedDate"
+            android:id="@+id/textViewParkingAddress"
             style="@style/App_TextViewUpcomingStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2015-12-02 09:30:00" />
+            android:text="Autohof Lutterberg, Frankfurt, Germany" />
     </LinearLayout>
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="@dimen/upcoming_item_row_margin_bottom"-->
-    <!--android:layout_marginLeft="@dimen/upcoming_item_row_margin_left"-->
-    <!--android:layout_marginRight="@dimen/upcoming_item_row_margin_right"-->
-    <!--android:layout_marginTop="@dimen/upcoming_item_row_margin_top"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingBottom="@dimen/upcoming_item_row_padding_bottom"-->
-    <!--android:paddingLeft="@dimen/upcoming_item_row_padding_left"-->
-    <!--android:paddingRight="@dimen/upcoming_item_row_padding_right"-->
-    <!--android:paddingTop="@dimen/upcoming_item_row_padding_top">-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewLabelTransactedBy"-->
-    <!--style="@style/App_TextViewUpcomingLabelStyle"-->
-    <!--android:layout_width="@dimen/upcoming_item_label_width"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="TransactedBy:" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewTransactedBy"-->
-    <!--style="@style/App_TextViewUpcomingStyle"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="DemoForwarder" />-->
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="@dimen/upcoming_item_row_margin_bottom"-->
-    <!--android:layout_marginLeft="@dimen/upcoming_item_row_margin_left"-->
-    <!--android:layout_marginRight="@dimen/upcoming_item_row_margin_right"-->
-    <!--android:layout_marginTop="@dimen/upcoming_item_row_margin_top"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingBottom="@dimen/upcoming_item_row_padding_bottom"-->
-    <!--android:paddingLeft="@dimen/upcoming_item_row_padding_left"-->
-    <!--android:paddingRight="@dimen/upcoming_item_row_padding_right"-->
-    <!--android:paddingTop="@dimen/upcoming_item_row_padding_top">-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewLabelTransactedFare"-->
-    <!--style="@style/App_TextViewUpcomingLabelStyle"-->
-    <!--android:layout_width="@dimen/upcoming_item_label_width"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="TransactedFare:" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewTransactedFare"-->
-    <!--style="@style/App_TextViewUpcomingStyle"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="5.5" />-->
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="@dimen/upcoming_item_row_margin_bottom"-->
-    <!--android:layout_marginLeft="@dimen/upcoming_item_row_margin_left"-->
-    <!--android:layout_marginRight="@dimen/upcoming_item_row_margin_right"-->
-    <!--android:layout_marginTop="@dimen/upcoming_item_row_margin_top"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingBottom="@dimen/upcoming_item_row_padding_bottom"-->
-    <!--android:paddingLeft="@dimen/upcoming_item_row_padding_left"-->
-    <!--android:paddingRight="@dimen/upcoming_item_row_padding_right"-->
-    <!--android:paddingTop="@dimen/upcoming_item_row_padding_top">-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewLabelPaymentMode"-->
-    <!--style="@style/App_TextViewUpcomingLabelStyle"-->
-    <!--android:layout_width="@dimen/upcoming_item_label_width"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="PaymentMode:" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewPaymentMode"-->
-    <!--style="@style/App_TextViewUpcomingStyle"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="Fuel Card" />-->
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="@dimen/upcoming_item_row_margin_bottom"-->
-    <!--android:layout_marginLeft="@dimen/upcoming_item_row_margin_left"-->
-    <!--android:layout_marginRight="@dimen/upcoming_item_row_margin_right"-->
-    <!--android:layout_marginTop="@dimen/upcoming_item_row_margin_top"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingBottom="@dimen/upcoming_item_row_padding_bottom"-->
-    <!--android:paddingLeft="@dimen/upcoming_item_row_padding_left"-->
-    <!--android:paddingRight="@dimen/upcoming_item_row_padding_right"-->
-    <!--android:paddingTop="@dimen/upcoming_item_row_padding_top">-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewLabelVehicleId"-->
-    <!--style="@style/App_TextViewUpcomingLabelStyle"-->
-    <!--android:layout_width="@dimen/upcoming_item_label_width"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="VehicleId:" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewVehicleId"-->
-    <!--style="@style/App_TextViewUpcomingStyle"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="CUX-223" />-->
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="@dimen/upcoming_item_row_margin_bottom"-->
-    <!--android:layout_marginLeft="@dimen/upcoming_item_row_margin_left"-->
-    <!--android:layout_marginRight="@dimen/upcoming_item_row_margin_right"-->
-    <!--android:layout_marginTop="@dimen/upcoming_item_row_margin_top"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingBottom="@dimen/upcoming_item_row_padding_bottom"-->
-    <!--android:paddingLeft="@dimen/upcoming_item_row_padding_left"-->
-    <!--android:paddingRight="@dimen/upcoming_item_row_padding_right"-->
-    <!--android:paddingTop="@dimen/upcoming_item_row_padding_top">-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewLabelDriverId"-->
-    <!--style="@style/App_TextViewUpcomingLabelStyle"-->
-    <!--android:layout_width="@dimen/upcoming_item_label_width"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="DriverId:" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewDriverId"-->
-    <!--style="@style/App_TextViewUpcomingStyle"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="DRV-2" />-->
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="@dimen/upcoming_item_row_margin_bottom"-->
-    <!--android:layout_marginLeft="@dimen/upcoming_item_row_margin_left"-->
-    <!--android:layout_marginRight="@dimen/upcoming_item_row_margin_right"-->
-    <!--android:layout_marginTop="@dimen/upcoming_item_row_margin_top"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingBottom="@dimen/upcoming_item_row_padding_bottom"-->
-    <!--android:paddingLeft="@dimen/upcoming_item_row_padding_left"-->
-    <!--android:paddingRight="@dimen/upcoming_item_row_padding_right"-->
-    <!--android:paddingTop="@dimen/upcoming_item_row_padding_top">-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewLabelAdditionalInfo"-->
-    <!--style="@style/App_TextViewUpcomingLabelStyle"-->
-    <!--android:layout_width="@dimen/upcoming_item_label_width"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="AdditionalInfo:" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewAdditionalInfo"-->
-    <!--style="@style/App_TextViewUpcomingStyle"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="ABC Transport" />-->
-    <!--</LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -314,6 +118,33 @@
             android:text="2015-12-11 07:00:00" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/upcoming_item_row_margin_bottom"
+        android:layout_marginLeft="@dimen/upcoming_item_row_margin_left"
+        android:layout_marginRight="@dimen/upcoming_item_row_margin_right"
+        android:layout_marginTop="@dimen/upcoming_item_row_margin_top"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/upcoming_item_row_padding_bottom"
+        android:paddingLeft="@dimen/upcoming_item_row_padding_left"
+        android:paddingRight="@dimen/upcoming_item_row_padding_right"
+        android:paddingTop="@dimen/upcoming_item_row_padding_top">
+
+        <TextView
+            android:id="@+id/textViewLabelTransactedDate"
+            style="@style/App_TextViewUpcomingLabelStyle"
+            android:layout_width="@dimen/upcoming_item_label_width"
+            android:layout_height="wrap_content"
+            android:text="TransactedDate:" />
+
+        <TextView
+            android:id="@+id/textViewTransactedDate"
+            style="@style/App_TextViewUpcomingStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2015-12-02 09:30:00" />
+    </LinearLayout>
 
 </LinearLayout>
 

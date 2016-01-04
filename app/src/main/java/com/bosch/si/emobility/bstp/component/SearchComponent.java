@@ -9,12 +9,12 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -88,7 +88,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     public void setActivity(Activity activity) {
         super.setActivity(activity);
 
-        layout = (RelativeLayout) this.activity.findViewById(R.id.searchLayout);
+        layout = (ViewGroup) this.activity.findViewById(R.id.searchLayout);
 
         editTextSearch = (AutoCompleteTextView) this.activity.findViewById(R.id.editTextSearch);
         imageButtonClear = (ImageButton) this.activity.findViewById(R.id.imageButtonClear);

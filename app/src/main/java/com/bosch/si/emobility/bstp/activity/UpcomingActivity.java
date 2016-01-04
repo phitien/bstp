@@ -2,6 +2,7 @@ package com.bosch.si.emobility.bstp.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,6 +38,8 @@ public class UpcomingActivity extends Activity {
     protected void setup() {
         super.setup();
 
+        headerComponent.setDisableSearch(true);
+
         listViewUpcoming = (ListView) findViewById(R.id.listViewUpcoming);
         listViewUpcoming.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -45,6 +48,11 @@ public class UpcomingActivity extends Activity {
             }
         });
 
+        populateData();
+    }
+
+    @Override
+    public void onReloginOk() {
         populateData();
     }
 
@@ -62,19 +70,32 @@ public class UpcomingActivity extends Activity {
 
         service.fromDate = fromDate.toString();
         service.toDate = toDate.toString();
-        service.searchTerm = "";
+        service.searchTerm = "";//TODO to clarify requirements
 
         service.executeAsync(new ServiceCallback() {
                                  @Override
                                  public void success(IService service) {
-                                     Gson gson = new Gson();
-                                     DataManager.getInstance().setTransactions(
-                                             (List<ParkingTransaction>) gson.fromJson(
-                                                     service.getResponseString(),
-                                                     new TypeToken<ArrayList<ParkingTransaction>>() {
-                                                     }.getType()));
-                                     UpcomingAdapter adapter = new UpcomingAdapter(UpcomingActivity.this);
-                                     listViewUpcoming.setAdapter(adapter);
+                                     final String responseString = service.getResponseString();
+                                     AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                                         @Override
+                                         protected Void doInBackground(Void... params) {
+                                             Gson gson = new Gson();
+                                             DataManager.getInstance().setTransactions(
+                                                     (List<ParkingTransaction>) gson.fromJson(
+                                                             responseString,
+                                                             new TypeToken<ArrayList<ParkingTransaction>>() {
+                                                             }.getType()));
+                                             return null;
+                                         }
+
+                                         @Override
+                                         protected void onPostExecute(Void aVoid) {
+                                             UpcomingAdapter adapter = new UpcomingAdapter(UpcomingActivity.this);
+                                             listViewUpcoming.setAdapter(adapter);
+                                         }
+                                     };
+
+                                     task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
                                  }
 
                                  @Override

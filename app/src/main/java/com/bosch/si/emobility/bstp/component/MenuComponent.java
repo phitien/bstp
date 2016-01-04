@@ -1,10 +1,10 @@
 package com.bosch.si.emobility.bstp.component;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.activity.Activity;
@@ -24,7 +24,7 @@ public class MenuComponent extends Component {
     @Override
     public void setActivity(Activity activity) {
         super.setActivity(activity);
-        layout = (RelativeLayout) this.activity.findViewById(R.id.menuLayout);
+        layout = (ViewGroup) this.activity.findViewById(R.id.menuLayout);
 
         layout.setOnClickListener(new View.OnClickListener() {
             @Override

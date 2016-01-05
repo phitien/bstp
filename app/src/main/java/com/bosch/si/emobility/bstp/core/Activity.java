@@ -1,4 +1,4 @@
-package com.bosch.si.emobility.bstp.activity;
+package com.bosch.si.emobility.bstp.core;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,13 +12,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.app.Event;
+import com.bosch.si.emobility.bstp.activity.AboutActivity;
+import com.bosch.si.emobility.bstp.activity.MapsActivity;
+import com.bosch.si.emobility.bstp.activity.UpcomingActivity;
 import com.bosch.si.emobility.bstp.component.HeaderComponent;
 import com.bosch.si.emobility.bstp.component.MenuComponent;
-import com.bosch.si.emobility.bstp.helper.Constants;
-import com.bosch.si.emobility.bstp.helper.Utils;
-import com.bosch.si.emobility.bstp.manager.UserSessionManager;
-import com.bosch.si.emobility.bstp.model.User;
 import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;

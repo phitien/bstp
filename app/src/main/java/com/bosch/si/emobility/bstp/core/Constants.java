@@ -1,4 +1,4 @@
-package com.bosch.si.emobility.bstp.helper;
+package com.bosch.si.emobility.bstp.core;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -13,6 +13,11 @@ public class Constants {
     public static final LatLng DEFAULT_LOCATION = new LatLng(50.1211277, 8.4964787);//Frankfurt
     public static final float DEFAULT_ZOOM_LEVEL = 9.5f;
     public static final float DEFAULT_ZOOM_RADIUS = 50000.0f;
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static final String TIME_FORMAT = "hh:mm";
+    public static final String DB_DATETIME_FORMAT = "yyyy-MM-dd hh:mm:ss";
+    public static final String DATETIME_FORMAT = "yyyy-MM-dd / hh:mm";
+
 
     public enum EventType {
         MESSAGE,

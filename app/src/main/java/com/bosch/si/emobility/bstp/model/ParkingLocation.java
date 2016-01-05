@@ -1,5 +1,7 @@
 package com.bosch.si.emobility.bstp.model;
 
+import com.bosch.si.emobility.bstp.core.Model;
+
 import java.util.ArrayList;
 import java.util.List;
 

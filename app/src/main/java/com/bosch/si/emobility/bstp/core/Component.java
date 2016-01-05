@@ -1,17 +1,14 @@
-package com.bosch.si.emobility.bstp.component;
+package com.bosch.si.emobility.bstp.core;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.activity.Activity;
-import com.bosch.si.emobility.bstp.activity.MapsActivity;
 
 /**
  * Created by sgp0458 on 16/12/15.

@@ -1,7 +1,7 @@
 package com.bosch.si.emobility.bstp.service;
 
-import com.bosch.si.emobility.bstp.helper.Constants;
-import com.bosch.si.emobility.bstp.model.User;
+import com.bosch.si.emobility.bstp.core.Constants;
+import com.bosch.si.emobility.bstp.core.User;
 import com.bosch.si.rest.AbstractService;
 import com.bosch.si.rest.anno.ContentType;
 import com.bosch.si.rest.anno.POST;

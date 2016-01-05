@@ -16,8 +16,8 @@
     <dimen name="log_height">78dp</dimen>
     <dimen name="menu_item_text_size">14dp</dimen>
     <dimen name="detail_view_header_height">104dp</dimen>
-    <dimen name="detail_view_image_icon_width">40dp</dimen>
-    <dimen name="detail_view_image_icon_height">40dp</dimen>
+    <dimen name="detail_view_image_icon_width">35dp</dimen>
+    <dimen name="detail_view_image_icon_height">35dp</dimen>
     <dimen name="detail_view_image_icon_margin_left">4dp</dimen>
     <dimen name="detail_view_image_icon_margin_top">4dp</dimen>
 

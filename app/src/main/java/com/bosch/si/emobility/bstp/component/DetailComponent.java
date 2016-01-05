@@ -7,8 +7,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.activity.Activity;
-import com.bosch.si.emobility.bstp.component.detail.DetailLayout;
+import com.bosch.si.emobility.bstp.core.Activity;
+import com.bosch.si.emobility.bstp.component.ux.DetailLayout;
+import com.bosch.si.emobility.bstp.core.Component;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 

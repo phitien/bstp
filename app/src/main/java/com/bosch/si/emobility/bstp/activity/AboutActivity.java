@@ -1,6 +1,7 @@
 package com.bosch.si.emobility.bstp.activity;
 
 import com.bosch.si.emobility.bstp.R;
+import com.bosch.si.emobility.bstp.core.Activity;
 
 public class AboutActivity extends Activity {
 

@@ -1,4 +1,4 @@
-package com.bosch.si.emobility.bstp.component.ux;
+package com.bosch.si.emobility.bstp.core;
 
 import com.bosch.si.emobility.bstp.R;
 import com.google.android.gms.common.api.GoogleApiClient;

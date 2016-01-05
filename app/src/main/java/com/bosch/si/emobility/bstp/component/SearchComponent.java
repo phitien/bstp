@@ -19,9 +19,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.activity.Activity;
+import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
-import com.bosch.si.emobility.bstp.component.ux.PlaceAutocompleteAdapter;
+import com.bosch.si.emobility.bstp.core.Component;
+import com.bosch.si.emobility.bstp.core.PlaceAutocompleteAdapter;
+import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.model.SearchCriteria;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -178,14 +180,11 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     }
 
     protected void updateComponent() {
-        String dateFormat = this.activity.getString(R.string.date_format);
-        String timeFormat = this.activity.getString(R.string.time_format);
+        textViewFromDate.setText(Utils.getFormattedDate(fromDate));
+        textViewFromTime.setText(Utils.getFormattedTime(fromDate));
 
-        textViewFromDate.setText(DateFormat.format(dateFormat, fromDate));
-        textViewFromTime.setText(DateFormat.format(timeFormat, fromDate));
-
-        textViewToDate.setText(DateFormat.format(dateFormat, toDate));
-        textViewToTime.setText(DateFormat.format(timeFormat, toDate));
+        textViewToDate.setText(Utils.getFormattedDate(toDate));
+        textViewToTime.setText(Utils.getFormattedTime(toDate));
 
         searchCriteria.setStartTime(fromDate.toString()).setEndTime(toDate.toString());
     }
@@ -313,7 +312,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
             }
         });
     }
-    
+
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         //Do nothing

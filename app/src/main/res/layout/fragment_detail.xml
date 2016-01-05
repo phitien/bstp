@@ -1,4 +1,4 @@
-<com.bosch.si.emobility.bstp.component.detail.DetailLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.bosch.si.emobility.bstp.component.ux.DetailLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,4 +21,4 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/viewHeader" />
 
-</com.bosch.si.emobility.bstp.component.detail.DetailLayout>
+</com.bosch.si.emobility.bstp.component.ux.DetailLayout>

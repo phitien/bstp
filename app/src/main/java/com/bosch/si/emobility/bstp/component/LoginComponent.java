@@ -6,8 +6,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.activity.Activity;
-import com.bosch.si.emobility.bstp.model.User;
+import com.bosch.si.emobility.bstp.core.Activity;
+import com.bosch.si.emobility.bstp.core.Component;
+import com.bosch.si.emobility.bstp.core.User;
 
 /**
  * Created by sgp0458 on 16/12/15.

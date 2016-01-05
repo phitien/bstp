@@ -1,4 +1,4 @@
-package com.bosch.si.emobility.bstp.helper;
+package com.bosch.si.emobility.bstp.core;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,11 +8,10 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.support.annotation.NonNull;
+import android.text.format.DateFormat;
 import android.widget.Toast;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.app.Application;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -21,6 +20,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by sgp0458 on 4/12/15.
@@ -224,6 +226,45 @@ public class Utils {
             return new LatLng(location.getLatitude(), location.getLongitude());
         else
             return Constants.DEFAULT_LOCATION;
+    }
+
+    public static String getFormattedDatetime(Date datetime) {
+        return (String) DateFormat.format(Constants.DATETIME_FORMAT, datetime);
+    }
+
+    public static String getFormattedDatetime(String datetime) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DB_DATETIME_FORMAT);
+            return getFormattedDatetime(sdf.parse(datetime));
+        } catch (ParseException ex) {
+        }
+        return datetime;
+    }
+
+    public static String getFormattedDate(Date datetime) {
+        return (String) DateFormat.format(Constants.DATE_FORMAT, datetime);
+    }
+
+    public static String getFormattedDate(String datetime) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DB_DATETIME_FORMAT);
+            return getFormattedDate(sdf.parse(datetime));
+        } catch (ParseException ex) {
+        }
+        return datetime;
+    }
+
+    public static String getFormattedTime(Date datetime) {
+        return (String) DateFormat.format(Constants.TIME_FORMAT, datetime);
+    }
+
+    public static String getFormattedTime(String datetime) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DB_DATETIME_FORMAT);
+            return getFormattedTime(sdf.parse(datetime));
+        } catch (ParseException ex) {
+        }
+        return datetime;
     }
 
     public static boolean isLocationServiceDisabled(Context context) {

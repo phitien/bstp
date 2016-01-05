@@ -3,8 +3,9 @@ package com.bosch.si.emobility.bstp.activity;
 import android.os.Handler;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.helper.Constants;
-import com.bosch.si.emobility.bstp.helper.Utils;
+import com.bosch.si.emobility.bstp.core.Activity;
+import com.bosch.si.emobility.bstp.core.Constants;
+import com.bosch.si.emobility.bstp.core.Utils;
 
 public class SplashActivity extends Activity {
 

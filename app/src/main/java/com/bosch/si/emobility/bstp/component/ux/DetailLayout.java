@@ -1,4 +1,4 @@
-package com.bosch.si.emobility.bstp.component.detail;
+package com.bosch.si.emobility.bstp.component.ux;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

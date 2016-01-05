@@ -1,7 +1,6 @@
-package com.bosch.si.emobility.bstp.app;
+package com.bosch.si.emobility.bstp.core;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 /**

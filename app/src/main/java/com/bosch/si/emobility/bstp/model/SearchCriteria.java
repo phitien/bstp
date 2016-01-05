@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.model;
 
+import com.bosch.si.emobility.bstp.core.Model;
 import com.bosch.si.emobility.bstp.service.SearchService;
 import com.google.android.gms.maps.model.LatLng;
 

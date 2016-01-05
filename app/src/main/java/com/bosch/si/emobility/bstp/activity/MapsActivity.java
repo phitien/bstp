@@ -6,15 +6,16 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.app.Event;
+import com.bosch.si.emobility.bstp.core.Activity;
+import com.bosch.si.emobility.bstp.core.Event;
 import com.bosch.si.emobility.bstp.component.DetailComponent;
 import com.bosch.si.emobility.bstp.component.LoginComponent;
 import com.bosch.si.emobility.bstp.component.MapComponent;
 import com.bosch.si.emobility.bstp.component.SearchComponent;
-import com.bosch.si.emobility.bstp.helper.Constants;
-import com.bosch.si.emobility.bstp.helper.Utils;
+import com.bosch.si.emobility.bstp.core.Constants;
+import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
-import com.bosch.si.emobility.bstp.manager.UserSessionManager;
+import com.bosch.si.emobility.bstp.core.UserSessionManager;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.SearchCriteria;
 import com.google.android.gms.location.places.Place;
@@ -58,10 +59,7 @@ public class MapsActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (authenticationChecked) {
-            checkAuthentication();
-            authenticationChecked = true;
-        }
+        checkAuthentication();
     }
 
     @Override
@@ -96,6 +94,7 @@ public class MapsActivity extends Activity {
     }
 
     private void showLoginDialog() {
+        authenticationChecked = false;
         loginComponent.setEnabled(true, true);
         setEnabled(false);
     }
@@ -110,12 +109,12 @@ public class MapsActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (searchComponent.isShown()) {
+        if (menuComponent.isShown()) {
+            menuComponent.setEnabled(false, true);
+        } else if (searchComponent.isShown()) {
             searchComponent.setEnabled(false, true);
         } else if (detailComponent.isShown()) {
             detailComponent.setEnabled(false, true);
-        } else {
-            super.onBackPressed();
         }
     }
 
@@ -137,8 +136,11 @@ public class MapsActivity extends Activity {
     }
 
     private void openMap() {
-        loginComponent.setEnabled(false, true);
-        setEnabled(true);
+        if (!authenticationChecked) {
+            loginComponent.setEnabled(false, true);
+            setEnabled(true);
+            authenticationChecked = true;
+        }
     }
 
     public void onSearchButtonClicked(View view) {

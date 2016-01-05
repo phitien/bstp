@@ -1,11 +1,6 @@
-package com.bosch.si.emobility.bstp.manager;
+package com.bosch.si.emobility.bstp.core;
 
 import android.util.Base64;
-
-import com.bosch.si.emobility.bstp.app.Event;
-import com.bosch.si.emobility.bstp.helper.Constants;
-import com.bosch.si.emobility.bstp.helper.Utils;
-import com.bosch.si.emobility.bstp.model.User;
 
 import java.io.File;
 import java.io.FileOutputStream;

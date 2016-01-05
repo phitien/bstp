@@ -1,20 +1,16 @@
 package com.bosch.si.emobility.bstp.activity;
 
 import android.content.Intent;
-import android.location.Location;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.app.Event;
 import com.bosch.si.emobility.bstp.component.DetailComponent;
 import com.bosch.si.emobility.bstp.component.ux.ReservationViewHolder;
-import com.bosch.si.emobility.bstp.helper.Constants;
-import com.bosch.si.emobility.bstp.helper.Utils;
+import com.bosch.si.emobility.bstp.core.Activity;
+import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
-import com.bosch.si.emobility.bstp.manager.UserSessionManager;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.google.android.gms.maps.model.LatLng;
 

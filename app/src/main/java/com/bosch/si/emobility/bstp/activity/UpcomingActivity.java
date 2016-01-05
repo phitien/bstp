@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.component.ux.ReservationViewHolder;
+import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.ParkingTransaction;
 import com.bosch.si.emobility.bstp.service.GetUpcomingReservationsService;

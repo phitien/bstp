@@ -1,6 +1,6 @@
-package com.bosch.si.emobility.bstp.activity;
+package com.bosch.si.emobility.bstp.core;
 
-import com.bosch.si.emobility.bstp.app.Event;
+import com.bosch.si.emobility.bstp.core.Event;
 
 /**
  * Created by sgp0458 on 8/12/15.

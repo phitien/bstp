@@ -2,8 +2,8 @@ package com.bosch.si.emobility.bstp;
 
 import android.test.suitebuilder.annotation.MediumTest;
 
-import com.bosch.si.emobility.bstp.helper.Utils;
-import com.bosch.si.emobility.bstp.model.User;
+import com.bosch.si.emobility.bstp.core.Utils;
+import com.bosch.si.emobility.bstp.core.User;
 import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.AbstractService;
 import com.bosch.si.rest.IService;

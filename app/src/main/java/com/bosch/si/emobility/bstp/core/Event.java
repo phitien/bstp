@@ -1,6 +1,4 @@
-package com.bosch.si.emobility.bstp.app;
-
-import com.bosch.si.emobility.bstp.helper.Utils;
+package com.bosch.si.emobility.bstp.core;
 
 import de.greenrobot.event.EventBus;
 

@@ -1,10 +1,10 @@
-package com.bosch.si.emobility.bstp.service;
+package com.bosch.si.emobility.bstp.core;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.manager.UserSessionManager;
-import com.bosch.si.emobility.bstp.app.Event;
-import com.bosch.si.emobility.bstp.helper.Constants;
-import com.bosch.si.emobility.bstp.helper.Utils;
+import com.bosch.si.emobility.bstp.core.UserSessionManager;
+import com.bosch.si.emobility.bstp.core.Event;
+import com.bosch.si.emobility.bstp.core.Constants;
+import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.rest.AbstractService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.IServiceCallback;

@@ -1,9 +1,9 @@
-package com.bosch.si.emobility.bstp.component;
+package com.bosch.si.emobility.bstp.core;
 
 import android.content.res.Resources;
 import android.view.View;
 
-import com.bosch.si.emobility.bstp.activity.Activity;
+import com.bosch.si.emobility.bstp.core.Activity;
 
 /**
  * Created by sgp0458 on 16/12/15.

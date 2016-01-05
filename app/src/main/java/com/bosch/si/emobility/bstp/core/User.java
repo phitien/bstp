@@ -1,4 +1,4 @@
-package com.bosch.si.emobility.bstp.model;
+package com.bosch.si.emobility.bstp.core;
 
 import com.google.gson.Gson;
 

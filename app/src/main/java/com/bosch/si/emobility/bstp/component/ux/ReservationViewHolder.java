@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
+import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.ParkingTransaction;
 
@@ -43,15 +44,15 @@ public class ReservationViewHolder {
     }
 
     public void populateData(ParkingTransaction transaction) {
-        textViewStartTime.setText(transaction.getStartTime());
-        textViewEndTime.setText(transaction.getEndTime());
+        textViewStartTime.setText(Utils.getFormattedDatetime(transaction.getStartTime()));
+        textViewEndTime.setText(Utils.getFormattedDatetime(transaction.getEndTime()));
         ParkingLocation parkingLocation = transaction.getParkingLocation();
         if (parkingLocation != null) {
             textViewParkingTitle.setText(parkingLocation.getLocationTitle());
             textViewParkingAddress.setText(parkingLocation.getAddress());
         }
         try {
-            textViewTransactedDate.setText(transaction.getTransactedDate());
+            textViewTransactedDate.setText(Utils.getFormattedDatetime(transaction.getTransactedDate()));
             textViewTransactionId.setText(transaction.getTransactionId());
             textViewTransactedBy.setText(transaction.getTransactedBy());
             textViewTransactedFare.setText(transaction.getTransactedFare());

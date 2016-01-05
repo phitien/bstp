@@ -1,7 +1,6 @@
 package com.bosch.si.emobility.bstp.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.bosch.si.emobility.bstp.core.Model;
 
 /**
  * Created by sgp0458 on 18/12/15.

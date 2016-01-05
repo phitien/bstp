@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.service;
 
+import com.bosch.si.emobility.bstp.core.BaseService;
 import com.bosch.si.rest.anno.POST;
 import com.google.gson.annotations.Expose;
 

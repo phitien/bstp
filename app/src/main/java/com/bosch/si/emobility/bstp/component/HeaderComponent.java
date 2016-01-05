@@ -6,7 +6,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.activity.Activity;
+import com.bosch.si.emobility.bstp.core.Activity;
+import com.bosch.si.emobility.bstp.core.Component;
 
 /**
  * Created by sgp0458 on 16/12/15.

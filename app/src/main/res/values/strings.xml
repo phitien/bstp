@@ -36,5 +36,6 @@
     <string name="date_format">yyyy-MM-dd</string>
     <string name="time_format">hh:mm:ss</string>
     <string name="title_activity_about">About</string>
+    <string name="cancel_reservation">Cancel reservation</string>
 
 </resources>

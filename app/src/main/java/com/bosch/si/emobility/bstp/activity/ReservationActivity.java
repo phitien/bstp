@@ -60,4 +60,8 @@ public class ReservationActivity extends Activity {
         ReservationViewHolder viewHolder = new ReservationViewHolder(this.findViewById(android.R.id.content));
         viewHolder.populateData(DataManager.getInstance().getCurrentTransaction());
     }
+
+    public void onCancelReservationClicked(View view) {
+        //TODO
+    }
 }

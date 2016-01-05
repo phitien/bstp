@@ -109,18 +109,22 @@ public class ParkingLocation extends Model {
     }
 
     public void merge(ParkingLocation parkingLocation) {
-        if (parkingLocation.locationTitle != null)
-            locationTitle = parkingLocation.locationTitle;
-        if (parkingLocation.address != null)
-            address = parkingLocation.address;
-        if (parkingLocation.availabilityCount >= 0)
-            availabilityCount = parkingLocation.availabilityCount;
-        if (parkingLocation.totalCapacityCount >= 0)
-            totalCapacityCount = parkingLocation.totalCapacityCount;
-        if (parkingLocation.securityLevel != null)
-            securityLevel = parkingLocation.securityLevel;
-        if (parkingLocation.facilities != null)
-            facilities = parkingLocation.facilities;
+        if (parkingLocation != null) {
+            if (parkingLocation.locationTitle != null)
+                locationTitle = parkingLocation.locationTitle;
+            if (parkingLocation.address != null)
+                address = parkingLocation.address;
+            if (parkingLocation.availabilityCount >= 0)
+                availabilityCount = parkingLocation.availabilityCount;
+            if (parkingLocation.totalCapacityCount >= 0)
+                totalCapacityCount = parkingLocation.totalCapacityCount;
+            if (parkingLocation.securityLevel != null)
+                securityLevel = parkingLocation.securityLevel;
+            if (parkingLocation.securityDetails != null)
+                securityDetails = parkingLocation.securityDetails;
+            if (parkingLocation.facilities != null)
+                facilities = parkingLocation.facilities;
+        }
     }
 
 }

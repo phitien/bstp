@@ -279,7 +279,28 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
                 .addApi(Places.GEO_DATA_API)
                 .build();
 
-        editTextSearch.setOnItemClickListener(mAutocompleteClickListener);
+        editTextSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final AutocompletePrediction item = mAdapter.getItem(position);
+                final String placeId = item.getPlaceId();
+                PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient, placeId);
+                placeResult.setResultCallback(new ResultCallback<PlaceBuffer>() {
+                    @Override
+                    public void onResult(PlaceBuffer places) {
+                        if (!places.getStatus().isSuccess()) {
+                            places.release();
+                            return;
+                        }
+                        // Get the Place object from the buffer.
+                        setEnabled(false, false);
+                        Place place = places.get(0);
+                        ((MapsActivity) activity).moveCamera(place);
+                        places.release();
+                    }
+                });
+            }
+        });
 
         LatLngBounds bounds = ((MapsActivity) activity).getCurrentLatLngBounds();
         mAdapter = new PlaceAutocompleteAdapter(this.activity, mGoogleApiClient, bounds, null);
@@ -292,33 +313,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
             }
         });
     }
-
-    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            final AutocompletePrediction item = mAdapter.getItem(position);
-            final String placeId = item.getPlaceId();
-            final CharSequence primaryText = item.getPrimaryText(null);
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-        }
-    };
-
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                places.release();
-                return;
-            }
-            // Get the Place object from the buffer.
-            setEnabled(false, false);
-            Place place = places.get(0);
-            ((MapsActivity) activity).moveCamera(place);
-            places.release();
-        }
-    };
-
+    
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         //Do nothing

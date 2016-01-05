@@ -57,6 +57,7 @@ public class MapComponent extends Component {
 
     private LatLng prevLatLng = null;
     private LatLng currLatLng = null;
+    private float zoomLevel = -1;
 
     public MapComponent(Activity activity) {
         super(activity);
@@ -116,13 +117,16 @@ public class MapComponent extends Component {
         return new LatLngBounds(southwest, northeast);
     }
 
-    private CameraUpdate getZoomForDistance(LatLng latLng, double radius) {
-        return CameraUpdateFactory.newLatLngBounds(getLatLngBounds(latLng, radius), 0);
+    private float getZoomLevel(float radius) {
+        if (zoomLevel <= 0) {
+            float scale = radius / 500;
+            zoomLevel = (float) (16 - Math.log(scale) / Math.log(2));
+        }
+        return zoomLevel;
     }
 
     public void moveCamera(LatLng latLng) {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, Constants.DEFAULT_ZOOM_LEVEL));
-//        map.moveCamera(getZoomForDistance(latLng, Constants.DEFAULT_ZOOM_RADIUS));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, getZoomLevel(Constants.DEFAULT_ZOOM_RADIUS)));
     }
 
     private void displayParkingAreas() {

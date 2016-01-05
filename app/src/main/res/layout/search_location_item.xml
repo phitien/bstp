@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/bg_search_panel_color"
+    android:clickable="false"
+    android:focusable="false"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="10dp">
@@ -13,6 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dip"
+        android:clickable="false"
+        android:focusable="false"
         android:textAppearance="?android:attr/textAppearanceListItem"
         android:textColor="@color/dark_style_text_color" />
 
@@ -21,6 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@android:id/text1"
+        android:clickable="false"
+        android:focusable="false"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/dark_style_text_color" />
 </RelativeLayout>

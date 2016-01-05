@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.activity.Activity;
 import com.bosch.si.emobility.bstp.component.detail.DetailLayout;
+import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 
 /**
@@ -29,6 +30,10 @@ public class DetailComponent extends Component {
 
     public ParkingLocation getParkingLocation() {
         return parkingLocation;
+    }
+
+    public void parkingLocationUpdated() {
+        setParkingLocation(DataManager.getInstance().getCurrentParkingLocation());
     }
 
     public void setParkingLocation(ParkingLocation parkingLocation) {

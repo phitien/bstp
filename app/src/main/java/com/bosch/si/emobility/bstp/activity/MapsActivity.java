@@ -53,10 +53,15 @@ public class MapsActivity extends Activity {
 
     }
 
+    boolean authenticationChecked = false;
+
     @Override
     protected void onResume() {
         super.onResume();
-        checkAuthentication();
+        if (authenticationChecked) {
+            checkAuthentication();
+            authenticationChecked = true;
+        }
     }
 
     @Override
@@ -156,7 +161,7 @@ public class MapsActivity extends Activity {
 
     public void openLocationDetail(ParkingLocation parkingLocation) {
         DataManager.getInstance().setCurrentParkingLocation(parkingLocation);
-        detailComponent.setParkingLocation(parkingLocation);
+        detailComponent.parkingLocationUpdated();
     }
 
     public void onReserveButtonClicked(View view) {

@@ -264,23 +264,27 @@ public class MapComponent extends Component {
                 service.executeAsync(new ServiceCallback() {
                     @Override
                     public void success(final IService service) {
-                        final ParkingLocation parkingLocation = parkingLocations.get(parkingId);
-
-                        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                        AsyncTask<Void, Void, ParkingLocation> task = new AsyncTask<Void, Void, ParkingLocation>() {
                             @Override
-                            protected Void doInBackground(Void... params) {
-                                parkingLocation.merge((new GsonBuilder().create()).fromJson(service.getResponseString(), ParkingLocation.class));
+                            protected ParkingLocation doInBackground(Void... params) {
+                                try {
+                                    ParkingLocation parkingLocation = parkingLocations.get(parkingId);
+                                    parkingLocation.merge((new GsonBuilder().create()).fromJson(service.getResponseString(), ParkingLocation.class));
+                                    return parkingLocation;
+                                } catch (Exception e) {
+
+                                }
                                 return null;
                             }
 
                             @Override
-                            protected void onPostExecute(Void aVoid) {
-                                ((MapsActivity) activity).openLocationDetail(parkingLocation);
+                            protected void onPostExecute(ParkingLocation parkingLocation) {
+                                if (parkingLocation != null)
+                                    ((MapsActivity) activity).openLocationDetail(parkingLocation);
                             }
                         };
 
                         task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-
                     }
 
                     @Override

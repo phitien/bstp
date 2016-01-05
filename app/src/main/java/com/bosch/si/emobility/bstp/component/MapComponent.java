@@ -34,6 +34,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -195,13 +196,16 @@ public class MapComponent extends Component {
     public void setEnabled(boolean enabled, boolean noAnimation) {
         if (enabled) {
             if (mapView != null && mapView.findViewById(1) != null) {
+
                 // Get the button view
                 View locationButton = ((View) mapView.findViewById(1).getParent()).findViewById(2);
                 // and next place it, on bottom right (as Google Maps app)
                 RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
                 layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
                 layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                layoutParams.setMargins(0, 0, 30, 310);
+                layoutParams.setMargins(0, 0,
+                        getResources().getDimensionPixelSize(R.dimen.location_button_margin_right),
+                        getResources().getDimensionPixelSize(R.dimen.location_button_margin_bottom));
 
                 map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                     @Override
@@ -293,56 +297,67 @@ public class MapComponent extends Component {
     }
 
     public void refresh() {
-        try {
-            Geocoder geocoder;
-            List<Address> addresses;
-            geocoder = new Geocoder(this.activity, Locale.getDefault());
-            addresses = geocoder.getFromLocation(currLatLng.latitude, currLatLng.longitude, 1);
-            if (addresses.size() > 0) {
-                Address address = addresses.get(0);
-                ((MapsActivity) activity).getSearchCriteria()
-                        .setLocationName(address.getFeatureName())
-                        .setLatLng(currLatLng)
-                        .createSearchService()
-                        .executeAsync(new ServiceCallback() {
-                            @Override
-                            public void success(IService service) {
-                                parkingLocations = new HashMap<>();
-
-                                final String responseString = service.getResponseString();
-
-                                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-                                    @Override
-                                    protected Void doInBackground(Void... params) {
-                                        Gson gson = new Gson();
-                                        List<ParkingLocation> locations = gson.fromJson(responseString, new TypeToken<ArrayList<ParkingLocation>>() {
-                                        }.getType());
-                                        for (ParkingLocation parkingLocation : locations) {
-                                            parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
-                                        }
-                                        return null;
-                                    }
-
-                                    @Override
-                                    protected void onPostExecute(Void aVoid) {
-                                        clearMarkers();
-                                        drawMyLocationMarker();
-                                        drawMySearchingMarker(searchingLatLng);
-                                        drawLocationMarkers();
-                                    }
-                                };
-
-                                task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-                            }
-
-                            @Override
-                            public void failure(IService service) {
-                                service.getResponseCode();
-                            }
-                        });
+        AsyncTask<Void, Void, Address> getAddressTask = new AsyncTask<Void, Void, Address>() {
+            @Override
+            protected Address doInBackground(Void... params) {
+                try {
+                    Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                    List<Address> addresses = geocoder.getFromLocation(currLatLng.latitude, currLatLng.longitude, 1);
+                    return addresses.get(0);
+                } catch (IOException e) {
+                    Utils.Log.e("BSTP_MapComponent_displayParkingAreas: ", e.getMessage());
+                }
+                return null;
             }
-        } catch (Exception e) {
-            Utils.Log.e("BSTP_MapComponent_displayParkingAreas: ", e.getMessage());
-        }
+
+            @Override
+            protected void onPostExecute(Address address) {
+                if (address != null) {
+                    ((MapsActivity) activity).getSearchCriteria()
+                            .setLocationName(address.getFeatureName())
+                            .setLatLng(currLatLng)
+                            .createSearchService()
+                            .executeAsync(new ServiceCallback() {
+                                @Override
+                                public void success(IService service) {
+                                    parkingLocations = new HashMap<>();
+
+                                    final String responseString = service.getResponseString();
+
+                                    AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                                        @Override
+                                        protected Void doInBackground(Void... params) {
+                                            Gson gson = new Gson();
+                                            List<ParkingLocation> locations = gson.fromJson(responseString, new TypeToken<ArrayList<ParkingLocation>>() {
+                                            }.getType());
+                                            for (ParkingLocation parkingLocation : locations) {
+                                                parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
+                                            }
+                                            return null;
+                                        }
+
+                                        @Override
+                                        protected void onPostExecute(Void aVoid) {
+                                            clearMarkers();
+                                            drawMyLocationMarker();
+                                            drawMySearchingMarker(searchingLatLng);
+                                            drawLocationMarkers();
+                                        }
+                                    };
+
+                                    task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+                                }
+
+                                @Override
+                                public void failure(IService service) {
+                                    service.getResponseCode();
+                                }
+                            });
+                }
+            }
+        };
+
+        getAddressTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+
     }
 }

@@ -1,5 +1,8 @@
 package com.bosch.si.emobility.bstp.component;
 
+import android.content.res.Resources;
+import android.view.View;
+
 import com.bosch.si.emobility.bstp.activity.Activity;
 
 /**
@@ -14,4 +17,10 @@ public interface IComponent {
     boolean isShown();
 
     void setActivity(Activity activity);
+
+    Activity getActivity();
+
+    Resources getResources();
+
+    View findViewById(int id);
 }

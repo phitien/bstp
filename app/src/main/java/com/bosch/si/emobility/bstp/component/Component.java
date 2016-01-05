@@ -2,6 +2,7 @@ package com.bosch.si.emobility.bstp.component;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
@@ -19,6 +20,21 @@ public abstract class Component implements IComponent {
 
     private static final long DURATION = 100;
     protected Activity activity;
+
+    @Override
+    public Activity getActivity() {
+        return activity;
+    }
+
+    @Override
+    public Resources getResources() {
+        return getActivity().getResources();
+    }
+
+    @Override
+    public View findViewById(int id) {
+        return getActivity().findViewById(id);
+    }
 
     protected ViewGroup layout;
 
@@ -120,19 +136,7 @@ public abstract class Component implements IComponent {
     @Override
     public void setEnabled(boolean enabled, boolean noAnimation) {
         layout.setEnabled(enabled);
-        if (!noAnimation && isSlideUp()) {
-            slideUp(enabled);
-        } else if (!noAnimation && isSlidDown()) {
-            slideDown(enabled);
-        } else if (!noAnimation && isSlideLeft()) {
-            slideLeft(enabled);
-        } else if (!noAnimation && isSlideRight()) {
-            slideRight(enabled);
-        } else if (!noAnimation && isFade()) {
-            fade(enabled);
-        } else {
-            layout.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
-        }
+        layout.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override

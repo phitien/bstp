@@ -2,20 +2,24 @@
     <!--
     TODO: Before you run your application, you need a Google Maps API key.
 
-    To get one, follow this link, follow the directions and press "Create" at the end:
+    open terminal, go to project folder, enter the command below to get fingerprint
 
-https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=9B:16:AA:6B:C8:CB:6C:2C:A7:E9:C0:D0:0A:2F:B9:5B:37:68:75:DD%3Bcom.bosch.si.emobility.bstp
+    keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
 
-    You can also add your credentials to an existing key, using this line:
+    look for SHA1, use that fingerprint & app package (com.bosch.si.emobility.bstp) to register with https://console.developers.google.com/
+
+    <fingerprint>;<package>
+
+    eg.:
     9B:16:AA:6B:C8:CB:6C:2C:A7:E9:C0:D0:0A:2F:B9:5B:37:68:75:DD;com.bosch.si.emobility.bstp
+
+    DB:9C:2A:D2:15:5B:C1:A1:69:93:86:1B:58:3D:40:FF:2A:7A:F5:5E
 
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.
     -->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        AIzaSyA8dTJigDVfrDZkCd7Jden7CD2Q3xGf1II
+        AIzaSyBsze9hfWR5xaeE6EKpTkUDe6I1bH7RIFE`
     </string>
-    <string name="google_maps_browser_key" templateMergeStrategy="preserve" translatable="false">
-        AIzaSyBsHwvojH1Qb9a8CnFZHD0C-d98XnJgdF4
-    </string>
+
 </resources>

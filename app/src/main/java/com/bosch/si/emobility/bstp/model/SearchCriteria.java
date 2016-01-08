@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.model;
 
+import com.bosch.si.emobility.bstp.core.Constants;
 import com.bosch.si.emobility.bstp.core.Model;
 import com.bosch.si.emobility.bstp.service.SearchService;
 import com.google.android.gms.maps.model.LatLng;
@@ -15,8 +16,17 @@ public class SearchCriteria extends Model {
     private String latitude;
     private String locationName;
     private String longitude;
+    private float radius = Constants.DEFAULT_ZOOM_RADIUS;
     private String searchString;
     private String startTime;
+
+    public float getRadius() {
+        return radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
 
     public String getDirection() {
         return direction;
@@ -104,6 +114,7 @@ public class SearchCriteria extends Model {
         service.longitude = longitude;
         service.searchString = searchString;
         service.startTime = startTime;
+        service.radius = radius;
         return service;
     }
 

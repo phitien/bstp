@@ -23,5 +23,6 @@ public class SearchService extends BaseService {
     public String searchString;
     @Expose
     public String startTime;
-
+    @Expose
+    public float radius;
 }

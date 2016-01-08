@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BSTP</string>
-    <string name="default_password" translatable="false"></string>
-    <string name="default_username" translatable="false"></string>
+    <string name="default_password" translatable="false">D0M1N1CT0R3TT0</string>
+    <string name="default_username" translatable="false">dominic</string>
     <string name="about" translatable="false">Etwa</string>
     <string name="action_login" translatable="false">Anmeldung</string>
     <string name="action_reserve" translatable="false">Reservieren</string>

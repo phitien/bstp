@@ -312,7 +312,7 @@ public class MapComponent extends Component {
                     Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
                     List<Address> addresses = geocoder.getFromLocation(currLatLng.latitude, currLatLng.longitude, 1);
                     return addresses.get(0);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     Utils.Log.e("BSTP_MapComponent_displayParkingAreas: ", e.getMessage());
                 }
                 return null;

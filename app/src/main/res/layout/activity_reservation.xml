@@ -65,7 +65,7 @@
                         style="@style/App_TextViewUpcomingLabelStyle"
                         android:layout_width="@dimen/upcoming_item_label_width"
                         android:layout_height="wrap_content"
-                        android:text="StartTime:" />
+                        android:text="@string/start_time" />
 
                     <TextView
                         android:id="@+id/textViewStartTime"
@@ -93,7 +93,7 @@
                         style="@style/App_TextViewUpcomingLabelStyle"
                         android:layout_width="@dimen/upcoming_item_label_width"
                         android:layout_height="wrap_content"
-                        android:text="EndTime:" />
+                        android:text="@string/end_time" />
 
                     <TextView
                         android:id="@+id/textViewEndTime"

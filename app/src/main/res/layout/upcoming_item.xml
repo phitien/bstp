@@ -24,7 +24,7 @@
             style="@style/App_TextViewUpcomingLabelStyle"
             android:layout_width="@dimen/upcoming_item_label_width"
             android:layout_height="wrap_content"
-            android:text="Parking:" />
+            android:text="@string/parking" />
 
         <TextView
             android:id="@+id/textViewParkingTitle"
@@ -52,7 +52,7 @@
             style="@style/App_TextViewUpcomingLabelStyle"
             android:layout_width="@dimen/upcoming_item_label_width"
             android:layout_height="wrap_content"
-            android:text="Address:" />
+            android:text="@string/address" />
 
         <TextView
             android:id="@+id/textViewParkingAddress"
@@ -80,7 +80,7 @@
             style="@style/App_TextViewUpcomingLabelStyle"
             android:layout_width="@dimen/upcoming_item_label_width"
             android:layout_height="wrap_content"
-            android:text="StartTime:" />
+            android:text="@string/start_time" />
 
         <TextView
             android:id="@+id/textViewStartTime"
@@ -108,7 +108,7 @@
             style="@style/App_TextViewUpcomingLabelStyle"
             android:layout_width="@dimen/upcoming_item_label_width"
             android:layout_height="wrap_content"
-            android:text="EndTime:" />
+            android:text="@string/end_time" />
 
         <TextView
             android:id="@+id/textViewEndTime"

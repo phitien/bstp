@@ -2,12 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        config {
-            keyAlias 'BSTPAndroidKey'
-            keyPassword 'boschsi.com'
-            storeFile file('/Users/sgp0458/bstp-mobile/app/keystores/android.jks')
-            storePassword 'boschsi.com'
-        }
     }
     compileSdkVersion 22
     buildToolsVersion "23.0.1"
@@ -16,7 +10,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
         multiDexEnabled true
     }
     lintOptions {
@@ -26,7 +20,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
         }
         debug {
         }

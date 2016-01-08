@@ -1,39 +1,43 @@
 <resources>
-    <string name="app_name">BSTP</string>
-    <string name="action_settings">Settings</string>
-    <string name="please_wait">Please wait...</string>
-    <string name="search">Search</string>
-    <string name="default_tenant">DEFAULT</string>
-    <string name="default_username">sgp0458</string>
-    <string name="default_password">Sgp04581234</string>
-    <string name="save_credentials">Save credentials</string>
-    <string name="action_login">Login</string>
-    <string name="login_failed">Could not login to system</string>
-    <string name="login_ok">Login successfully</string>
-    <string name="from">From</string>
-    <string name="to">To</string>
-    <string name="date">Date</string>
-    <string name="time">Time</string>
-    <string name="home">Home</string>
-    <string name="upcoming">Upcoming</string>
-    <string name="logout">Logout</string>
-    <string name="about">About</string>
+    <string name="app_name" translatable="false">BSTP</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="please_wait" translatable="false">Please wait...</string>
+    <string name="search" translatable="false">Search</string>
+    <string name="default_tenant" translatable="false">DEFAULT</string>
+    <string name="default_username" translatable="false">sgp0458</string>
+    <string name="default_password" translatable="false">Sgp04581234</string>
+    <string name="save_credentials" translatable="false">Save credentials</string>
+    <string name="action_login" translatable="false">Login</string>
+    <string name="login_failed" translatable="false">Could not login to system</string>
+    <string name="login_ok" translatable="false">Login successfully</string>
+    <string name="from" translatable="false">From</string>
+    <string name="to" translatable="false">To</string>
+    <string name="date" translatable="false">Date</string>
+    <string name="time" translatable="false">Time</string>
+    <string name="home" translatable="false">Home</string>
+    <string name="upcoming" translatable="false">Upcoming</string>
+    <string name="logout" translatable="false">Logout</string>
+    <string name="about" translatable="false">About</string>
 
-    <string name="autocomplete_hint">Enter place name or address</string>
-    <string name="your_location">Your location</string>
-    <string name="current_search_location">Searching location</string>
-    <string name="session_expired">Session expired</string>
-    <string name="re_login_ok">Re-Login successfully</string>
-    <string name="re_login_failed">Re-Login failed</string>
+    <string name="autocomplete_hint" translatable="false">Enter place name or address</string>
+    <string name="your_location" translatable="false">Your location</string>
+    <string name="current_search_location" translatable="false">Searching location</string>
+    <string name="session_expired" translatable="false">Session expired</string>
+    <string name="re_login_ok" translatable="false">Re-Login successfully</string>
+    <string name="re_login_failed" translatable="false">Re-Login failed</string>
 
-    <string name="action_reserve">Reserve</string>
-    <string name="security_level">Security Level</string>
-    <string name="free">free</string>
-    <string name="title_activity_upcoming">Upcoming</string>
+    <string name="action_reserve" translatable="false">Reserve</string>
+    <string name="security_level" translatable="false">Security Level</string>
+    <string name="free" translatable="false">free</string>
+    <string name="title_activity_upcoming" translatable="false">Upcoming</string>
 
-    <string name="title_activity_reservation">Reservation</string>
-    <string name="route_to_location">Route to location</string>
-    <string name="title_activity_about">About</string>
-    <string name="cancel_reservation">Cancel reservation</string>
+    <string name="title_activity_reservation" translatable="false">Reservation</string>
+    <string name="route_to_location" translatable="false">Route to location</string>
+    <string name="title_activity_about" translatable="false">About</string>
+    <string name="cancel_reservation" translatable="false">Cancel reservation</string>
+    <string name="start_time" translatable="false">Start Time</string>
+    <string name="end_time" translatable="false">End Time</string>
+    <string name="parking" translatable="false">Parking</string>
+    <string name="address" translatable="false">Address</string>
 
 </resources>

@@ -6,7 +6,11 @@
 
     keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
 
-    look for SHA1, use that fingerprint & app package (com.bosch.si.emobility.bstp) to register with https://console.developers.google.com/
+    look for SHA1, use that fingerprint & app package (com.bosch.si.emobility.bstp) to register with
+
+    https://console.developers.google.com/
+
+    user/pass: bosch.inst/boschsi.com
 
     <fingerprint>;<package>
 
@@ -18,8 +22,8 @@
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.
     -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        AIzaSyBsze9hfWR5xaeE6EKpTkUDe6I1bH7RIFE`
+    <string name="google_maps_key" templateMergeStrategy="preserve">
+        AIzaSyBsze9hfWR5xaeE6EKpTkUDe6I1bH7RIFE
     </string>
 
 </resources>

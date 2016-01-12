@@ -7,7 +7,20 @@ import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.core.Constants;
 import com.bosch.si.emobility.bstp.core.Utils;
 
+import net.hockeyapp.android.CrashManager;
+
 public class SplashActivity extends Activity {
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkForCrashes();
+    }
+
+    private void checkForCrashes() {
+        CrashManager.register(this, Constants.HOCKEY_APP_ID);
+    }
 
     @Override
     public int layoutResID() {

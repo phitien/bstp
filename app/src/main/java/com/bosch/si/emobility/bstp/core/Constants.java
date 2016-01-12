@@ -17,7 +17,7 @@ public class Constants {
     public static final String TIME_FORMAT = "hh:mm";
     public static final String DB_DATETIME_FORMAT = "yyyy-MM-dd hh:mm:ss";
     public static final String DATETIME_FORMAT = "yyyy-MM-dd / hh:mm";
-
+    public static final String HOCKEY_APP_ID = "c94bedcf98a14355847b6ebc059b6463";
 
     public enum EventType {
         MESSAGE,

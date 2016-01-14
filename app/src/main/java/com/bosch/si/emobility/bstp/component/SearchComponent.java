@@ -22,6 +22,7 @@ import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.activity.MapsActivity;
 import com.bosch.si.emobility.bstp.core.Component;
+import com.bosch.si.emobility.bstp.core.Constants;
 import com.bosch.si.emobility.bstp.core.PlaceAutocompleteAdapter;
 import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.model.SearchCriteria;
@@ -86,6 +87,12 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
         return searchCriteria;
     }
 
+    private void setupSearchCriteria(){
+        searchCriteria.setHighway(Constants.NOT_USED_PARAM);
+        searchCriteria.setDirection(Constants.NOT_USED_PARAM);
+        searchCriteria.setSearchString(Constants.NOT_USED_PARAM);
+    }
+
     @Override
     public void setActivity(Activity activity) {
         super.setActivity(activity);
@@ -131,9 +138,10 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
             }
         });
 
-        Calendar calendar = Calendar.getInstance();
-        fromDate = calendar.getTime();
-        toDate = new Date(fromDate.getTime() + TimeUnit.SECONDS.toMillis(1));
+        fromDate = Utils.getNextDateByAddingHours(24);
+        toDate = Utils.getNextDateByAddingHours(48);
+
+        setupSearchCriteria();
 
         setSearchAutoComplete();
     }
@@ -170,11 +178,13 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     private void validateDates() {
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
+
         if (fromDate.getTime() < date.getTime()) {
-            fromDate = date;
+            Date nextDate = Utils.getNextDateByAddingHours(24);
+            fromDate = nextDate;
         }
         if (toDate.getTime() < fromDate.getTime()) {
-            toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(1));
+            toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toHours(1));
         }
         updateComponent();
     }
@@ -242,7 +252,6 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
-
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), SearchComponent.this, year, month, day);
         }

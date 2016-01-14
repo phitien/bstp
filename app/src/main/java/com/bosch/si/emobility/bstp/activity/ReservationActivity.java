@@ -42,7 +42,7 @@ public class ReservationActivity extends Activity {
         ParkingLocation parkingLocation = DataManager.getInstance().getCurrentTransaction().getParkingLocation();
 
         LatLng s = Utils.getMyLocationLatLng(this);
-        LatLng d = new LatLng(37.423156, -122.084917);//TODO replace this line by parking location position
+        LatLng d = new LatLng(parkingLocation.getLatitude(), parkingLocation.getLongitude());//TODO replace this line by parking location position
 
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                 Uri.parse(String.format("http://maps.google.com/maps?saddr=%s,%s&daddr=%s,%s",

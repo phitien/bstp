@@ -10,6 +10,7 @@ public class Facility extends Model {
     private String facilityId;
     private String facilityName;
     private String imageUrlOrCss;
+    private String parkingId;
 
     public String getFacilityId() {
         return facilityId;
@@ -33,5 +34,13 @@ public class Facility extends Model {
 
     public void setImageUrlOrCss(String imageUrlOrCss) {
         this.imageUrlOrCss = imageUrlOrCss;
+    }
+
+    public String getParkingId() {
+        return parkingId;
+    }
+
+    public void setParkingId(String parkingId) {
+        this.parkingId = parkingId;
     }
 }

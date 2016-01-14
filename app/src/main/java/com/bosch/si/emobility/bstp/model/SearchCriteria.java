@@ -106,6 +106,7 @@ public class SearchCriteria extends Model {
     }
 
     private SearchService fillToSearchService(SearchService service) {
+
         service.direction = direction;
         service.endTime = endTime;
         service.highway = highway;

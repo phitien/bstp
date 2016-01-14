@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -283,5 +284,12 @@ public class Utils {
             Log.e("BSTP_Utils_getMyLocation", e.getMessage());
         }
         return true;
+    }
+
+    public static Date getNextDateByAddingHours(int hoursInterval){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, hoursInterval);
+        return calendar.getTime();
     }
 }

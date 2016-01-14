@@ -15,6 +15,8 @@ public class ParkingLocation extends Model {
     private double longitude;
     private String locationTitle;
     private String address;
+    private String description;
+    private String parkingFee;
     private int availabilityCount;
     private int totalCapacityCount;
     private String parkingType;
@@ -53,6 +55,23 @@ public class ParkingLocation extends Model {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getParkingFee() {
+        return parkingFee;
+    }
+
+    public void setParkingFee(String parkingFee) {
+        this.parkingFee = parkingFee;
+    }
+
 
     public int getAvailabilityCount() {
         return availabilityCount;

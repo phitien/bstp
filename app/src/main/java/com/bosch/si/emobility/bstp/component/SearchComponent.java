@@ -301,7 +301,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
                             return;
                         }
                         // Get the Place object from the buffer.
-                        setEnabled(false, false);
+                        //setEnabled(false, false);
                         Place place = places.get(0);
                         ((MapsActivity) activity).moveCamera(place);
                         places.release();
@@ -309,6 +309,8 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
                 });
             }
         });
+
+
 
         LatLngBounds bounds = ((MapsActivity) activity).getCurrentLatLngBounds();
         mAdapter = new PlaceAutocompleteAdapter(this.activity, mGoogleApiClient, bounds, null);

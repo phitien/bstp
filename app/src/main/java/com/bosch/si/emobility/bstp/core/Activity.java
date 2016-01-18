@@ -56,7 +56,8 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
         try {
             headerComponent = new HeaderComponent(this);
             ActivityInfo activityInfo = getPackageManager().getActivityInfo(getComponentName(), PackageManager.GET_META_DATA);
-            headerComponent.setTitle(activityInfo.loadLabel(getPackageManager()).toString());
+            //commenting out the title of the screens
+            //headerComponent.setTitle(activityInfo.loadLabel(getPackageManager()).toString());
 
             menuComponent = new MenuComponent(this);
             menuComponent.setOnItemClickListener(new AdapterView.OnItemClickListener() {

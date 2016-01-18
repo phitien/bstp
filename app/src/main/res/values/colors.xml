@@ -72,6 +72,7 @@
     <color name="bg_action_bar_color">#ccffffff</color>
     <color name="menu_item_color">#ffffff</color>
     <color name="bg_search_panel_color">#cc294d86</color>
+    <color name="bg_header_color">#f7f7f7</color>
 
     <color name="text_color">#000000</color>
     <color name="text_hint_color">#73000000</color>

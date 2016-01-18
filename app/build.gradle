@@ -5,7 +5,9 @@ android {
     }
     compileSdkVersion 22
     buildToolsVersion "23.0.1"
+
     defaultConfig {
+
         applicationId "com.bosch.si.emobility.bstp"
         minSdkVersion 15
         targetSdkVersion 22
@@ -13,6 +15,7 @@ android {
         versionName "1.1"
         multiDexEnabled true
     }
+
     lintOptions {
         abortOnError false
     }
@@ -38,6 +41,18 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    productFlavors {
+        nightly {
+            applicationId "com.bosch.si.emobility.bstp.nightly"
+            minSdkVersion 15
+        }
+
+        weekly {
+            applicationId "com.bosch.si.emobility.bstp.weekly"
+            minSdkVersion 15
+        }
     }
 }
 

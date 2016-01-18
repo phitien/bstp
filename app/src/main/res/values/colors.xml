@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="primary_white">#ffffff</color>
     <color name="primary">#294d86</color>
     <color name="primary_dark">#294d86</color>
 
@@ -70,7 +71,8 @@
     <color name="bg_black_opacity_0">#00000000</color>
 
     <color name="bg_action_bar_color">#ccffffff</color>
-    <color name="menu_item_color">#ffffff</color>
+    <color name="menu_item_color">#294d86</color>
+    <color name="menu_item_divider">#294d86</color>
     <color name="bg_search_panel_color">#cc294d86</color>
     <color name="bg_header_color">#f7f7f7</color>
 

@@ -347,8 +347,11 @@ public class MapComponent extends Component {
                                             Gson gson = new Gson();
                                             List<ParkingLocation> locations = gson.fromJson(responseString, new TypeToken<ArrayList<ParkingLocation>>() {
                                             }.getType());
-                                            for (ParkingLocation parkingLocation : locations) {
-                                                parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
+
+                                            if (locations.size()> 0){
+                                                for (ParkingLocation parkingLocation : locations) {
+                                                    parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
+                                                }
                                             }
                                             return null;
                                         }

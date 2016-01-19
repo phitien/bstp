@@ -290,6 +290,23 @@ public class Utils {
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR, hoursInterval);
-        return calendar.getTime();
+        Date date = calendar.getTime();
+        return date;
+    }
+
+    public static String convertDateToAppSpecificFormat(Date inputDate) {
+
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+        try {
+            String datetime = inputDateFormat.format(inputDate);
+            if (datetime != null) {
+                return datetime;
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 }

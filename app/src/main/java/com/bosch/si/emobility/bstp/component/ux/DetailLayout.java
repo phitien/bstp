@@ -8,6 +8,7 @@ import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.bosch.si.emobility.bstp.R;
@@ -29,6 +30,8 @@ public class DetailLayout extends RelativeLayout {
     private int mDragRange;
     private int mTop;
     private float mDragOffset;
+
+    private Button reserveButtonRef;
 
     public View getHeaderView() {
         return headerView;
@@ -59,11 +62,13 @@ public class DetailLayout extends RelativeLayout {
     protected void onFinishInflate() {
         headerView = findViewById(R.id.viewHeader);
         contentView = findViewById(R.id.viewContent);
+        reserveButtonRef = (Button) findViewById(R.id.reserveButton);
     }
 
     public DetailLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         dragHelper = ViewDragHelper.create(this, 1f, new DragHelperCallback());
+
     }
 
     public void maximize() {
@@ -137,16 +142,39 @@ public class DetailLayout extends RelativeLayout {
         }
     }
 
+    public static boolean isPointInsideView(float x, float y, View view){
+        int location[] = new int[2];
+        view.getLocationOnScreen(location);
+        int viewX = location[0];
+        int viewY = location[1];
+
+        //point is inside view bounds
+        if(( x > viewX && x < (viewX + view.getWidth())) &&
+                ( y > viewY && y < (viewY + view.getHeight()))){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        if(isPointInsideView(ev.getRawX(), ev.getRawY(), reserveButtonRef)){
+            super.onInterceptTouchEvent(ev);
+            return false;
+        }
+
         final int action = MotionEventCompat.getActionMasked(ev);
 
         if ((action != MotionEvent.ACTION_DOWN)) {
+
             dragHelper.cancel();
             return super.onInterceptTouchEvent(ev);
         }
 
         if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+
             dragHelper.cancel();
             return false;
         }
@@ -179,6 +207,12 @@ public class DetailLayout extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+
+        if(isPointInsideView(ev.getRawX(), ev.getRawY(), reserveButtonRef)){
+            super.onTouchEvent(ev);
+            return  true;
+        }
+
         dragHelper.processTouchEvent(ev);
 
         final int action = ev.getAction();

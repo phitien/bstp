@@ -135,6 +135,8 @@ public class ParkingSearchAPITest extends TestCase{
 
             searchServiceSignal.await(TestUtil.WAITING_TIME, TimeUnit.SECONDS);
 
+            Log.d("BSTP_TEST", "Search service response" + searchService.getResponseCode());
+
             assertTrue("Service is ok",searchService.isOK());
 
         }

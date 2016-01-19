@@ -6,11 +6,11 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/no_margin"
+        android:layout_height="22dp"
         android:layout_marginTop="@dimen/no_margin"
-        android:background="@color/bg_header_color"
+        android:background="@color/primary_white"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/no_padding"
         android:paddingTop="@dimen/no_padding">
 
     </RelativeLayout>

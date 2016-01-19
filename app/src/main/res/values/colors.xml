@@ -23,7 +23,7 @@
     <color name="switch_text_color">#665C56</color>
     <color name="checkbox_text_color">#665C56</color>
 
-    <color name="background">#ffADCFFF</color>
+    <color name="background">#f0f0f0</color>
     <color name="transparent_background">#80ADCFFF</color>
 
     <color name="bg_white_opacity_100">#ffffffff</color>

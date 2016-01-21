@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.manager;
 
+import com.bosch.si.emobility.bstp.model.Driver;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.ParkingTransaction;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,6 +25,8 @@ public class DataManager {
     ParkingLocation currentParkingLocation = null;
     List<ParkingTransaction> transactions = new ArrayList<>();
     ParkingTransaction currentTransaction;
+
+    Driver currentDriver;
 
     public ParkingLocation getCurrentParkingLocation() {
         return currentParkingLocation;
@@ -56,4 +59,14 @@ public class DataManager {
     public void setTransactions(List<ParkingTransaction> transactions) {
         this.transactions = transactions;
     }
+
+
+    public Driver getCurrentDriver() {
+        return currentDriver;
+    }
+
+    public void setCurrentDriver(Driver currentDriver) {
+        this.currentDriver = currentDriver;
+    }
+
 }

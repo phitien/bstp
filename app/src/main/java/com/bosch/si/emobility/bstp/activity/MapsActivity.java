@@ -168,5 +168,6 @@ public class MapsActivity extends Activity {
 
     public void onReserveButtonClicked(View view) {
         detailComponent.onReserveButtonClicked(view);
+
     }
 }

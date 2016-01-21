@@ -69,6 +69,7 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'net.hockeyapp.android:HockeySDK:3.7.0-rc.1'
+    compile 'org.apmem.tools:layouts:1.10@aar'
     compile project(':rest')
     // Google services
     compile 'com.google.android.gms:play-services:8.1.0'

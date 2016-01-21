@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/parkingLocationInfoMainContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <ImageView
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/booking_green" />
+
+    <LinearLayout
+        android:id="@+id/parkingLocationInfoContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewReserveParkingName"
+            style="@style/App_EditTextStyle"
+            android:layout_width="@dimen/date_label_width"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="---" />
+
+        <TextView
+            android:id="@+id/textViewReserveParkingAddress"
+            style="@style/App_EditTextStyle"
+            android:layout_width="@dimen/date_label_width"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="---" />
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fromDateContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/parkingLocationInfoMainContainer">
+
+    <TextView
+        android:id="@+id/textViewFrom"
+        style="@style/App_EditTextStyle"
+        android:layout_width="@dimen/date_label_width"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/from" />
+
+    <TextView
+        android:id="@+id/textViewFromDate"
+        style="@style/App_EditTextStyle"
+        android:layout_width="@dimen/date_textview_width"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextSearch"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@id/textViewFrom"
+        android:singleLine="true"
+        android:text="2015-12-24"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textViewFromTime"
+        style="@style/App_EditTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextSearch"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@id/textViewFromDate"
+        android:singleLine="true"
+        android:text="23:59:59"
+        android:textAlignment="center" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/toDateContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fromDateContainer">
+
+    <TextView
+        android:id="@+id/textViewTo"
+        style="@style/App_EditTextStyle"
+        android:layout_width="@dimen/date_label_width"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFrom"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/to" />
+
+    <TextView
+        android:id="@+id/textViewToDate"
+        style="@style/App_EditTextStyle"
+        android:layout_width="@dimen/date_textview_width"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFrom"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@id/textViewTo"
+        android:singleLine="true"
+        android:text="2015-12-25"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textViewToTime"
+        style="@style/App_EditTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFrom"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@id/textViewToDate"
+        android:singleLine="true"
+        android:text="00:00:00"
+        android:textAlignment="center" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/driverInfoContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toDateContainer">
+
+        <TextView
+            android:id="@+id/textViewDriverNameLabel"
+            style="@style/App_EditTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Driver"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+
+        <TextView
+            android:id="@+id/textViewDriverName"
+            style="@style/App_EditTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="---"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/truckInfoContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/driverInfoContainer">
+
+        <TextView
+            android:id="@+id/textViewTruckRegNoLabel"
+            style="@style/App_EditTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Truck"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+
+        <TextView
+            android:id="@+id/textViewTruckRegNo"
+            style="@style/App_EditTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/textViewTruckRegNoLabel"
+            android:singleLine="true"
+            android:text="---"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actionButtonsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/truckInfoContainer">
+
+        <Button
+            android:id="@+id/cancelConfirmReservation"
+            style="@style/App_ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="10dp"
+            android:onClick="onCancelConfirmReserveButtonClicked"
+            android:text="@string/Cancel" />
+
+        <Button
+            android:id="@+id/confirmReservation"
+            style="@style/App_ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/cancelConfirmReservation"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:onClick="onConfirmReserveButtonClicked"
+            android:text="@string/Confirm" />
+
+    </LinearLayout>
+
+</RelativeLayout>

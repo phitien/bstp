@@ -20,6 +20,7 @@ public class Constants {
     public static final String DATETIME_FORMAT = "yyyy-MM-dd / hh:mm";
     public static final String HOCKEY_APP_ID = "c94bedcf98a14355847b6ebc059b6463";
     public static final String NOT_USED_PARAM = "Notused";
+    public static final String PAYMENT_MODE_CREDIT = "Credit";
 
     public enum EventType {
         MESSAGE,

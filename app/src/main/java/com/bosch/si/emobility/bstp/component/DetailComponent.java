@@ -11,7 +11,10 @@ import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.component.ux.DetailLayout;
 import com.bosch.si.emobility.bstp.core.Component;
 import com.bosch.si.emobility.bstp.manager.DataManager;
+import com.bosch.si.emobility.bstp.model.Facility;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
+
+import java.util.List;
 
 /**
  * Created by sgp0458 on 16/12/15.
@@ -50,10 +53,6 @@ public class DetailComponent extends Component {
 
     private void populateData() {
         if (this.parkingLocation != null) {
-            //TODO remove these hardcoded lines below
-            parkingLocation.setSecurityLevel("3");
-            parkingLocation.getSecurityDetails().add("CCTV");
-            parkingLocation.getSecurityDetails().add("Security fence");
 
             textViewParkingName.setText(parkingLocation.getLocationTitle());
             textViewParkingAddress.setText(parkingLocation.getAddress());
@@ -65,6 +64,15 @@ public class DetailComponent extends Component {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this.activity, R.layout.security_item, R.id.text1, parkingLocation.getSecurityDetails());
             listViewSecurityDetails.setAdapter(adapter);
         }
+    }
+
+    private void addSecurityDetials(List<String> securityDetails){
+
+
+    }
+
+    private void updateFacilities(List<Facility> facilities){
+
     }
 
     @Override
@@ -87,6 +95,7 @@ public class DetailComponent extends Component {
     }
 
     public void onReserveButtonClicked(View view) {
-        //TODO call rest service to reserve a parking lot
+        //show the reservation confirmation ui
+
     }
 }

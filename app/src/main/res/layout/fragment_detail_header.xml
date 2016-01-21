@@ -17,6 +17,7 @@
         android:layout_alignParentTop="true"
         android:src="@drawable/booking_green" />
 
+    <!--
     <LinearLayout
         android:id="@+id/statusBarContainer"
         android:layout_width="wrap_content"
@@ -65,6 +66,7 @@
             android:background="@color/status_bar_item5_color" />
 
     </LinearLayout>
+    -->
 
     <TextView
         android:id="@+id/textViewAvailability"
@@ -73,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/statusBarContainer"
+        android:layout_toRightOf="@+id/imageView"
         android:text="20/24" />
 
     <TextView
@@ -91,9 +93,9 @@
         style="@style/App_TextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/statusBarContainer"
-        android:layout_alignStart="@+id/statusBarContainer"
-        android:layout_below="@+id/statusBarContainer"
+        android:layout_alignLeft="@+id/textViewAvailability"
+        android:layout_alignStart="@+id/textViewAvailability"
+        android:layout_below="@+id/textViewAvailability"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="Autohof Lutterberg" />
 

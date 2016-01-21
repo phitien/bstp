@@ -39,5 +39,9 @@
     <string name="end_time" translatable="false">End Time</string>
     <string name="parking" translatable="false">Parking</string>
     <string name="address" translatable="false">Address</string>
+    <string name="Driver">Driver</string>
+    <string name="Truck">Truck</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Confirm">Confirm</string>
 
 </resources>

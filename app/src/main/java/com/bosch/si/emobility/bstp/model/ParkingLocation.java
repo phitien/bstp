@@ -147,5 +147,4 @@ public class ParkingLocation extends Model {
                 facilities = parkingLocation.facilities;
         }
     }
-
 }

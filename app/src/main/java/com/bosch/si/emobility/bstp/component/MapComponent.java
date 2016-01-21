@@ -268,7 +268,11 @@ public class MapComponent extends Component {
         for (Map.Entry<String, Marker> entry : markers.entrySet()) {
             if (marker.equals(entry.getValue())) {
                 final String parkingId = entry.getKey();
-                ParkingLocationInfoService service = new ParkingLocationInfoService();
+                ParkingLocation parkingLocation = parkingLocations.get(parkingId);
+                if (parkingLocation != null)
+                    ((MapsActivity) activity).openLocationDetail(parkingLocation);
+                //TODO: Parking location info service is broken so getting data from cache
+                /*ParkingLocationInfoService service = new ParkingLocationInfoService();
                 service.parkingid = parkingId;
                 service.executeAsync(new ServiceCallback() {
                     @Override
@@ -300,7 +304,7 @@ public class MapComponent extends Component {
                     public void failure(IService service) {
                         service.getResponseCode();
                     }
-                });
+                });*/
                 return true;
             }
         }
@@ -348,7 +352,7 @@ public class MapComponent extends Component {
                                             List<ParkingLocation> locations = gson.fromJson(responseString, new TypeToken<ArrayList<ParkingLocation>>() {
                                             }.getType());
 
-                                            if (locations.size()> 0){
+                                            if (locations != null && locations.size()> 0){
                                                 for (ParkingLocation parkingLocation : locations) {
                                                     parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
                                                 }

@@ -22,6 +22,12 @@ public class Constants {
     public static final String NOT_USED_PARAM = "Notused";
     public static final String PAYMENT_MODE_CREDIT = "Credit";
 
+    public static final String SECURITY_FENCE = "FENCE";
+    public static final String SECURITY_CCTV = "CCTV";
+    public static final String SECURITY_LIGHTING = "24H LIGHTING";
+    public static final String SECURITY_GATE = "GATE";
+    public static final String SECURITY_LPR = "LPR";
+
     public enum EventType {
         MESSAGE,
         LOGIN_OK,
@@ -32,4 +38,6 @@ public class Constants {
         CAMERA_CHANGED,
         LOGOUT_OK,
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.bosch.si.emobility.bstp.model;
 
 import com.bosch.si.emobility.bstp.core.Model;
+import com.bosch.si.emobility.bstp.core.SecurityDetailsMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,8 @@ public class ParkingLocation extends Model {
     private String securityLevel;
     private List<Facility> facilities = new ArrayList<>();
     private List<String> securityDetails = new ArrayList<>();
+
+    private List<SecurityDetails> mappedSecurityDetails = null;
 
     public List<String> getSecurityDetails() {
         return securityDetails;
@@ -146,5 +149,13 @@ public class ParkingLocation extends Model {
             if (parkingLocation.facilities != null)
                 facilities = parkingLocation.facilities;
         }
+    }
+
+    public List<SecurityDetails> getMappedSecurityDetails(){
+
+        if (mappedSecurityDetails == null){
+            mappedSecurityDetails = SecurityDetailsMapper.mapSecurityDetails(securityDetails);
+        }
+        return mappedSecurityDetails;
     }
 }

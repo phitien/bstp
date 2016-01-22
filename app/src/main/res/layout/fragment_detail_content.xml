@@ -54,7 +54,7 @@
             android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
             android:background="@android:color/transparent"
             android:scaleType="center"
-            android:src="@drawable/restaurant_inactive" />
+            android:src="@drawable/icon_electricity" />
 
         <ImageView
             android:id="@+id/showerFacility"
@@ -173,11 +173,6 @@
             android:layout_below="@+id/textViewSecurityLevel"
             android:divider="@null"
             android:dividerHeight="0dp" />
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"></GridLayout>
 
     </LinearLayout>
 

@@ -2,13 +2,13 @@ package com.bosch.si.emobility.bstp.component;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.core.Activity;
+import com.bosch.si.emobility.bstp.component.ListView.SecurityDetailsListAdapater;
 import com.bosch.si.emobility.bstp.component.ux.DetailLayout;
+import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.core.Component;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.Facility;
@@ -61,8 +61,8 @@ public class DetailComponent extends Component {
                     Integer.valueOf(parkingLocation.getTotalCapacityCount())));
             textViewSecurityLevel.setText(parkingLocation.getSecurityLevel());
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this.activity, R.layout.security_item, R.id.text1, parkingLocation.getSecurityDetails());
-            listViewSecurityDetails.setAdapter(adapter);
+            SecurityDetailsListAdapater adpater = new SecurityDetailsListAdapater(this.activity, R.layout.security_item, parkingLocation.getMappedSecurityDetails());
+            listViewSecurityDetails.setAdapter(adpater);
         }
     }
 

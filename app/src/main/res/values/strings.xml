@@ -35,6 +35,7 @@
     <string name="route_to_location" translatable="false">Route to location</string>
     <string name="title_activity_about" translatable="false">About</string>
     <string name="cancel_reservation" translatable="false">Cancel reservation</string>
+    <string name="title_confirm_reservation_activity_about" translatable="false">Confirm</string>
     <string name="start_time" translatable="false">Start Time</string>
     <string name="end_time" translatable="false">End Time</string>
     <string name="parking" translatable="false">Parking</string>

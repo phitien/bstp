@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.activity;
 
+import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -167,7 +168,10 @@ public class MapsActivity extends Activity {
     }
 
     public void onReserveButtonClicked(View view) {
-        detailComponent.onReserveButtonClicked(view);
-
+        Intent intent = new Intent(MapsActivity.this, ConfirmReservationDetailsActivity.class);
+        intent.putExtra(Constants.PARKING_LOCATION_INTENT_DATA_KEY, DataManager.getInstance().getCurrentParkingLocation());
+        intent.putExtra(Constants.FROM_DATE_TIME_INTENT_DATA_KEY, searchComponent.getSearchCriteria().getStartTime());
+        intent.putExtra(Constants.TO_DATE_TIME_INTENT_DATA_KEY, searchComponent.getSearchCriteria().getEndTime());
+        startActivity(intent);
     }
 }

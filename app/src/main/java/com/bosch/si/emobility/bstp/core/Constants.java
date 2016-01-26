@@ -22,6 +22,9 @@ public class Constants {
     public static final String HOCKEY_APP_ID = "c94bedcf98a14355847b6ebc059b6463";
     public static final String NOT_USED_PARAM = "Notused";
     public static final String PAYMENT_MODE_CREDIT = "Credit";
+    public static final String FROM_DATE_TIME_INTENT_DATA_KEY = "FROM_DATE_TIME_INTENT_DATA_KEY";
+    public static final String TO_DATE_TIME_INTENT_DATA_KEY = "TO_DATE_TIME_INTENT_DATA_KEY";
+    public static final String PARKING_LOCATION_INTENT_DATA_KEY = "PARKING_LOCATION_INTENT_DATA_KEY";
 
     public static final String SECURITY_FENCE = "FENCE";
     public static final String SECURITY_CCTV = "CCTV";

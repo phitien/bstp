@@ -26,7 +26,7 @@ public class DataManager {
     List<ParkingTransaction> transactions = new ArrayList<>();
     ParkingTransaction currentTransaction;
 
-    Driver currentDriver;
+    Driver currentDriver = null;
 
     public ParkingLocation getCurrentParkingLocation() {
         return currentParkingLocation;
@@ -59,7 +59,6 @@ public class DataManager {
     public void setTransactions(List<ParkingTransaction> transactions) {
         this.transactions = transactions;
     }
-
 
     public Driver getCurrentDriver() {
         return currentDriver;

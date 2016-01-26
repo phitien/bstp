@@ -68,6 +68,12 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.ConfirmReservationDetailsActivity"
+            android:configChanges="orientation"
+            android:label="@string/title_confirm_reservation_activity_about"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="net.hockeyapp.android.UpdateActivity" />
     </application>
 

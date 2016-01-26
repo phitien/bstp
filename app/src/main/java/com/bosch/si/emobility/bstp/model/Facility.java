@@ -2,10 +2,12 @@ package com.bosch.si.emobility.bstp.model;
 
 import com.bosch.si.emobility.bstp.core.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by sgp0458 on 18/12/15.
  */
-public class Facility extends Model {
+public class Facility extends Model implements Serializable {
 
     private String facilityId;
     private String facilityName;

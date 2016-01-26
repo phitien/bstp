@@ -3,13 +3,14 @@ package com.bosch.si.emobility.bstp.model;
 import com.bosch.si.emobility.bstp.core.Model;
 import com.bosch.si.emobility.bstp.core.SecurityDetailsMapper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by sgp0458 on 18/12/15.
  */
-public class ParkingLocation extends Model {
+public class ParkingLocation extends Model implements Serializable{
 
     private String parkingId;
     private double latitude;

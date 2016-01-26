@@ -2,10 +2,12 @@ package com.bosch.si.emobility.bstp.model;
 
 import com.bosch.si.emobility.bstp.core.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by SSY1SGP on 22/1/16.
  */
-public class SecurityDetails extends Model {
+public class SecurityDetails extends Model implements Serializable {
 
     private String securityDetailName;
     private Boolean isAvailable;

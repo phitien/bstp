@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.core;
 
+import com.bosch.si.emobility.bstp.R;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -27,6 +28,50 @@ public class Constants {
     public static final String SECURITY_LIGHTING = "24H LIGHTING";
     public static final String SECURITY_GATE = "GATE";
     public static final String SECURITY_LPR = "LPR";
+
+    public static final int RESTAURANT_FACILITY_IMAGE_VIEW = R.id.restaurantFacility;
+    public static final int TOILET_FACILITY_IMAGE_VIEW = R.id.toiletFacility;
+    public static final int SHOWER_FACILITY_IMAGE_VIEW = R.id.showerFacility;
+    public static final int FUEL_STATION_FACILITY_IMAGE_VIEW = R.id.fuelStationFacility;
+    public static final int HOTEL_FACILITY_IMAGE_VIEW = R.id.hotelFacility;
+    public static final int TRUCK_REPAIR_FACILITY_IMAGE_VIEW = R.id.truckRepairFacility;
+    public static final int TRUCK_WASH_FACILITY_IMAGE_VIEW = R.id.truckWashFacility;
+    public static final int TRUCK_REFREGERATION_FACILITY_IMAGE_VIEW = R.id.truckRefregerationFacility;
+    public static final int ELECTRIC_CHARGING_FACILITY_IMAGE_VIEW = R.id.electricChargingFacility;
+    public static final int WIFI_FACILITY_IMAGE_VIEW = R.id.wifiFacility;
+
+    public static final int RESTAURANT_FACILITY_IMAGE_SRC_DEFAULT = R.drawable.icon_restaurant;
+    public static final int TOILET_FACILITY_IMAGE_SRC_DEFAULT = R.drawable.icon_toilet;
+    public static final int SHOWER_FACILITY_IMAGE_SRC_DEFAULT = R.drawable.icon_shower;
+    public static final int FUEL_STATION_FACILITY_SRC_DEFAULT = R.drawable.icon_fuelstation;
+    public static final int HOTEL_FACILITY_IMAGE_SRC_DEFAULT = R.drawable.icon_hotel;
+    public static final int TRUCK_REPAIR_FACILITY_IMAGE_SRC_DEFAULT = R.drawable.icon_truckrepair;
+    public static final int TRUCK_WASH_FACILITY_IMAGE_SRC_DEFAULT = R.drawable.icon_truckwash;
+    public static final int TRUCK_REFREGERATION_FACILITY_IMAGE_SRC_DEFAULT = R.drawable.icon_refrigerator;
+    public static final int ELECTRIC_CHARGING_FACILITY_IMAGE_SRC_DEFAULT = R.drawable.icon_electricity;
+    public static final int WIFI_FACILITY_IMAGE_SRC_DEFAULT = R.drawable.icon_wifi;
+
+    public static final int RESTAURANT_FACILITY_IMAGE_SRC_HIGHLIGHTED = R.drawable.icon_restaurant_hi;
+    public static final int TOILET_FACILITY_IMAGE_SRC_HIGHLIGHTED = R.drawable.icon_toilet_hi;
+    public static final int SHOWER_FACILITY_IMAGE_SRC_HIGHLIGHTED = R.drawable.icon_shower_hi;
+    public static final int FUEL_STATION_FACILITY_SRC_HIGHLIGHTED = R.drawable.icon_fuelstation_hi;
+    public static final int HOTEL_FACILITY_IMAGE_SRC_HIGHLIGHTED = R.drawable.icon_hotel_hi;
+    public static final int TRUCK_REPAIR_FACILITY_IMAGE_SRC_HIGHLIGHTED = R.drawable.icon_truckrepair_hi;
+    public static final int TRUCK_WASH_FACILITY_IMAGE_SRC_HIGHLIGHTED = R.drawable.icon_truckwash_hi;
+    public static final int TRUCK_REFREGERATION_FACILITY_IMAGE_SRC_HIGHLIGHTED = R.drawable.icon_refrigerator_hi;
+    public static final int ELECTRIC_CHARGING_FACILITY_IMAGE_SRC_HIGHLIGHTED = R.drawable.icon_electricity_hi;
+    public static final int WIFI_FACILITY_IMAGE_SRC_HIGHLIGHTED = R.drawable.icon_wifi_hi;
+
+    public static final String RESTAURANT_FACILITY_NAME = "RESTAURANT";
+    public static final String TOILET_FACILITY_NAME = "TOILETS";
+    public static final String SHOWER_FACILITY_NAME = "SHOWERS";
+    public static final String FUEL_STATION_FACILITY_NAME = "FUEL STATION";
+    public static final String HOTEL_FACILITY_NAME = "HOTEL";
+    public static final String TRUCK_REPAIR_FACILITY_NAME = "REPAIR SERVICE";
+    public static final String TRUCK_WASH_FACILITY_NAME = "TRUCK WASH";
+    public static final String TRUCK_REFERGERATION_FACILITY_NAME = "REFRIGERATED TRUCK AREA";
+    public static final String ELECTIRC_CHARGING_FACILITY_NAME = "ELECTRICITY";
+    public static final String WIFI_FACILITY_NAME = "WIFI";
 
     public enum EventType {
         MESSAGE,

@@ -50,9 +50,9 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/margin"
-            android:background="@android:color/transparent"
-            android:onClick="onMenuButtonClicked"
-            android:src="@drawable/menu" />
+            android:background="@drawable/menu_button"
+            android:onClick="onMenuButtonClicked" />
+
     </RelativeLayout>
 
     <ImageView

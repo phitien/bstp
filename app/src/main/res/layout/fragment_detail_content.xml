@@ -47,26 +47,6 @@
         android:layout_below="@+id/securityLevelContainer">
 
         <ImageView
-            android:id="@+id/restaurantFacility"
-            android:layout_width="@dimen/detail_view_image_icon_width"
-            android:layout_height="@dimen/detail_view_image_icon_height"
-            android:layout_marginLeft="@dimen/detail_view_image_icon_margin_left"
-            android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
-            android:background="@android:color/transparent"
-            android:scaleType="center"
-            android:src="@drawable/icon_electricity" />
-
-        <ImageView
-            android:id="@+id/showerFacility"
-            android:layout_width="@dimen/detail_view_image_icon_width"
-            android:layout_height="@dimen/detail_view_image_icon_height"
-            android:layout_marginLeft="@dimen/detail_view_image_icon_margin_left"
-            android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
-            android:background="@android:color/transparent"
-            android:scaleType="center"
-            android:src="@drawable/shower_inactive" />
-
-        <ImageView
             android:id="@+id/fuelStationFacility"
             android:layout_width="@dimen/detail_view_image_icon_width"
             android:layout_height="@dimen/detail_view_image_icon_height"
@@ -74,17 +54,17 @@
             android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
             android:background="@android:color/transparent"
             android:scaleType="center"
-            android:src="@drawable/voucher_inactive" />
+            android:src="@drawable/icon_fuelstation" />
 
         <ImageView
-            android:id="@+id/hotelFacility"
+            android:id="@+id/restaurantFacility"
             android:layout_width="@dimen/detail_view_image_icon_width"
             android:layout_height="@dimen/detail_view_image_icon_height"
             android:layout_marginLeft="@dimen/detail_view_image_icon_margin_left"
             android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
             android:background="@android:color/transparent"
             android:scaleType="center"
-            android:src="@drawable/calendar_inactivte" />
+            android:src="@drawable/icon_restaurant" />
 
         <ImageView
             android:id="@+id/toiletFacility"
@@ -94,27 +74,28 @@
             android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
             android:background="@android:color/transparent"
             android:scaleType="center"
-            android:src="@drawable/cc_inactive" />
+            android:src="@drawable/icon_toilet" />
 
         <ImageView
-            android:id="@+id/electricChargingFacility"
+            android:id="@+id/showerFacility"
             android:layout_width="@dimen/detail_view_image_icon_width"
             android:layout_height="@dimen/detail_view_image_icon_height"
             android:layout_marginLeft="@dimen/detail_view_image_icon_margin_left"
             android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
             android:background="@android:color/transparent"
             android:scaleType="center"
-            android:src="@drawable/restaurant_inactive" />
+            android:src="@drawable/icon_shower" />
 
         <ImageView
-            android:id="@+id/refregerationFacility"
+            android:id="@+id/hotelFacility"
             android:layout_width="@dimen/detail_view_image_icon_width"
             android:layout_height="@dimen/detail_view_image_icon_height"
             android:layout_marginLeft="@dimen/detail_view_image_icon_margin_left"
             android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
             android:background="@android:color/transparent"
             android:scaleType="center"
-            android:src="@drawable/shower_inactive" />
+            android:src="@drawable/icon_hotel" />
+
 
         <ImageView
             android:id="@+id/truckRepairFacility"
@@ -124,7 +105,17 @@
             android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
             android:background="@android:color/transparent"
             android:scaleType="center"
-            android:src="@drawable/voucher_inactive" />
+            android:src="@drawable/icon_truckrepair" />
+
+        <ImageView
+            android:id="@+id/truckRefregerationFacility"
+            android:layout_width="@dimen/detail_view_image_icon_width"
+            android:layout_height="@dimen/detail_view_image_icon_height"
+            android:layout_marginLeft="@dimen/detail_view_image_icon_margin_left"
+            android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
+            android:background="@android:color/transparent"
+            android:scaleType="center"
+            android:src="@drawable/icon_refrigerator" />
 
         <ImageView
             android:id="@+id/truckWashFacility"
@@ -134,7 +125,17 @@
             android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
             android:background="@android:color/transparent"
             android:scaleType="center"
-            android:src="@drawable/calendar_inactivte" />
+            android:src="@drawable/icon_truckwash" />
+
+        <ImageView
+            android:id="@+id/electricChargingFacility"
+            android:layout_width="@dimen/detail_view_image_icon_width"
+            android:layout_height="@dimen/detail_view_image_icon_height"
+            android:layout_marginLeft="@dimen/detail_view_image_icon_margin_left"
+            android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
+            android:background="@android:color/transparent"
+            android:scaleType="center"
+            android:src="@drawable/icon_electricity" />
 
         <ImageView
             android:id="@+id/wifiFacility"
@@ -144,7 +145,7 @@
             android:layout_marginTop="@dimen/detail_view_image_icon_margin_top"
             android:background="@android:color/transparent"
             android:scaleType="center"
-            android:src="@drawable/cc_inactive" />
+            android:src="@drawable/icon_wifi" />
 
     </org.apmem.tools.layouts.FlowLayout>
 

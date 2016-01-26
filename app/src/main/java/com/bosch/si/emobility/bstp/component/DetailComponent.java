@@ -10,11 +10,9 @@ import com.bosch.si.emobility.bstp.component.ListView.SecurityDetailsListAdapate
 import com.bosch.si.emobility.bstp.component.ux.DetailLayout;
 import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.core.Component;
+import com.bosch.si.emobility.bstp.core.FacilityViewManager;
 import com.bosch.si.emobility.bstp.manager.DataManager;
-import com.bosch.si.emobility.bstp.model.Facility;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
-
-import java.util.List;
 
 /**
  * Created by sgp0458 on 16/12/15.
@@ -27,6 +25,8 @@ public class DetailComponent extends Component {
     private TextView textViewAvailability;
     private TextView textViewSecurityLevel;
     private ListView listViewSecurityDetails;
+
+    private FacilityViewManager facilityViewManager;
 
     public DetailComponent(Activity activity) {
         super(activity);
@@ -63,16 +63,10 @@ public class DetailComponent extends Component {
 
             SecurityDetailsListAdapater adpater = new SecurityDetailsListAdapater(this.activity, R.layout.security_item, parkingLocation.getMappedSecurityDetails());
             listViewSecurityDetails.setAdapter(adpater);
+
+            facilityViewManager.updateIcons(parkingLocation.getFacilities());
+
         }
-    }
-
-    private void addSecurityDetials(List<String> securityDetails){
-
-
-    }
-
-    private void updateFacilities(List<Facility> facilities){
-
     }
 
     @Override
@@ -85,6 +79,8 @@ public class DetailComponent extends Component {
         textViewAvailability = (TextView) this.activity.findViewById(R.id.textViewAvailability);
         textViewSecurityLevel = (TextView) this.activity.findViewById(R.id.textViewSecurityLevel);
         listViewSecurityDetails = (ListView) this.activity.findViewById(R.id.listViewSecurityDetails);
+
+        facilityViewManager = new FacilityViewManager(this.activity);
 
         setEnabled(false, true);
     }

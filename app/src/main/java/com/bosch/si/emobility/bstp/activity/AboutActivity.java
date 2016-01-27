@@ -10,4 +10,10 @@ public class AboutActivity extends Activity {
         return R.layout.activity_about;
     }
 
+    @Override
+    protected void setup() {
+        super.setup();
+
+        headerComponent.setDisableSearch(true);
+    }
 }

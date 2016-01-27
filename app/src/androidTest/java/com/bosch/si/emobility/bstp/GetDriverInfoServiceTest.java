@@ -3,9 +3,11 @@ package com.bosch.si.emobility.bstp;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
 
+import com.bosch.si.emobility.bstp.model.Driver;
 import com.bosch.si.emobility.bstp.service.GetDriverInfoService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
+import com.google.gson.Gson;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +40,14 @@ public class GetDriverInfoServiceTest extends BaseAPITest {
                 @Override
                 public void success(IService service) {
                     Log.d("BSTP_TEST", "Get driver info service success response" + service.getResponseString());
+
+                    Driver driver = new Gson().fromJson(service.getResponseString(), Driver.class);
+                    if (driver != null) {
+                        Log.d("BSTP_TEST", "json parsed successfully" + driver.getDriverName() +" "+driver.getDriverId());
+                    }
+                    else {
+                        Log.d("BSTP_TEST", "failed to parse json" + service.getResponseString());
+                    }
                 }
 
                 @Override

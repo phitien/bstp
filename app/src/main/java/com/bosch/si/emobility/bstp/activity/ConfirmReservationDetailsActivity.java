@@ -12,7 +12,9 @@ import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.Driver;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
+import com.bosch.si.emobility.bstp.model.ParkingTransaction;
 import com.bosch.si.emobility.bstp.service.GetDriverInfoService;
+import com.bosch.si.emobility.bstp.service.ReserveParkingService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.gson.Gson;
@@ -28,6 +30,9 @@ public class ConfirmReservationDetailsActivity extends Activity {
     String toDateTime;
 
     ParkingLocation parkingLocation;
+    Driver driver;
+
+    ParkingTransaction parkingTransaction;
 
     @Override
     public int layoutResID() {
@@ -50,9 +55,9 @@ public class ConfirmReservationDetailsActivity extends Activity {
         confirmReservationComponent.setFromDateTime(fromDateTime);
         confirmReservationComponent.setToDateTime(toDateTime);
 
-        Driver driverInfo = DataManager.getInstance().getCurrentDriver();
+        driver = DataManager.getInstance().getCurrentDriver();
 
-        if (driverInfo == null){
+        if (driver == null){
 
             final ProgressDialog mDialog = new ProgressDialog(ConfirmReservationDetailsActivity.this);
                                                                 mDialog.setMessage("Please wait...");
@@ -78,10 +83,10 @@ public class ConfirmReservationDetailsActivity extends Activity {
                 public void onPostExecute(IService service) {
                     super.onPostExecute(service);
                     mDialog.dismiss();
-                    Driver driverInfo = DataManager.getInstance().getCurrentDriver();
+                    driver = DataManager.getInstance().getCurrentDriver();
 
-                    if (driverInfo != null){
-                        confirmReservationComponent.setDriver(driverInfo);
+                    if (driver != null){
+                        confirmReservationComponent.setDriver(driver);
                         confirmReservationComponent.populateData();
                     }
                     else {
@@ -94,7 +99,7 @@ public class ConfirmReservationDetailsActivity extends Activity {
             });
         }
         else {
-            confirmReservationComponent.setDriver(driverInfo);
+            confirmReservationComponent.setDriver(driver);
             confirmReservationComponent.populateData();
         }
     }
@@ -107,7 +112,43 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
     public void onConfirmReserveButtonClicked(View view){
         //reserve the space
-        setResult(Activity.RESULT_OK);
-        finish();
+
+        Utils.Indicator.setDialogTitle("Please wait...");
+        Utils.Indicator.show();
+
+        ReserveParkingService reserveParkingService = new ReserveParkingService();
+        reserveParkingService.driverId = driver.getDriverId();
+        reserveParkingService.parkingId = parkingLocation.getParkingId();
+        reserveParkingService.additionalInfo = "";
+        reserveParkingService.startTime = fromDateTime;
+        reserveParkingService.endTime = toDateTime;
+        reserveParkingService.vehicleId = confirmReservationComponent.getTruck().getVehicleId();
+        reserveParkingService.parkingId = Constants.PAYMENT_MODE_CREDIT;
+
+        reserveParkingService.executeAsync(new ServiceCallback() {
+
+            @Override
+            public void success(IService service) {
+                parkingTransaction = new Gson().fromJson(service.getResponseString(), ParkingTransaction.class);
+            }
+
+            @Override
+            public void failure(IService service) {
+            }
+
+            @Override
+            public void onPostExecute(IService service) {
+                super.onPostExecute(service);
+                Utils.Indicator.hide();
+                if (parkingTransaction != null) {
+                    Utils.Notifier.notify("Succesfully reserved the parking space!");
+                }
+                else {
+                    Utils.Notifier.notify("Unable to reserve parking space!");
+                }
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+        });
     }
 }

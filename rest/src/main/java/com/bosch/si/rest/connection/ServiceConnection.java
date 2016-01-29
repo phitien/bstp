@@ -38,12 +38,12 @@ public class ServiceConnection implements IServiceConnection {
     }
 
     @Override
-    public HttpURLConnection getURLConnection() {
-        if (secure) {
+    public HttpsURLConnection getURLConnection() {
+        if (secure) //{
             return httpsURLConnection;
-        } else if (httpURLConnection != null) {
-            return httpURLConnection;
-        }
+//        } else if (httpURLConnection != null) {
+//            return httpURLConnection;
+//        }
         return null;
     }
 

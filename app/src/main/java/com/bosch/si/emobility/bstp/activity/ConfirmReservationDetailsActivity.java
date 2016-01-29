@@ -119,11 +119,11 @@ public class ConfirmReservationDetailsActivity extends Activity {
         ReserveParkingService reserveParkingService = new ReserveParkingService();
         reserveParkingService.driverId = driver.getDriverId();
         reserveParkingService.parkingId = parkingLocation.getParkingId();
-        reserveParkingService.additionalInfo = "";
+        reserveParkingService.additionalInfo = "bstp app";
         reserveParkingService.startTime = fromDateTime;
         reserveParkingService.endTime = toDateTime;
-        reserveParkingService.vehicleId = confirmReservationComponent.getTruck().getVehicleId();
-        reserveParkingService.parkingId = Constants.PAYMENT_MODE_CREDIT;
+        reserveParkingService.vehicleId = confirmReservationComponent.getSelectedTruck();
+        reserveParkingService.paymentMode = Constants.PAYMENT_MODE_CREDIT;
 
         reserveParkingService.executeAsync(new ServiceCallback() {
 

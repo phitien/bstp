@@ -2,27 +2,60 @@ package com.bosch.si.rest;
 
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.bosch.si.rest.anno.*;
+import com.bosch.si.rest.anno.Authorization;
+import com.bosch.si.rest.anno.ContentType;
+import com.bosch.si.rest.anno.Cookie;
+import com.bosch.si.rest.anno.DELETE;
+import com.bosch.si.rest.anno.FormUrlEncoded;
+import com.bosch.si.rest.anno.GET;
+import com.bosch.si.rest.anno.Header;
+import com.bosch.si.rest.anno.POST;
+import com.bosch.si.rest.anno.PUT;
+import com.bosch.si.rest.anno.QueryParam;
 import com.bosch.si.rest.callback.IServiceCallback;
-import com.bosch.si.rest.connection.*;
-import com.google.gson.*;
+import com.bosch.si.rest.connection.IServiceConnection;
+import com.bosch.si.rest.connection.ServiceConnection;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.net.*;
-import java.util.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * Created by sgp0458 on 18/8/15.
@@ -397,11 +430,17 @@ public abstract class AbstractService implements IService {
         try {
             responseString = null;
             IServiceConnection conn = getConnection();
+
+            Log.d("BSTP_SVC", conn.getURLConnection().getRequestMethod());
+
             conn.connect();
             //set responseCode
             responseCode = conn.getResponseCode();
             inputStream = conn.getInputStream();
             responseCookie = conn.getURLConnection().getHeaderField(SET_COOKIE);
+
+            Log.d("BSTP_SVC","responseCode "+ responseCode);
+
             if (isOK()) {
                 BufferedReader reader = null;
                 try {
@@ -413,6 +452,9 @@ public abstract class AbstractService implements IService {
                     }
                     //set responseString
                     responseString = builder.toString();
+
+                    Log.d("BSTP_SVC","Response string "+ responseString);
+
                 } catch (IOException e) {
                     exception = e;
                 } finally {
@@ -468,10 +510,55 @@ public abstract class AbstractService implements IService {
     protected IServiceConnection getServiceConnection() throws Exception {
         updateParams();
         URL url = new URL(getURI());
+
+        try {
+
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[] {
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return null;
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            // Create an ssl socket factory with our all-trusting manager
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            HttpsURLConnection.setDefaultSSLSocketFactory(sslSocketFactory);
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+        }
+        catch (Exception e) {
+            Log.d("BSTP_SVC",e.getLocalizedMessage());
+        }
+
+        Log.d("BSTP_SVC","url " + url.toString());
+
         URLConnection conn = url.openConnection();
         if (conn instanceof HttpsURLConnection) {
+
             HttpsURLConnection httpsConn = (HttpsURLConnection) conn;
             updateConnectionParams(httpsConn);
+
+            Log.d("BSTP_SVC", httpsConn.getRequestMethod());
+
             return new ServiceConnection(httpsConn);
         } else if (conn instanceof HttpURLConnection) {
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
@@ -519,6 +606,9 @@ public abstract class AbstractService implements IService {
                 writer.close();
             } else {
                 String body = getBody();
+
+                Log.d("BSTP_SVC","Body "+ body);
+
                 if (body != null && !body.isEmpty()) {
                     byte[] postDataBytes = body.getBytes(CHARSET);
                     conn.setRequestProperty(CONTENT_LENGTH, "" + Integer.toString(postDataBytes.length));

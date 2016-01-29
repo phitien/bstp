@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.component.ux.ReservationViewHolder;
 import com.bosch.si.emobility.bstp.core.Activity;
+import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.ParkingTransaction;
 import com.bosch.si.emobility.bstp.service.GetUpcomingReservationsService;
@@ -29,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class UpcomingActivity extends Activity {
 
     ListView listViewUpcoming;
+    TextView emptyView;
 
     @Override
     public int layoutResID() {
@@ -49,6 +52,9 @@ public class UpcomingActivity extends Activity {
             }
         });
 
+        emptyView = (TextView) findViewById(R.id.noReservationsInfoLabel);
+        listViewUpcoming.setEmptyView(emptyView);
+
         populateData();
     }
 
@@ -67,10 +73,10 @@ public class UpcomingActivity extends Activity {
         GetUpcomingReservationsService service = new GetUpcomingReservationsService();
         Calendar calendar = Calendar.getInstance();
         Date fromDate = calendar.getTime();
-        Date toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(24));
+        Date toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toHours(24 * 365));
 
-        service.fromDate = fromDate.toString();
-        service.toDate = toDate.toString();
+        service.fromDate = Utils.convertDateToAppSpecificFormat(fromDate);
+        service.toDate = Utils.convertDateToAppSpecificFormat(toDate);
         service.searchTerm = "";//TODO to clarify requirements
 
         service.executeAsync(new ServiceCallback() {

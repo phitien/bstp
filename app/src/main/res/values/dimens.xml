@@ -18,7 +18,8 @@
     <dimen name="detail_view_header_height">150dp</dimen>
     <dimen name="detail_view_image_icon_width">35dp</dimen>
     <dimen name="detail_view_image_icon_height">35dp</dimen>
-    <dimen name="detail_view_image_icon_margin_left">4dp</dimen>
+    <dimen name="detail_view_image_icon_margin_left">5dp</dimen>
+    <dimen name="detail_view_image_icon_margin_right">5dp</dimen>
     <dimen name="detail_view_image_icon_margin_top">4dp</dimen>
 
     <dimen name="upcoming_item_label_width">140dp</dimen>

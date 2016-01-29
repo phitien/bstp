@@ -79,6 +79,10 @@ public class ConfirmReservationComponent extends Component{
         this.fromDateTime = fromDateTime;
     }
 
+    public String getSelectedTruck(){
+        return truckRegNo.getSelectedItem().toString();
+    }
+
     public ConfirmReservationComponent(Activity activity) {
         super(activity);
     }
@@ -115,7 +119,7 @@ public class ConfirmReservationComponent extends Component{
 
             driverName.setText(driver.getDriverName());
 
-            List<String> allTrucks = driver.getAllTruckRegNos();
+            List<String> allTrucks = driver.getAssociatedTrucks();
             if (allTrucks.size() > 0){
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this.activity, android.R.layout.simple_spinner_item, allTrucks);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

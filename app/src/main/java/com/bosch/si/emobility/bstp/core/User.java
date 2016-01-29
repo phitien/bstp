@@ -15,7 +15,7 @@ public class User extends Model {
         }
     }
 
-    private String tenantName = "DEFAULT";
+    private String tenantName = "DHL";
     private String username;
     private String password;
     private String contextId;

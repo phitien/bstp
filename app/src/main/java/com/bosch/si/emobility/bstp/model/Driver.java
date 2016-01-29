@@ -2,7 +2,6 @@ package com.bosch.si.emobility.bstp.model;
 
 import com.bosch.si.emobility.bstp.core.Model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,16 +15,16 @@ public class Driver extends Model {
     private String driverEmail;
     private String driverPassCode;
     private List<String> notificationChannels;
-    private List<Truck> associatedTrucks;
+    private List<String> associatedTrucks;
     private List<Truck> trucks;
 
     private List<String> truckRegNos = null;
 
-    public List<Truck> getAssociatedTrucks() {
+    public List<String> getAssociatedTrucks() {
         return associatedTrucks;
     }
 
-    public void setAssociatedTrucks(List<Truck> associatedTrucks) {
+    public void setAssociatedTrucks(List<String> associatedTrucks) {
         this.associatedTrucks = associatedTrucks;
     }
 
@@ -85,15 +84,4 @@ public class Driver extends Model {
         this.trucks = trucks;
     }
 
-    public List<String> getAllTruckRegNos() {
-
-        if (truckRegNos == null) {
-            truckRegNos = new ArrayList<String>();
-            for (Truck truck: associatedTrucks) {
-                truckRegNos.add(truck.getVehicleId());
-            }
-        }
-
-        return truckRegNos;
-    }
 }

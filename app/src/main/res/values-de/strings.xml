@@ -11,7 +11,7 @@
     <string name="cancel_reservation" translatable="false">Reservierung stornieren</string>
     <string name="current_search_location" translatable="false">Suchen Ort</string>
     <string name="date" translatable="false">Datum</string>
-    <string name="default_tenant" translatable="false">DEFAULT</string>
+    <string name="default_tenant" translatable="false">DHL</string>
     <string name="free" translatable="false">frei</string>
     <string name="from" translatable="false">Von</string>
     <string name="home" translatable="false">Zuhause</string>

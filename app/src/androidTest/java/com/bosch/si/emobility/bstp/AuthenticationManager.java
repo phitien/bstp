@@ -28,8 +28,8 @@ public class AuthenticationManager {
             final CountDownLatch loginServiceSignal = new CountDownLatch(1);
 
             user = new User();
-            user.setUsername("sgp0458");
-            user.setPassword("Sgp04581234");
+            user.setUsername("dhlforwarder");
+            user.setPassword("Dhlforwarder123$");
 
             LoginService loginService = new LoginService();
             loginService.user = user;

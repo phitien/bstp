@@ -137,6 +137,12 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
                 onLogout();
                 Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
             }
+
+            @Override
+            public void onSessionExpiry(IService service) {
+                onLogout();
+                Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
+            }
         });
     }
 
@@ -233,7 +239,7 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
 
     @Override
     public void onBackPressed() {
-        if (menuComponent.isShown()) {
+        if (menuComponent != null && menuComponent.isShown()) {
             menuComponent.setEnabled(false, true);
         } else {
             super.onBackPressed();

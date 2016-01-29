@@ -14,6 +14,14 @@
         android:layout_marginTop="@dimen/margin_top_from_header"
         android:background="@color/bg_white_opacity_100" />
 
+    <TextView
+        android:id="@+id/noReservationsInfoLabel"
+        android:text="No upcoming reservations found!"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        />
+
     <include
         android:id="@+id/headerLayout"
         layout="@layout/fragment_header"

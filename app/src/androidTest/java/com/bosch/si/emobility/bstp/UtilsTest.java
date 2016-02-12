@@ -3,6 +3,7 @@ package com.bosch.si.emobility.bstp;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 
+import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.model.Driver;
 import com.google.gson.Gson;
 
@@ -28,5 +29,22 @@ public class UtilsTest extends TestCase{
         }
         Log.d("BSTP_TEST", "user context id");
 
+    }
+
+    @SmallTest
+    public void testTimestampToDateConversion() {
+
+        try {
+            Log.d("BSTP_TEST", "testTimestampToDateConversion");
+
+            String timestampAsString = "1454300170039";
+            long timestamp = Long.parseLong(timestampAsString);
+            String formattedString = Utils.convertTimestampToDateInAppSpecificFormat(timestamp);
+            assertNotNull(formattedString);
+            Log.d("BSTP_TEST", "formattedString " + formattedString);
+        }
+        catch (Exception e) {
+            Log.d("BSTP_TEST", "testTimestampToDateConversion  "+ e.getLocalizedMessage());
+        }
     }
 }

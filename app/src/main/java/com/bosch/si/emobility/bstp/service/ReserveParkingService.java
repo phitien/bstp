@@ -32,4 +32,7 @@ public class ReserveParkingService extends BaseService {
     @Expose
     public String vehicleId;
 
+    @Expose
+    public String parkingLocationName;
+
 }

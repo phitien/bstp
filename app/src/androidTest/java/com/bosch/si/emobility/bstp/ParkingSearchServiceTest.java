@@ -14,6 +14,7 @@ import junit.framework.TestCase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -62,14 +63,24 @@ public class ParkingSearchServiceTest extends TestCase{
             Log.d("BSTP_TEST", "user context id" + user.getContextId());
 
 
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            //SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ") {
+                @Override
+                public StringBuffer format(Date date, StringBuffer toAppendTo, java.text.FieldPosition pos) {
+                    StringBuffer toFix = super.format(date, toAppendTo, pos);
+                    return toFix.insert(toFix.length()-2, ':');
+                };
+            };
+
 
             Calendar calendar = Calendar.getInstance(); // gets a calendar using the default time zone and locale.
             calendar.add(Calendar.HOUR, 24);
             String startTime = df.format(calendar.getTime());
 
-            calendar.add(Calendar.HOUR, 48);
+            calendar.add(Calendar.HOUR, 24);
             String endTime = df.format(calendar.getTime());
+
 
 
             Log.d("BSTP_TEST","start time"+startTime);
@@ -82,9 +93,9 @@ public class ParkingSearchServiceTest extends TestCase{
             searchCriteria.setHighway("Notused");
             searchCriteria.setStartTime(startTime);
             searchCriteria.setEndTime(endTime);
-            searchCriteria.setLatitude("48.83610");
-            searchCriteria.setLongitude("9.19935");
-            searchCriteria.setLocationName("stuttgart");
+            searchCriteria.setLatitude(0.0);
+            searchCriteria.setLongitude(0.0);
+            searchCriteria.setLocationName("telaviv");
             searchCriteria.setRadius(15000);
             searchCriteria.setSearchString("Notused");
 

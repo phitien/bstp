@@ -296,7 +296,15 @@ public class Utils {
 
     public static String convertDateToAppSpecificFormat(Date inputDate) {
 
-        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        //SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ") {
+            @Override
+            public StringBuffer format(Date date, StringBuffer toAppendTo, java.text.FieldPosition pos) {
+                StringBuffer toFix = super.format(date, toAppendTo, pos);
+                return toFix.insert(toFix.length()-2, ':');
+            };
+        };
 
         try {
             String datetime = inputDateFormat.format(inputDate);
@@ -309,4 +317,22 @@ public class Utils {
         }
         return null;
     }
+
+    public static String convertTimestampToDateInAppSpecificFormat(long timeStamp) {
+
+        try {
+
+            Date inputdDate = new Date(timeStamp);
+            SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String datetime = inputDateFormat.format(inputdDate);
+            if (datetime != null) {
+                return datetime;
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

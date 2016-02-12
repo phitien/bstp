@@ -2,7 +2,7 @@ package com.bosch.si.emobility.bstp.service;
 
 import com.bosch.si.emobility.bstp.core.BaseService;
 import com.bosch.si.rest.anno.DELETE;
-import com.google.gson.annotations.Expose;
+import com.bosch.si.rest.anno.QueryParam;
 
 /**
  * Created by SSY1SGP on 20/1/16.
@@ -10,6 +10,6 @@ import com.google.gson.annotations.Expose;
 @DELETE("/rest/parkingtransaction/cancel")
 public class CancelParkingReservationService extends BaseService {
 
-    @Expose
+    @QueryParam
     public String transactionId;
 }

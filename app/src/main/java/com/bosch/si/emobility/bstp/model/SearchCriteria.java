@@ -13,9 +13,9 @@ public class SearchCriteria extends Model {
     private String direction;
     private String endTime;
     private String highway;
-    private String latitude;
+    private double latitude;
     private String locationName;
-    private String longitude;
+    private double longitude;
     private float radius = Constants.DEFAULT_ZOOM_RADIUS;
     private String searchString;
     private String startTime;
@@ -54,13 +54,20 @@ public class SearchCriteria extends Model {
         return this;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public SearchCriteria setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
-        return this;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getLocationName() {
@@ -69,15 +76,6 @@ public class SearchCriteria extends Model {
 
     public SearchCriteria setLocationName(String locationName) {
         this.locationName = locationName;
-        return this;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public SearchCriteria setLongitude(String longitude) {
-        this.longitude = longitude;
         return this;
     }
 
@@ -100,8 +98,8 @@ public class SearchCriteria extends Model {
     }
 
     public SearchCriteria setLatLng(LatLng latLng) {
-        latitude = String.valueOf(latLng.latitude);
-        longitude = String.valueOf(latLng.longitude);
+        latitude = latLng.latitude;
+        longitude = latLng.longitude;
         return this;
     }
 

@@ -16,7 +16,7 @@ public class Constants {
     public static final String IM_AUTH_BASE_URL = "https://212.62.203.10/im-server/1/rest/authentication";
     public static final LatLng DEFAULT_LOCATION = new LatLng(50.1211277, 8.4964787);//Frankfurt
     public static final float DEFAULT_ZOOM_LEVEL = 9.5f;
-    public static final float DEFAULT_ZOOM_RADIUS = 50000.0f;
+    public static final float DEFAULT_ZOOM_RADIUS = 15000;
     public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String TIME_FORMAT = "hh:mm";
     public static final String DB_DATETIME_FORMAT = "yyyy-MM-dd hh:mm:ss";
@@ -77,6 +77,12 @@ public class Constants {
     public static final String TRUCK_REFERGERATION_FACILITY_NAME = "REFRIGERATED TRUCK AREA";
     public static final String ELECTIRC_CHARGING_FACILITY_NAME = "ELECTRICITY";
     public static final String WIFI_FACILITY_NAME = "WIFI";
+
+    public static final String TRANSANCTION_STATUS_CANCELED = "CANCELED";
+    public static final String TRANSANCTION_STATUS_RESERVATION = "RESERVATION";
+    public static final String TRANSANCTION_STATUS_FINISHED = "FINISHED";
+
+    public static final String IM_USER_ROLE_FOR_DRIVER = "ROLE_DRIVER";
 
     public enum EventType {
         MESSAGE,

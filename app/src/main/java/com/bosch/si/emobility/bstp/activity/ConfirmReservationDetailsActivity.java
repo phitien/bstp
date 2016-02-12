@@ -45,6 +45,8 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
         Intent intent = getIntent();
 
+        headerComponent.setDisableSearch(true);
+
         fromDateTime = intent.getStringExtra(Constants.FROM_DATE_TIME_INTENT_DATA_KEY);
         toDateTime = intent.getStringExtra(Constants.TO_DATE_TIME_INTENT_DATA_KEY);
         parkingLocation = (ParkingLocation)intent.getSerializableExtra(Constants.PARKING_LOCATION_INTENT_DATA_KEY);
@@ -124,6 +126,7 @@ public class ConfirmReservationDetailsActivity extends Activity {
         reserveParkingService.endTime = toDateTime;
         reserveParkingService.vehicleId = confirmReservationComponent.getSelectedTruck();
         reserveParkingService.paymentMode = Constants.PAYMENT_MODE_CREDIT;
+        reserveParkingService.parkingLocationName = parkingLocation.getLocationTitle();
 
         reserveParkingService.executeAsync(new ServiceCallback() {
 

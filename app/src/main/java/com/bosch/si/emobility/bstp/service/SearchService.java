@@ -14,11 +14,11 @@ public class SearchService extends BaseService {
     @Expose
     public String highway;
     @Expose
-    public String latitude;
+    public double latitude;
     @Expose
     public String locationName;
     @Expose
-    public String longitude;
+    public double longitude;
     @Expose
     public String searchString;
     @Expose

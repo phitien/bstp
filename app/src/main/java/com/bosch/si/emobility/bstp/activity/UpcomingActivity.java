@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.component.ux.ReservationViewHolder;
 import com.bosch.si.emobility.bstp.core.Activity;
+import com.bosch.si.emobility.bstp.core.Constants;
 import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.ParkingTransaction;
@@ -23,10 +24,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class UpcomingActivity extends Activity {
 
@@ -64,16 +63,19 @@ public class UpcomingActivity extends Activity {
     }
 
     private void openDetailActivity(int position) {
-        DataManager.getInstance().setCurrentTransaction(DataManager.getInstance().getTransactions().get(position));
+        DataManager.getInstance().setCurrentTransaction(DataManager.getInstance().getFilteredTransactions(Constants.TRANSANCTION_STATUS_RESERVATION).get(position));
         Intent intent = new Intent(UpcomingActivity.this, ReservationActivity.class);
         startActivity(intent);
     }
 
     private void populateData() {
+
+        Utils.Indicator.setDialogTitle("Please wait...");
+        Utils.Indicator.show();
+
         GetUpcomingReservationsService service = new GetUpcomingReservationsService();
-        Calendar calendar = Calendar.getInstance();
-        Date fromDate = calendar.getTime();
-        Date toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toHours(24 * 365));
+        Date fromDate = Utils.getNextDateByAddingHours(0);
+        Date toDate = Utils.getNextDateByAddingHours(24*365);
 
         service.fromDate = Utils.convertDateToAppSpecificFormat(fromDate);
         service.toDate = Utils.convertDateToAppSpecificFormat(toDate);
@@ -97,6 +99,8 @@ public class UpcomingActivity extends Activity {
 
                                          @Override
                                          protected void onPostExecute(Void aVoid) {
+
+                                             Utils.Indicator.hide();
                                              UpcomingAdapter adapter = new UpcomingAdapter(UpcomingActivity.this);
                                              listViewUpcoming.setAdapter(adapter);
                                          }
@@ -109,6 +113,8 @@ public class UpcomingActivity extends Activity {
                                  public void failure(IService service) {
                                      service.getResponseCode();
                                  }
+
+
                              }
 
         );
@@ -121,7 +127,7 @@ public class UpcomingActivity extends Activity {
     private class UpcomingAdapter extends ArrayAdapter<ParkingTransaction> {
 
         public UpcomingAdapter(Context context) {
-            super(context, R.layout.upcoming_item, DataManager.getInstance().getTransactions());
+            super(context, R.layout.upcoming_item, DataManager.getInstance().getFilteredTransactions(Constants.TRANSANCTION_STATUS_RESERVATION));
         }
 
         @Override
@@ -137,6 +143,17 @@ public class UpcomingActivity extends Activity {
             }
             holder.populateData(getItem(position));
             return convertView;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (resultCode == RESULT_OK) {
+            // The user picked a contact.
+            // The Intent's data Uri identifies which contact was selected.
+            // Do something with the contact here (bigger example below)
+            populateData();
         }
     }
 }

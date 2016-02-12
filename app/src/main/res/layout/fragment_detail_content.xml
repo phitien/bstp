@@ -161,7 +161,7 @@
 
     <LinearLayout
         android:id="@+id/servicesContainer"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/facilitiesGridContainer"
@@ -172,7 +172,7 @@
     <LinearLayout
         android:id="@+id/facilitiesContainer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="185dp"
         android:layout_marginLeft="@dimen/detail_view_image_icon_margin_left"
         android:layout_below="@+id/servicesContainer"
         android:orientation="vertical">

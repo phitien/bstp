@@ -21,6 +21,7 @@ import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -124,8 +125,26 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
                 try {
                     JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
                     user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
-                    UserSessionManager.getInstance().setUserSession(user);
-                    Event.broadcast(Utils.getString(R.string.login_ok), Constants.EventType.LOGIN_OK.toString());
+                    JSONArray currentUserRoles = (JSONArray) jsonObj.getJSONObject("ns2:identityContext").getJSONObject("ns2:tenantRelatedData").getJSONArray("ns2:role");
+                    Boolean isADriver = false;
+
+                    for (int i = 0; i < currentUserRoles.length(); i++) {
+                        JSONObject item = currentUserRoles.getJSONObject(i);
+                        if (item.getString("ns2:name").equalsIgnoreCase(Constants.IM_USER_ROLE_FOR_DRIVER) == true){
+                            isADriver = true;
+                            break;
+                        }
+                    }
+
+                    if (isADriver == true){
+                        UserSessionManager.getInstance().setUserSession(user);
+                        Event.broadcast(Utils.getString(R.string.login_ok), Constants.EventType.LOGIN_OK.toString());
+                    }
+                    else {
+                        onLogout();
+                        Event.broadcast(Utils.getString(R.string.login_failed_with_reason_invalid_role), Constants.EventType.LOGIN_FAILED.toString());
+                    }
+
                 } catch (Exception e) {
                     onLogout();
                     Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());

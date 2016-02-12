@@ -4,11 +4,12 @@
     <string name="please_wait" translatable="false">Please wait...</string>
     <string name="search" translatable="false">Search</string>
     <string name="default_tenant" translatable="false">DHL</string>
-    <string name="default_username" translatable="false">dhlforwarder</string>
-    <string name="default_password" translatable="false">Dhlforwarder123$</string>
+    <string name="default_username" translatable="false">Juergen-Moeller</string>
+    <string name="default_password" translatable="false">randomValue12</string>
     <string name="save_credentials" translatable="false">Save credentials</string>
     <string name="action_login" translatable="false">Login</string>
     <string name="login_failed" translatable="false">Could not login to system</string>
+    <string name="login_failed_with_reason_invalid_role" translatable="false">Could not login to system, because the current user is not a driver</string>
     <string name="login_ok" translatable="false">Login successfully</string>
     <string name="from" translatable="false">From</string>
     <string name="to" translatable="false">To</string>

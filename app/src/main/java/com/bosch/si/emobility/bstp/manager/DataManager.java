@@ -6,7 +6,9 @@ import com.bosch.si.emobility.bstp.model.ParkingTransaction;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by sgp0458 on 30/12/15.
@@ -25,6 +27,7 @@ public class DataManager {
     ParkingLocation currentParkingLocation = null;
     List<ParkingTransaction> transactions = new ArrayList<>();
     ParkingTransaction currentTransaction;
+    private Map<String, ParkingLocation> parkingLocations = new HashMap<>();
 
     Driver currentDriver = null;
 
@@ -52,11 +55,32 @@ public class DataManager {
         this.currentTransaction = currentTransaction;
     }
 
+    public List<ParkingTransaction> getFilteredTransactions(String filter) {
+
+        List<ParkingTransaction> filteredTransactions = new ArrayList<ParkingTransaction>();
+
+        for( ParkingTransaction a : transactions) {
+            // or equalsIgnoreCase or whatever your conditon is
+            if (a.getStatus().equals(filter)) {
+                // do something
+                filteredTransactions.add(a);
+            }
+        }
+
+        return filteredTransactions;
+    }
+
     public List<ParkingTransaction> getTransactions() {
         return transactions;
     }
 
     public void setTransactions(List<ParkingTransaction> transactions) {
+
+        for (ParkingTransaction transaction: transactions) {
+            ParkingLocation parkingLocation = this.getParkingLocations().get(transaction.getParkingId());
+            transaction.setParkingLocation(parkingLocation);
+        }
+
         this.transactions = transactions;
     }
 
@@ -68,4 +92,11 @@ public class DataManager {
         this.currentDriver = currentDriver;
     }
 
+    public Map<String, ParkingLocation> getParkingLocations() {
+        return parkingLocations;
+    }
+
+    public void setParkingLocations(Map<String, ParkingLocation> parkingLocations) {
+        this.parkingLocations = parkingLocations;
+    }
 }

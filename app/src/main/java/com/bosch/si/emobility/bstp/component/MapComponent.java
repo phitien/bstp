@@ -16,6 +16,7 @@ import com.bosch.si.emobility.bstp.core.Component;
 import com.bosch.si.emobility.bstp.core.Constants;
 import com.bosch.si.emobility.bstp.core.Event;
 import com.bosch.si.emobility.bstp.core.Utils;
+import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.service.ParkingLocationInfoService;
 import com.bosch.si.rest.IService;
@@ -168,7 +169,7 @@ public class MapComponent extends Component {
     }
 
     private void drawParkingLocationMarker(ParkingLocation parkingLocation) {
-        String imageName = "parking_";
+        String imageName = "icon_parking_space_";
         try {
             float usedPercentage = 1 - (parkingLocation.getAvailabilityCount() / parkingLocation.getTotalCapacityCount());
             if (usedPercentage < 0.7)
@@ -176,7 +177,7 @@ public class MapComponent extends Component {
             else if (usedPercentage == 0)
                 imageName += "red";
             else
-                imageName += "orange";
+                imageName += "yellow";
         } catch (Exception e) {
             imageName += "grey";
         }
@@ -356,6 +357,7 @@ public class MapComponent extends Component {
                                                 for (ParkingLocation parkingLocation : locations) {
                                                     parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
                                                 }
+                                                DataManager.getInstance().setParkingLocations(parkingLocations);
                                             }
                                             return null;
                                         }
@@ -375,6 +377,7 @@ public class MapComponent extends Component {
                                 @Override
                                 public void failure(IService service) {
                                     service.getResponseCode();
+                                    Utils.Notifier.notify("Unable to complete the search now! "+ " response code "+ service.getResponseCode());
                                 }
                             });
                 }

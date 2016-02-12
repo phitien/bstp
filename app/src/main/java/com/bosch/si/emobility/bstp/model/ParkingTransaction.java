@@ -1,6 +1,9 @@
 package com.bosch.si.emobility.bstp.model;
 
+import android.util.Log;
+
 import com.bosch.si.emobility.bstp.core.Model;
+import com.bosch.si.emobility.bstp.core.Utils;
 
 /**
  * Created by sgp0458 on 18/12/15.
@@ -18,6 +21,8 @@ public class ParkingTransaction extends Model {
     private String transactedDate;
     private String transactionId;
     private String vehicleId;
+    private String parkingId;
+    private String status;
 
     public ParkingLocation getParkingLocation() {
         return parkingLocation;
@@ -105,5 +110,51 @@ public class ParkingTransaction extends Model {
 
     public void setVehicleId(String vehicleId) {
         this.vehicleId = vehicleId;
+    }
+
+    public String getParkingId() {
+        return parkingId;
+    }
+
+    public void setParkingId(String parkingId) {
+        this.parkingId = parkingId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getFormattedStartTime() {
+
+        try {
+
+            long timeStamp = Long.parseLong(startTime);
+            String formattedDate = Utils.convertTimestampToDateInAppSpecificFormat(timeStamp);
+            if (formattedDate != null) {
+                return formattedDate;
+            }
+        } catch (Exception e) {
+            Log.d("BSTP_UTILS","getFormattedStartTime execption "+e.getLocalizedMessage());
+        }
+        return null;
+    }
+
+    public String getFormattedEndTime() {
+
+        try {
+
+            long timeStamp = Long.parseLong(endTime);
+            String formattedDate = Utils.convertTimestampToDateInAppSpecificFormat(timeStamp);
+            if (formattedDate != null) {
+                return formattedDate;
+            }
+        } catch (Exception e) {
+            Log.d("BSTP_UTILS","getFormattedEndTime execption "+e.getLocalizedMessage());
+        }
+        return null;
     }
 }

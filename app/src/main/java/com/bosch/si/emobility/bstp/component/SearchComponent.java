@@ -180,7 +180,7 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
         Date date = calendar.getTime();
 
         if (fromDate.getTime() < date.getTime()) {
-            Date nextDate = Utils.getNextDateByAddingHours(24);
+            Date nextDate = Utils.getNextDateByAddingHours(0);
             fromDate = nextDate;
         }
         if (toDate.getTime() < fromDate.getTime()) {

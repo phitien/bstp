@@ -70,12 +70,12 @@ public class UpcomingActivity extends Activity {
 
     private void populateData() {
 
-        Utils.Indicator.setDialogTitle("Please wait...");
+        Utils.Indicator.setDialogTitle(getString(R.string.please_wait));
         Utils.Indicator.show();
 
         GetUpcomingReservationsService service = new GetUpcomingReservationsService();
         Date fromDate = Utils.getNextDateByAddingHours(0);
-        Date toDate = Utils.getNextDateByAddingHours(24*365);
+        Date toDate = Utils.getNextDateByAddingHours(24 * 365);
 
         service.fromDate = Utils.convertDateToAppSpecificFormat(fromDate);
         service.toDate = Utils.convertDateToAppSpecificFormat(toDate);

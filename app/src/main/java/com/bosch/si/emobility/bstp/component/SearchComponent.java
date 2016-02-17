@@ -84,10 +84,11 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     }
 
     public SearchCriteria getSearchCriteria() {
+        validateDates();
         return searchCriteria;
     }
 
-    private void setupSearchCriteria(){
+    private void setupSearchCriteria() {
         searchCriteria.setHighway(Constants.NOT_USED_PARAM);
         searchCriteria.setDirection(Constants.NOT_USED_PARAM);
         searchCriteria.setSearchString(Constants.NOT_USED_PARAM);
@@ -138,9 +139,6 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
             }
         });
 
-        fromDate = Utils.getNextDateByAddingHours(24);
-        toDate = Utils.getNextDateByAddingHours(48);
-
         setupSearchCriteria();
 
         setSearchAutoComplete();
@@ -161,8 +159,9 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     @Override
     public void setEnabled(boolean enabled, boolean noAnimation) {
         super.setEnabled(enabled, noAnimation);
+        if (enabled)
+            validateDates();
         hideKeyboard();
-        updateComponent();
     }
 
     @Override
@@ -176,16 +175,16 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     }
 
     private void validateDates() {
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
+        Date now = Calendar.getInstance().getTime();
 
-        if (fromDate.getTime() < date.getTime()) {
-            Date nextDate = Utils.getNextDateByAddingHours(0);
-            fromDate = nextDate;
+        if (fromDate == null || fromDate.getTime() <= now.getTime() + TimeUnit.MINUTES.toMillis(5)) {
+            fromDate = new Date(now.getTime() + TimeUnit.HOURS.toMillis(Constants.DIFFERENCE_BETWEEN_NOW_FROM_DATE));
         }
-        if (toDate.getTime() < fromDate.getTime()) {
-            toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toHours(1));
+
+        if (toDate == null || toDate.getTime() <= fromDate.getTime() + TimeUnit.MINUTES.toMillis(5)) {
+            toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(Constants.DIFFERENCE_BETWEEN_FROM_DATE_TO_DATE));
         }
+
         updateComponent();
     }
 
@@ -309,7 +308,6 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
                 });
             }
         });
-
 
 
         LatLngBounds bounds = ((MapsActivity) activity).getCurrentLatLngBounds();

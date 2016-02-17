@@ -108,13 +108,13 @@ public class MapComponent extends Component {
 
     private LatLng drawMyLocationMarker() {
         LatLng latLng = Utils.getMyLocationLatLng(this.activity);
-        if (myLocationMarker == null) {
-            myLocationMarker = map.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title(activity.getString(R.string.your_location))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        } else
-            myLocationMarker.setPosition(latLng);
+//        if (myLocationMarker == null) {
+//            myLocationMarker = map.addMarker(new MarkerOptions()
+//                    .position(latLng)
+//                    .title(activity.getString(R.string.your_location))
+//                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+//        } else
+//            myLocationMarker.setPosition(latLng);
         return latLng;
     }
 

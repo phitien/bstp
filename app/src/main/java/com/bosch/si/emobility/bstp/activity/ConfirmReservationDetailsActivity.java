@@ -49,7 +49,7 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
         fromDateTime = intent.getStringExtra(Constants.FROM_DATE_TIME_INTENT_DATA_KEY);
         toDateTime = intent.getStringExtra(Constants.TO_DATE_TIME_INTENT_DATA_KEY);
-        parkingLocation = (ParkingLocation)intent.getSerializableExtra(Constants.PARKING_LOCATION_INTENT_DATA_KEY);
+        parkingLocation = (ParkingLocation) intent.getSerializableExtra(Constants.PARKING_LOCATION_INTENT_DATA_KEY);
 
         confirmReservationComponent = new ConfirmReservationComponent(this);
 
@@ -59,19 +59,19 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
         driver = DataManager.getInstance().getCurrentDriver();
 
-        if (driver == null){
+        if (driver == null) {
 
             final ProgressDialog mDialog = new ProgressDialog(ConfirmReservationDetailsActivity.this);
-                                                                mDialog.setMessage("Please wait...");
-                                                                mDialog.setCancelable(false);
-                                                                mDialog.show();
+            mDialog.setMessage(getString(R.string.please_wait));
+            mDialog.setCancelable(false);
+            mDialog.show();
 
             GetDriverInfoService driverInfoService = new GetDriverInfoService();
             driverInfoService.executeAsync(new ServiceCallback() {
                 @Override
                 public void success(IService service) {
                     Driver driver = new Gson().fromJson(service.getResponseString(), Driver.class);
-                    if (driver != null){
+                    if (driver != null) {
                         DataManager.getInstance().setCurrentDriver(driver);
                     }
                 }
@@ -87,41 +87,39 @@ public class ConfirmReservationDetailsActivity extends Activity {
                     mDialog.dismiss();
                     driver = DataManager.getInstance().getCurrentDriver();
 
-                    if (driver != null){
+                    if (driver != null) {
                         confirmReservationComponent.setDriver(driver);
                         confirmReservationComponent.populateData();
-                    }
-                    else {
+                    } else {
                         //cancel the intent
-                        Utils.Notifier.notify("Unable to get driver details");
+                        Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
                 }
             });
-        }
-        else {
+        } else {
             confirmReservationComponent.setDriver(driver);
             confirmReservationComponent.populateData();
         }
     }
 
-    public void onCancelConfirmReserveButtonClicked(View view){
+    public void onCancelConfirmReserveButtonClicked(View view) {
         //dismiss the view
         setResult(Activity.RESULT_OK);
         finish();
     }
 
-    public void onConfirmReserveButtonClicked(View view){
+    public void onConfirmReserveButtonClicked(View view) {
         //reserve the space
 
-        Utils.Indicator.setDialogTitle("Please wait...");
+        Utils.Indicator.setDialogTitle(getString(R.string.please_wait));
         Utils.Indicator.show();
 
         ReserveParkingService reserveParkingService = new ReserveParkingService();
         reserveParkingService.driverId = driver.getDriverId();
         reserveParkingService.parkingId = parkingLocation.getParkingId();
-        reserveParkingService.additionalInfo = "bstp app";
+        reserveParkingService.additionalInfo = getString(R.string.bstp_app);
         reserveParkingService.startTime = fromDateTime;
         reserveParkingService.endTime = toDateTime;
         reserveParkingService.vehicleId = confirmReservationComponent.getSelectedTruck();
@@ -144,10 +142,9 @@ public class ConfirmReservationDetailsActivity extends Activity {
                 super.onPostExecute(service);
                 Utils.Indicator.hide();
                 if (parkingTransaction != null) {
-                    Utils.Notifier.notify("Succesfully reserved the parking space!");
-                }
-                else {
-                    Utils.Notifier.notify("Unable to reserve parking space!");
+                    Utils.Notifier.notify(getString(R.string.reserved_successfully));
+                } else {
+                    Utils.Notifier.notify(getString(R.string.reserved_unsuccessfully));
                 }
                 setResult(Activity.RESULT_OK);
                 finish();

@@ -4,8 +4,8 @@
     <string name="please_wait" translatable="false">Please wait...</string>
     <string name="search" translatable="false">Search</string>
     <string name="default_tenant" translatable="false">DHL</string>
-    <string name="default_username" translatable="false">Juergen-Moeller</string>
-    <string name="default_password" translatable="false">randomValue12</string>
+    <string name="default_username" translatable="false"></string>
+    <string name="default_password" translatable="false"></string>
     <string name="save_credentials" translatable="false">Save credentials</string>
     <string name="action_login" translatable="false">Login</string>
     <string name="login_failed" translatable="false">Could not login to system</string>
@@ -41,9 +41,15 @@
     <string name="end_time" translatable="false">End Time</string>
     <string name="parking" translatable="false">Parking</string>
     <string name="address" translatable="false">Address</string>
-    <string name="Driver">Driver</string>
-    <string name="Truck">Truck</string>
-    <string name="Cancel">Cancel</string>
-    <string name="Confirm">Confirm</string>
+    <string name="Driver" translatable="false">Driver</string>
+    <string name="Truck" translatable="false">Truck</string>
+    <string name="Cancel" translatable="false">Cancel</string>
+    <string name="Confirm" translatable="false">Confirm</string>
+    <string name="username" translatable="false">Username</string>
+    <string name="password" translatable="false">Password</string>
+    <string name="bstp_app">bstp app</string>
+    <string name="reserved_successfully" translatable="false">Successfully reserved the parking space!</string>
+    <string name="reserved_unsuccessfully" translatable="false">Unable to reserve parking space!</string>
+    <string name="unable_to_get_driver_details" translatable="false">Unable to get driver details</string>
 
 </resources>

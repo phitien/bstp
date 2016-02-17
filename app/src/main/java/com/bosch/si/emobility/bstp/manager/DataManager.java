@@ -29,6 +29,8 @@ public class DataManager {
     ParkingTransaction currentTransaction;
     private Map<String, ParkingLocation> parkingLocations = new HashMap<>();
 
+    boolean justCanceledReservations = false;
+
     Driver currentDriver = null;
 
     public ParkingLocation getCurrentParkingLocation() {
@@ -59,7 +61,7 @@ public class DataManager {
 
         List<ParkingTransaction> filteredTransactions = new ArrayList<ParkingTransaction>();
 
-        for( ParkingTransaction a : transactions) {
+        for (ParkingTransaction a : transactions) {
             // or equalsIgnoreCase or whatever your conditon is
             if (a.getStatus().equals(filter)) {
                 // do something
@@ -76,7 +78,7 @@ public class DataManager {
 
     public void setTransactions(List<ParkingTransaction> transactions) {
 
-        for (ParkingTransaction transaction: transactions) {
+        for (ParkingTransaction transaction : transactions) {
             ParkingLocation parkingLocation = this.getParkingLocations().get(transaction.getParkingId());
             transaction.setParkingLocation(parkingLocation);
         }
@@ -98,5 +100,13 @@ public class DataManager {
 
     public void setParkingLocations(Map<String, ParkingLocation> parkingLocations) {
         this.parkingLocations = parkingLocations;
+    }
+
+    public boolean isJustCanceledReservations() {
+        return justCanceledReservations;
+    }
+
+    public void setJustCanceledReservations(boolean justCanceledReservations) {
+        this.justCanceledReservations = justCanceledReservations;
     }
 }

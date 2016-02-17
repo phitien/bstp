@@ -78,7 +78,11 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            if (headerComponent != null) {
+                if (menuComponent == null) {
+                    headerComponent.setDisableMenu(true);
+                }
+            }
         }
     }
 
@@ -130,17 +134,16 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
 
                     for (int i = 0; i < currentUserRoles.length(); i++) {
                         JSONObject item = currentUserRoles.getJSONObject(i);
-                        if (item.getString("ns2:name").equalsIgnoreCase(Constants.IM_USER_ROLE_FOR_DRIVER) == true){
+                        if (item.getString("ns2:name").equalsIgnoreCase(Constants.IM_USER_ROLE_FOR_DRIVER) == true) {
                             isADriver = true;
                             break;
                         }
                     }
 
-                    if (isADriver == true){
+                    if (isADriver == true) {
                         UserSessionManager.getInstance().setUserSession(user);
                         Event.broadcast(Utils.getString(R.string.login_ok), Constants.EventType.LOGIN_OK.toString());
-                    }
-                    else {
+                    } else {
                         onLogout();
                         Event.broadcast(Utils.getString(R.string.login_failed_with_reason_invalid_role), Constants.EventType.LOGIN_FAILED.toString());
                     }

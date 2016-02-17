@@ -16,6 +16,7 @@ import com.bosch.si.emobility.bstp.core.Component;
 public class HeaderComponent extends Component {
 
     boolean disableSearch = false;
+    boolean disableMenu = false;
 
     TextView textViewTitle;
     ImageButton imageButtonSearch;
@@ -35,6 +36,19 @@ public class HeaderComponent extends Component {
             imageButtonSearch.setVisibility(View.GONE);
         } else {
             imageButtonSearch.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public boolean isDisableMenu() {
+        return disableMenu;
+    }
+
+    public void setDisableMenu(boolean disableMenu) {
+        this.disableMenu = disableMenu;
+        if (disableMenu) {
+            imageButtonMenu.setVisibility(View.GONE);
+        } else {
+            imageButtonMenu.setVisibility(View.VISIBLE);
         }
     }
 

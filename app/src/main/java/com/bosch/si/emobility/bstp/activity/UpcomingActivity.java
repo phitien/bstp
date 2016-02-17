@@ -156,4 +156,14 @@ public class UpcomingActivity extends Activity {
             populateData();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (DataManager.getInstance().isJustCanceledReservations()) {
+            populateData();
+            DataManager.getInstance().setJustCanceledReservations(false);
+        }
+    }
+
 }

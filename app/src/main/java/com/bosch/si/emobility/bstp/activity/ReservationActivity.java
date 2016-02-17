@@ -96,7 +96,7 @@ public class ReservationActivity extends Activity {
 
                     if (service.getResponseCode() == 200) {
                         Utils.Notifier.notify(getString(R.string.reservation_canceled_successfully));
-                        setResult(Activity.RESULT_OK);
+                        DataManager.getInstance().setJustCanceledReservations(true);
                         finish();
                     } else {
                         Utils.Notifier.notify(getString(R.string.reservation_canceled_unsuccessfully));

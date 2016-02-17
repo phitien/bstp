@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Book'n'Park</string>
+    <string name="app_name"><![CDATA[Book n Park]]></string>
     <string name="default_password" translatable="false"></string>
     <string name="default_username" translatable="false"></string>
-    <string name="about" translatable="false">Über Book'n'Park</string>
+    <string name="about" translatable="false"><![CDATA[Über Book n Park]]></string>
     <string name="action_login" translatable="false">Anmelden</string>
     <string name="action_reserve" translatable="false">Reservieren</string>
     <string name="action_settings" translatable="false">Einstellungen</string>
@@ -26,7 +26,7 @@
     <string name="search" translatable="false">Suche</string>
     <string name="security_level" translatable="false">Sicherheitsstufe</string>
     <string name="time" translatable="false">Zeit</string>
-    <string name="title_activity_about" translatable="false">Über Book'n'Park</string>
+    <string name="title_activity_about" translatable="false"><![CDATA[Über Book n Park]]></string>
     <string name="title_activity_reservation">Reservierungen</string>
     <string name="title_activity_upcoming">Reservierungen</string>
     <string name="to" translatable="false">Bis</string>
@@ -49,4 +49,6 @@
     <string name="Confirm" translatable="false">Bestätigen</string>
     <string name="Driver" translatable="false">Fahrer</string>
     <string name="Truck" translatable="false">Fahrzeug</string>
+    <string name="reservation_canceled_successfully">Ihre Reservierung storniert.</string>
+    <string name="reservation_canceled_unsuccessfully">Konnte die Buchung zu stornieren.</string>
 </resources>

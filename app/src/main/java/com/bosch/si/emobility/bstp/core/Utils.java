@@ -229,43 +229,28 @@ public class Utils {
             return Constants.DEFAULT_LOCATION;
     }
 
+    public static String getDbFormattedDatetime(Date datetime) {
+        return (String) DateFormat.format(Constants.DB_DATETIME_FORMAT, datetime);
+    }
+
+    public static String getDbFormattedDatetime(String datetime) {
+        return getDbFormattedDatetime(new Date(datetime));
+    }
+
     public static String getFormattedDatetime(Date datetime) {
         return (String) DateFormat.format(Constants.DATETIME_FORMAT, datetime);
     }
 
     public static String getFormattedDatetime(String datetime) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DB_DATETIME_FORMAT);
-            return getFormattedDatetime(sdf.parse(datetime));
-        } catch (ParseException ex) {
-        }
-        return datetime;
+        return getFormattedDatetime(new Date(datetime));
     }
 
     public static String getFormattedDate(Date datetime) {
         return (String) DateFormat.format(Constants.DATE_FORMAT, datetime);
     }
 
-    public static String getFormattedDate(String datetime) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DB_DATETIME_FORMAT);
-            return getFormattedDate(sdf.parse(datetime));
-        } catch (ParseException ex) {
-        }
-        return datetime;
-    }
-
     public static String getFormattedTime(Date datetime) {
         return (String) DateFormat.format(Constants.TIME_FORMAT, datetime);
-    }
-
-    public static String getFormattedTime(String datetime) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DB_DATETIME_FORMAT);
-            return getFormattedTime(sdf.parse(datetime));
-        } catch (ParseException ex) {
-        }
-        return datetime;
     }
 
     public static boolean isLocationServiceDisabled(Context context) {
@@ -286,53 +271,12 @@ public class Utils {
         return true;
     }
 
-    public static Date getNextDateByAddingHours(int hoursInterval){
+    public static Date getNextDateByAddingHours(int hoursInterval) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR, hoursInterval);
         Date date = calendar.getTime();
         return date;
-    }
-
-    public static String convertDateToAppSpecificFormat(Date inputDate) {
-
-        //SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
-        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ") {
-            @Override
-            public StringBuffer format(Date date, StringBuffer toAppendTo, java.text.FieldPosition pos) {
-                StringBuffer toFix = super.format(date, toAppendTo, pos);
-                return toFix.insert(toFix.length()-2, ':');
-            };
-        };
-
-        try {
-            String datetime = inputDateFormat.format(inputDate);
-            if (datetime != null) {
-                return datetime;
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static String convertTimestampToDateInAppSpecificFormat(long timeStamp) {
-
-        try {
-
-            Date inputdDate = new Date(timeStamp);
-            SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String datetime = inputDateFormat.format(inputdDate);
-            if (datetime != null) {
-                return datetime;
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
     }
 
 }

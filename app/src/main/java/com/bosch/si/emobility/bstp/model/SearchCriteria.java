@@ -2,6 +2,7 @@ package com.bosch.si.emobility.bstp.model;
 
 import com.bosch.si.emobility.bstp.core.Constants;
 import com.bosch.si.emobility.bstp.core.Model;
+import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.service.SearchService;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -106,13 +107,13 @@ public class SearchCriteria extends Model {
     private SearchService fillToSearchService(SearchService service) {
 
         service.direction = direction;
-        service.endTime = endTime;
+        service.endTime = Utils.getDbFormattedDatetime(endTime);
         service.highway = highway;
         service.latitude = latitude;
         service.locationName = locationName;
         service.longitude = longitude;
         service.searchString = searchString;
-        service.startTime = startTime;
+        service.startTime = Utils.getDbFormattedDatetime(startTime);
         service.radius = radius;
         return service;
     }

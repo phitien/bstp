@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.core.Component;
+import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.model.Driver;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.Truck;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by SSY1SGP on 21/1/16.
  */
-public class ConfirmReservationComponent extends Component{
+public class ConfirmReservationComponent extends Component {
 
     private ImageView parkingIcon;
     private TextView parkingLocationName;
@@ -79,7 +80,7 @@ public class ConfirmReservationComponent extends Component{
         this.fromDateTime = fromDateTime;
     }
 
-    public String getSelectedTruck(){
+    public String getSelectedTruck() {
         return truckRegNo.getSelectedItem().toString();
     }
 
@@ -102,7 +103,7 @@ public class ConfirmReservationComponent extends Component{
         truckRegNo = (Spinner) this.activity.findViewById(R.id.spinnerTruckRegNo);
     }
 
-    public void populateData(){
+    public void populateData() {
 
         if (parkingLocation != null) {
             parkingLocationName.setText(parkingLocation.getLocationTitle());
@@ -110,17 +111,17 @@ public class ConfirmReservationComponent extends Component{
         }
 
         if (fromDateTime != null)
-            fromDate.setText(fromDateTime);
+            fromDate.setText(Utils.getFormattedDatetime(fromDateTime));
 
         if (toDateTime != null)
-            toDate.setText(toDateTime);
+            toDate.setText(Utils.getFormattedDatetime(toDateTime));
 
         if (driver != null) {
 
             driverName.setText(driver.getDriverName());
 
             List<String> allTrucks = driver.getAssociatedTrucks();
-            if (allTrucks.size() > 0){
+            if (allTrucks.size() > 0) {
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this.activity, android.R.layout.simple_spinner_item, allTrucks);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 truckRegNo.setAdapter(dataAdapter);
@@ -129,11 +130,11 @@ public class ConfirmReservationComponent extends Component{
 
     }
 
-    public void onCancelConfirmReserveButtonClicked(View view){
+    public void onCancelConfirmReserveButtonClicked(View view) {
 
     }
 
-    public void onConfirmReserveButtonClicked(View view){
+    public void onConfirmReserveButtonClicked(View view) {
 
     }
 }

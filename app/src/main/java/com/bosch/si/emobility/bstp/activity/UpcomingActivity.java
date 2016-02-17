@@ -77,8 +77,8 @@ public class UpcomingActivity extends Activity {
         Date fromDate = Utils.getNextDateByAddingHours(0);
         Date toDate = Utils.getNextDateByAddingHours(24 * 365);
 
-        service.fromDate = Utils.convertDateToAppSpecificFormat(fromDate);
-        service.toDate = Utils.convertDateToAppSpecificFormat(toDate);
+        service.fromDate = Utils.getDbFormattedDatetime(fromDate);
+        service.toDate = Utils.getDbFormattedDatetime(toDate);
         service.searchTerm = "";//TODO to clarify requirements
 
         service.executeAsync(new ServiceCallback() {

@@ -19,6 +19,8 @@ import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.gson.Gson;
 
+import java.util.Date;
+
 /**
  * Created by SSY1SGP on 26/1/16.
  */
@@ -120,8 +122,8 @@ public class ConfirmReservationDetailsActivity extends Activity {
         reserveParkingService.driverId = driver.getDriverId();
         reserveParkingService.parkingId = parkingLocation.getParkingId();
         reserveParkingService.additionalInfo = getString(R.string.bstp_app);
-        reserveParkingService.startTime = fromDateTime;
-        reserveParkingService.endTime = toDateTime;
+        reserveParkingService.startTime = Utils.getDbFormattedDatetime(fromDateTime);
+        reserveParkingService.endTime = Utils.getDbFormattedDatetime(toDateTime);
         reserveParkingService.vehicleId = confirmReservationComponent.getSelectedTruck();
         reserveParkingService.paymentMode = Constants.PAYMENT_MODE_CREDIT;
         reserveParkingService.parkingLocationName = parkingLocation.getLocationTitle();

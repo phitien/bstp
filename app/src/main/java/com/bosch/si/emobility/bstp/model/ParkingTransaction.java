@@ -5,6 +5,8 @@ import android.util.Log;
 import com.bosch.si.emobility.bstp.core.Model;
 import com.bosch.si.emobility.bstp.core.Utils;
 
+import java.util.Date;
+
 /**
  * Created by sgp0458 on 18/12/15.
  */
@@ -129,32 +131,10 @@ public class ParkingTransaction extends Model {
     }
 
     public String getFormattedStartTime() {
-
-        try {
-
-            long timeStamp = Long.parseLong(startTime);
-            String formattedDate = Utils.convertTimestampToDateInAppSpecificFormat(timeStamp);
-            if (formattedDate != null) {
-                return formattedDate;
-            }
-        } catch (Exception e) {
-            Log.d("BSTP_UTILS","getFormattedStartTime execption "+e.getLocalizedMessage());
-        }
-        return null;
+        return Utils.getFormattedDatetime(new Date(Long.parseLong(startTime)));
     }
 
     public String getFormattedEndTime() {
-
-        try {
-
-            long timeStamp = Long.parseLong(endTime);
-            String formattedDate = Utils.convertTimestampToDateInAppSpecificFormat(timeStamp);
-            if (formattedDate != null) {
-                return formattedDate;
-            }
-        } catch (Exception e) {
-            Log.d("BSTP_UTILS","getFormattedEndTime execption "+e.getLocalizedMessage());
-        }
-        return null;
+        return Utils.getFormattedDatetime(new Date(Long.parseLong(endTime)));
     }
 }

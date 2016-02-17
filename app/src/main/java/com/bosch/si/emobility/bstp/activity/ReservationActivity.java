@@ -73,7 +73,7 @@ public class ReservationActivity extends Activity {
 
         try {
 
-            Utils.Indicator.setDialogTitle("Please wait...");
+            Utils.Indicator.setDialogTitle(getString(R.string.please_wait));
             Utils.Indicator.show();
 
             CancelParkingReservationService cancelParkingReservationService = new CancelParkingReservationService();
@@ -94,19 +94,17 @@ public class ReservationActivity extends Activity {
                     super.onPostExecute(service);
                     Utils.Indicator.hide();
 
-                    if (service.getResponseCode() == 200){
-                        Utils.Notifier.notify("Successfully to canceled the reservation");
+                    if (service.getResponseCode() == 200) {
+                        Utils.Notifier.notify(getString(R.string.reservation_canceled_successfully));
                         setResult(Activity.RESULT_OK);
                         finish();
-                    }
-                    else {
-                        Utils.Notifier.notify("Failed to cancel the reservation");
+                    } else {
+                        Utils.Notifier.notify(getString(R.string.reservation_canceled_unsuccessfully));
                     }
                 }
             });
-        }
-        catch (Exception e) {
-            Utils.Notifier.notify("Failed to cancel the reservation");
+        } catch (Exception e) {
+            Utils.Notifier.notify(getString(R.string.reservation_canceled_unsuccessfully));
         }
     }
 }

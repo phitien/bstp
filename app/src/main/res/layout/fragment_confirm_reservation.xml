@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@drawable/gradient_background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/parkingLocationInfoMainContainer"
@@ -11,43 +11,43 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-    <ImageView
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:id="@+id/parkingLocationIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/booking_green" />
-
-    <LinearLayout
-        android:id="@+id/parkingLocationInfoContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textViewReserveParkingName"
-            style="@style/App_TextViewStyle"
+        <ImageView
+            android:id="@+id/parkingLocationIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:singleLine="true"
-            android:text="---" />
+            android:src="@drawable/booking_green" />
 
-        <TextView
-            android:id="@+id/textViewReserveParkingAddress"
-            style="@style/App_TextViewStyle"
+        <LinearLayout
+            android:id="@+id/parkingLocationInfoContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:singleLine="true"
-            android:text="---" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textViewReserveParkingName"
+                style="@style/App_TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:singleLine="true"
+                android:text="-" />
+
+            <TextView
+                android:id="@+id/textViewReserveParkingAddress"
+                style="@style/App_TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:singleLine="true"
+                android:text="-" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -57,26 +57,26 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/parkingLocationInfoMainContainer">
 
-    <TextView
-        android:id="@+id/textViewFrom"
-        style="@style/App_TextViewStyle"
-        android:layout_width="@dimen/date_label_width"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/from" />
+        <TextView
+            android:id="@+id/textViewFrom"
+            style="@style/App_TextViewStyle"
+            android:layout_width="@dimen/date_label_width"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/from" />
 
-    <TextView
-        android:id="@+id/textViewReserveFromDateTime"
-        style="@style/App_TextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextSearch"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_toRightOf="@id/textViewFrom"
-        android:singleLine="true"
-        android:text="2015-12-24 00:00:00"
-        android:textAlignment="center" />
+        <TextView
+            android:id="@+id/textViewReserveFromDateTime"
+            style="@style/App_TextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextSearch"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_toRightOf="@id/textViewFrom"
+            android:singleLine="true"
+            android:text=""
+            android:textAlignment="center" />
 
     </LinearLayout>
 
@@ -86,27 +86,27 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/fromDateContainer">
 
-    <TextView
-        android:id="@+id/textViewTo"
-        style="@style/App_TextViewStyle"
-        android:layout_width="@dimen/date_label_width"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewFrom"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/to" />
+        <TextView
+            android:id="@+id/textViewTo"
+            style="@style/App_TextViewStyle"
+            android:layout_width="@dimen/date_label_width"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewFrom"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/to" />
 
-    <TextView
-        android:id="@+id/textViewReserveToDateTime"
-        style="@style/App_TextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewFrom"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_toRightOf="@id/textViewTo"
-        android:singleLine="true"
-        android:text="2015-12-25 00:00:00"
-        android:textAlignment="center" />
+        <TextView
+            android:id="@+id/textViewReserveToDateTime"
+            style="@style/App_TextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewFrom"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_toRightOf="@id/textViewTo"
+            android:singleLine="true"
+            android:text=""
+            android:textAlignment="center" />
 
     </LinearLayout>
 
@@ -114,26 +114,26 @@
         android:id="@+id/driverInfoContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_below="@id/toDateContainer">
+        android:layout_below="@id/toDateContainer"
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/textViewDriverNameLabel"
             style="@style/App_TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Driver"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="@string/Driver" />
 
         <TextView
             android:id="@+id/textViewReserveDriverName"
             style="@style/App_TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/textViewDriverNameLabel"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@+id/textViewDriverNameLabel"
             android:singleLine="true"
-            android:text="---"/>
+            android:text="-" />
 
     </LinearLayout>
 
@@ -142,24 +142,24 @@
         android:id="@+id/truckInfoContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_below="@id/driverInfoContainer">
+        android:layout_below="@id/driverInfoContainer"
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/textViewTruckRegNoLabel"
             style="@style/App_TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Truck"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="@string/Truck" />
 
         <Spinner
             android:id="@+id/spinnerTruckRegNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="0dp"
-            android:layout_toRightOf="@id/textViewTruckRegNoLabel"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin">
+            android:layout_toRightOf="@id/textViewTruckRegNoLabel">
 
         </Spinner>
 
@@ -176,8 +176,8 @@
             android:id="@+id/cancelConfirmReservation"
             style="@style/App_ButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:onClick="onCancelConfirmReserveButtonClicked"
             android:text="@string/Cancel" />
 
@@ -185,11 +185,11 @@
             android:id="@+id/confirmReservation"
             style="@style/App_ButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_toRightOf="@id/cancelConfirmReservation"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_toRightOf="@id/cancelConfirmReservation"
             android:onClick="onConfirmReserveButtonClicked"
             android:text="@string/Confirm" />
 

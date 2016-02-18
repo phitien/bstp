@@ -169,18 +169,8 @@ public class MapComponent extends Component {
     }
 
     private void drawParkingLocationMarker(ParkingLocation parkingLocation) {
-        String imageName = "icon_parking_space_";
-        try {
-            float usedPercentage = 1 - (parkingLocation.getAvailabilityCount() / parkingLocation.getTotalCapacityCount());
-            if (usedPercentage < 0.7)
-                imageName += "green";
-            else if (usedPercentage == 0)
-                imageName += "red";
-            else
-                imageName += "yellow";
-        } catch (Exception e) {
-            imageName += "grey";
-        }
+        String imageName = Utils.getParkingIconName(parkingLocation);
+
         LatLng latLng = new LatLng(parkingLocation.getLatitude(), parkingLocation.getLongitude());
         markers.put(parkingLocation.getParkingId(), map.addMarker(new MarkerOptions()
                 .position(latLng)
@@ -353,7 +343,7 @@ public class MapComponent extends Component {
                                             List<ParkingLocation> locations = gson.fromJson(responseString, new TypeToken<ArrayList<ParkingLocation>>() {
                                             }.getType());
 
-                                            if (locations != null && locations.size()> 0){
+                                            if (locations != null && locations.size() > 0) {
                                                 for (ParkingLocation parkingLocation : locations) {
                                                     parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
                                                 }
@@ -377,7 +367,7 @@ public class MapComponent extends Component {
                                 @Override
                                 public void failure(IService service) {
                                     service.getResponseCode();
-                                    Utils.Notifier.notify("Unable to complete the search now! "+ " response code "+ service.getResponseCode());
+                                    Utils.Notifier.notify("Unable to complete the search now! " + " response code " + service.getResponseCode());
                                 }
                             });
                 }

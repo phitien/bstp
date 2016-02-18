@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by sgp0458 on 18/12/15.
  */
-public class ParkingLocation extends Model implements Serializable{
+public class ParkingLocation extends Model implements Serializable {
 
     private String parkingId;
     private double latitude;
@@ -152,11 +152,19 @@ public class ParkingLocation extends Model implements Serializable{
         }
     }
 
-    public List<SecurityDetails> getMappedSecurityDetails(){
+    public List<SecurityDetails> getMappedSecurityDetails() {
 
-        if (mappedSecurityDetails == null){
+        if (mappedSecurityDetails == null) {
             mappedSecurityDetails = SecurityDetailsMapper.mapSecurityDetails(securityDetails);
         }
         return mappedSecurityDetails;
+    }
+
+    public boolean hasFacility(String facilityName) {
+        for (Facility facility : facilities) {
+            if (facility.getFacilityName().equals(facilityName))
+                return true;
+        }
+        return false;
     }
 }

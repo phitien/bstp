@@ -106,6 +106,10 @@ public class ConfirmReservationComponent extends Component {
     public void populateData() {
 
         if (parkingLocation != null) {
+
+            String imageName = Utils.getParkingIconName(parkingLocation);
+            parkingIcon.setImageResource(Utils.getImage(imageName));
+
             parkingLocationName.setText(parkingLocation.getLocationTitle());
             parkingLocationAddress.setText(parkingLocation.getAddress());
         }

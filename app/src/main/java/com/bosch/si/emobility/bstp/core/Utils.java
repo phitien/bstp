@@ -12,6 +12,7 @@ import android.text.format.DateFormat;
 import android.widget.Toast;
 
 import com.bosch.si.emobility.bstp.R;
+import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -277,6 +278,38 @@ public class Utils {
         calendar.add(Calendar.HOUR, hoursInterval);
         Date date = calendar.getTime();
         return date;
+    }
+
+    public static String getParkingIconName(ParkingLocation parkingLocation) {
+        String prefix = "icon_parking";
+
+        String bookable = "bookable1";
+
+        String color = "blue";
+        try {
+            float usedPercentage = 1 - (parkingLocation.getAvailabilityCount() / parkingLocation.getTotalCapacityCount());
+            if (usedPercentage < 0.7)
+                color = "green";
+            else if (usedPercentage == 0)
+                color = "red";
+            else
+                color = "orange";
+        } catch (Exception e) {
+            bookable = "bookable0";
+        }
+
+        String type = "";
+        if (parkingLocation.getParkingType().equals("PARKING_GARAGE")) {
+            type = "garage";
+        } else {
+            if (parkingLocation.hasFacility(Constants.TOILET_FACILITY_NAME)) {
+                type = "wc1";
+            } else {
+                type = "wc0";
+            }
+        }
+
+        return prefix + "_" + bookable + "_" + color + "_" + type;
     }
 
 }

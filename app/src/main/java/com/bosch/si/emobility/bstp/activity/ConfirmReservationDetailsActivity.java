@@ -19,8 +19,6 @@ import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.gson.Gson;
 
-import java.util.Date;
-
 /**
  * Created by SSY1SGP on 26/1/16.
  */
@@ -28,8 +26,8 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
     ConfirmReservationComponent confirmReservationComponent;
 
-    String fromDateTime;
-    String toDateTime;
+    String startTime;
+    String toTime;
 
     ParkingLocation parkingLocation;
     Driver driver;
@@ -44,20 +42,20 @@ public class ConfirmReservationDetailsActivity extends Activity {
     @Override
     protected void setup() {
         super.setup();
-
-        Intent intent = getIntent();
-
+        
         headerComponent.setDisableSearch(true);
 
-        fromDateTime = intent.getStringExtra(Constants.FROM_DATE_TIME_INTENT_DATA_KEY);
-        toDateTime = intent.getStringExtra(Constants.TO_DATE_TIME_INTENT_DATA_KEY);
-        parkingLocation = (ParkingLocation) intent.getSerializableExtra(Constants.PARKING_LOCATION_INTENT_DATA_KEY);
+        DataManager dataManager = DataManager.getInstance();
+
+        startTime = dataManager.getStartTime();
+        toTime = dataManager.getEndTime();
+        parkingLocation = dataManager.getCurrentParkingLocation();
 
         confirmReservationComponent = new ConfirmReservationComponent(this);
 
         confirmReservationComponent.setParkingLocation(parkingLocation);
-        confirmReservationComponent.setFromDateTime(fromDateTime);
-        confirmReservationComponent.setToDateTime(toDateTime);
+        confirmReservationComponent.setFromDateTime(startTime);
+        confirmReservationComponent.setToDateTime(toTime);
 
         driver = DataManager.getInstance().getCurrentDriver();
 
@@ -122,8 +120,8 @@ public class ConfirmReservationDetailsActivity extends Activity {
         reserveParkingService.driverId = driver.getDriverId();
         reserveParkingService.parkingId = parkingLocation.getParkingId();
         reserveParkingService.additionalInfo = getString(R.string.bstp_app);
-        reserveParkingService.startTime = Utils.getDbFormattedDatetime(fromDateTime);
-        reserveParkingService.endTime = Utils.getDbFormattedDatetime(toDateTime);
+        reserveParkingService.startTime = Utils.getDbFormattedDatetime(startTime);
+        reserveParkingService.endTime = Utils.getDbFormattedDatetime(toTime);
         reserveParkingService.vehicleId = confirmReservationComponent.getSelectedTruck();
         reserveParkingService.paymentMode = Constants.PAYMENT_MODE_CREDIT;
         reserveParkingService.parkingLocationName = parkingLocation.getLocationTitle();

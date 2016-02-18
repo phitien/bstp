@@ -1,5 +1,6 @@
 package com.bosch.si.emobility.bstp.manager;
 
+import com.bosch.si.emobility.bstp.core.Constants;
 import com.bosch.si.emobility.bstp.model.Driver;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.ParkingTransaction;
@@ -24,10 +25,14 @@ public class DataManager {
     }
 
     LatLng searchLatLng = null;
+
     ParkingLocation currentParkingLocation = null;
+    String endTime;
+    String startTime;
+
     List<ParkingTransaction> transactions = new ArrayList<>();
     ParkingTransaction currentTransaction;
-    private Map<String, ParkingLocation> parkingLocations = new HashMap<>();
+    Map<String, ParkingLocation> parkingLocations = new HashMap<>();
 
     boolean justCanceledReservations = false;
 
@@ -39,6 +44,22 @@ public class DataManager {
 
     public void setCurrentParkingLocation(ParkingLocation currentParkingLocation) {
         this.currentParkingLocation = currentParkingLocation;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
     public LatLng getSearchLatLng() {

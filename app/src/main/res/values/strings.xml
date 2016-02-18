@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false"><![CDATA[Book n Park]]></string>
+    <string name="app_name" translatable="false"><![CDATA[BSTP]]></string>
     <string name="action_settings" translatable="false">Settings</string>
     <string name="please_wait" translatable="false">Please wait...</string>
     <string name="search" translatable="false">Search</string>
@@ -18,7 +18,7 @@
     <string name="home" translatable="false">Home</string>
     <string name="upcoming" translatable="false">Upcoming</string>
     <string name="logout" translatable="false">Logout</string>
-    <string name="about" translatable="false"><![CDATA[About Book n Park]]></string>
+    <string name="about" translatable="false"><![CDATA[About]]></string>
 
     <string name="autocomplete_hint" translatable="false">Enter place name or address</string>
     <string name="your_location" translatable="false">Your location</string>
@@ -34,7 +34,7 @@
 
     <string name="title_activity_reservation" translatable="false">Reservation</string>
     <string name="route_to_location" translatable="false">Route to location</string>
-    <string name="title_activity_about" translatable="false"><![CDATA[About Book n Park]]></string>
+    <string name="title_activity_about" translatable="false"><![CDATA[About]]></string>
     <string name="cancel_reservation" translatable="false">Cancel reservation</string>
     <string name="title_confirm_reservation_activity_about" translatable="false">Confirm</string>
     <string name="start_time" translatable="false">Start Time</string>

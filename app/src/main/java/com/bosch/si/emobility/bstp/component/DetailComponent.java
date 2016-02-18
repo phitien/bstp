@@ -2,6 +2,7 @@ package com.bosch.si.emobility.bstp.component;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -11,8 +12,10 @@ import com.bosch.si.emobility.bstp.component.ux.DetailLayout;
 import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.core.Component;
 import com.bosch.si.emobility.bstp.core.FacilityViewManager;
+import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 /**
  * Created by sgp0458 on 16/12/15.
@@ -20,6 +23,8 @@ import com.bosch.si.emobility.bstp.model.ParkingLocation;
 public class DetailComponent extends Component {
 
     private ParkingLocation parkingLocation;
+
+    private ImageView imageViewParkingIcon;
     private TextView textViewParkingName;
     private TextView textViewParkingAddress;
     private TextView textViewAvailability;
@@ -54,6 +59,9 @@ public class DetailComponent extends Component {
     private void populateData() {
         if (this.parkingLocation != null) {
 
+            String imageName = Utils.getParkingIconName(parkingLocation);
+            imageViewParkingIcon.setImageResource(Utils.getImage(imageName));
+
             textViewParkingName.setText(parkingLocation.getLocationTitle());
             textViewParkingAddress.setText(parkingLocation.getAddress());
             textViewAvailability.setText(String.format("%d/%d",
@@ -74,6 +82,7 @@ public class DetailComponent extends Component {
         super.setActivity(activity);
         layout = (ViewGroup) this.activity.findViewById(R.id.detailLayout);
 
+        imageViewParkingIcon = (ImageView) this.activity.findViewById(R.id.imageViewParkingIcon);
         textViewParkingName = (TextView) this.activity.findViewById(R.id.textViewParkingName);
         textViewParkingAddress = (TextView) this.activity.findViewById(R.id.textViewParkingAddress);
         textViewAvailability = (TextView) this.activity.findViewById(R.id.textViewAvailability);

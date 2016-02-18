@@ -3,6 +3,7 @@ package com.bosch.si.emobility.bstp.activity;
 import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
@@ -59,6 +60,7 @@ public class MapsActivity extends Activity {
 
     @Override
     protected void onResume() {
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         super.onResume();
         checkAuthentication();
     }

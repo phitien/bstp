@@ -269,10 +269,10 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     }
 
     protected void hideKeyboard() {
-        View v = getWindow().getCurrentFocus();
-        if (v != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        try {
+            InputMethodManager im = (InputMethodManager) this.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            im.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        } catch (Exception e) {
         }
     }
 

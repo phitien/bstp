@@ -60,7 +60,6 @@ public class MapsActivity extends Activity {
 
     @Override
     protected void onResume() {
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         super.onResume();
         checkAuthentication();
     }

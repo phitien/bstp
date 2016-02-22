@@ -52,8 +52,8 @@ public class MapComponent extends Component {
     private LatLng searchingLatLng;
     private Marker searchingMarker;
 
-    private Map<String, Marker> markers = new HashMap<>();
-    private Map<String, ParkingLocation> parkingLocations = new HashMap<>();
+    private ArrayList<Marker> markers = new ArrayList<>();
+    private ArrayList<ParkingLocation> parkingLocations = new ArrayList<>();
 
     private LatLng prevLatLng = null;
     private LatLng currLatLng = null;
@@ -159,12 +159,13 @@ public class MapComponent extends Component {
         map.clear();
         searchingMarker = null;
         myLocationMarker = null;
-        markers = new HashMap<>();
+        markers = new ArrayList<>();
+        parkingLocations = new ArrayList<>();
     }
 
     private void drawLocationMarkers() {
-        for (Map.Entry<String, ParkingLocation> entry : parkingLocations.entrySet()) {
-            drawParkingLocationMarker(entry.getValue());
+        for (ParkingLocation parkingLocation : parkingLocations) {
+            drawParkingLocationMarker(parkingLocation);
         }
     }
 
@@ -172,7 +173,7 @@ public class MapComponent extends Component {
         String imageName = Utils.getParkingIconName(parkingLocation);
 
         LatLng latLng = new LatLng(parkingLocation.getLatitude(), parkingLocation.getLongitude());
-        markers.put(parkingLocation.getParkingId(), map.addMarker(new MarkerOptions()
+        markers.add(map.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title(parkingLocation.getLocationTitle())
                 .icon(BitmapDescriptorFactory.fromResource(Utils.getImage(imageName)))));
@@ -254,58 +255,22 @@ public class MapComponent extends Component {
         }
     }
 
+    private void openLocationDetail(final Marker marker) {
+        ParkingLocation parkingLocation = getParkingLocationFromMarker(marker);
+        if (parkingLocation != null) {
+            ((MapsActivity) activity).openLocationDetail(parkingLocation);
+            return;
+        }
+    }
 
-    private boolean openLocationDetail(Marker marker) {
-        for (Map.Entry<String, Marker> entry : markers.entrySet()) {
-            if (marker.equals(entry.getValue())) {
-                final String parkingId = entry.getKey();
-                ParkingLocation parkingLocation = parkingLocations.get(parkingId);
-                if (parkingLocation != null)
-                    ((MapsActivity) activity).openLocationDetail(parkingLocation);
-                //TODO: Parking location info service is broken so getting data from cache
-                /*ParkingLocationInfoService service = new ParkingLocationInfoService();
-                service.parkingid = parkingId;
-                service.executeAsync(new ServiceCallback() {
-                    @Override
-                    public void success(final IService service) {
-                        AsyncTask<Void, Void, ParkingLocation> task = new AsyncTask<Void, Void, ParkingLocation>() {
-                            @Override
-                            protected ParkingLocation doInBackground(Void... params) {
-                                try {
-                                    ParkingLocation parkingLocation = parkingLocations.get(parkingId);
-                                    parkingLocation.merge((new GsonBuilder().create()).fromJson(service.getResponseString(), ParkingLocation.class));
-                                    return parkingLocation;
-                                } catch (Exception e) {
-
-                                }
-                                return null;
-                            }
-
-                            @Override
-                            protected void onPostExecute(ParkingLocation parkingLocation) {
-                                if (parkingLocation != null)
-                                    ((MapsActivity) activity).openLocationDetail(parkingLocation);
-                            }
-                        };
-
-                        task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-                    }
-
-                    @Override
-                    public void failure(IService service) {
-                        service.getResponseCode();
-                    }
-                });*/
-                return true;
+    private ParkingLocation getParkingLocationFromMarker(Marker marker) {
+        List<ParkingLocation> parkingLocations = DataManager.getInstance().getParkingLocations();
+        for (ParkingLocation parkingLocation : parkingLocations) {
+            if (marker.getPosition().equals(new LatLng(parkingLocation.getLatitude(), parkingLocation.getLongitude()))) {
+                return parkingLocation;
             }
         }
-
-        if (marker.equals(myLocationMarker)) {
-            //do nothing
-        } else if (marker.equals(searchingMarker)) {
-            //do nothing
-        }
-        return false;
+        return null;
     }
 
     public void refresh() {
@@ -332,31 +297,29 @@ public class MapComponent extends Component {
                             .executeAsync(new ServiceCallback() {
                                 @Override
                                 public void success(IService service) {
-                                    parkingLocations = new HashMap<>();
 
                                     final String responseString = service.getResponseString();
 
                                     AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
                                         @Override
+                                        protected void onPreExecute() {
+                                            clearMarkers();
+                                            drawMyLocationMarker();
+                                            drawMySearchingMarker(searchingLatLng);
+                                        }
+
+                                        @Override
                                         protected Void doInBackground(Void... params) {
                                             Gson gson = new Gson();
-                                            List<ParkingLocation> locations = gson.fromJson(responseString, new TypeToken<ArrayList<ParkingLocation>>() {
+                                            parkingLocations = gson.fromJson(responseString, new TypeToken<ArrayList<ParkingLocation>>() {
                                             }.getType());
 
-                                            if (locations != null && locations.size() > 0) {
-                                                for (ParkingLocation parkingLocation : locations) {
-                                                    parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
-                                                }
-                                                DataManager.getInstance().setParkingLocations(parkingLocations);
-                                            }
+                                            DataManager.getInstance().setParkingLocations(parkingLocations);
                                             return null;
                                         }
 
                                         @Override
                                         protected void onPostExecute(Void aVoid) {
-                                            clearMarkers();
-                                            drawMyLocationMarker();
-                                            drawMySearchingMarker(searchingLatLng);
                                             drawLocationMarkers();
                                         }
                                     };
@@ -367,7 +330,7 @@ public class MapComponent extends Component {
                                 @Override
                                 public void failure(IService service) {
                                     service.getResponseCode();
-                                    Utils.Notifier.notify("Unable to complete the search now! " + " response code " + service.getResponseCode());
+                                    Utils.Notifier.notify(activity.getString(R.string.unable_to_complete_the_search));
                                 }
                             });
                 }

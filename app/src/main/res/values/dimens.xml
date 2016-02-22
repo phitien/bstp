@@ -13,7 +13,7 @@
     <dimen name="editText_textSize">14sp</dimen>
     <dimen name="button_textSize">14sp</dimen>
     <dimen name="log_width">120dp</dimen>
-    <dimen name="log_height">78dp</dimen>
+    <dimen name="log_height">77dp</dimen>
     <dimen name="menu_item_text_size">14dp</dimen>
     <dimen name="detail_view_header_height">150dp</dimen>
     <dimen name="detail_view_image_icon_width">35dp</dimen>

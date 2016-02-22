@@ -4,8 +4,10 @@
     <string name="please_wait" translatable="false">Please wait...</string>
     <string name="search" translatable="false">Search</string>
     <string name="default_tenant" translatable="false">DHL</string>
-    <string name="default_username" translatable="false">Juergen-Moeller</string>
-    <string name="default_password" translatable="false">randomValue12</string>
+    <string name="default_username" translatable="false"></string>
+    <string name="default_password" translatable="false"></string>
+    <!--<string name="default_username" translatable="false">Juergen-Moeller</string>-->
+    <!--<string name="default_password" translatable="false">randomValue12</string>-->
     <string name="save_credentials" translatable="false">Save credentials</string>
     <string name="action_login" translatable="false">Login</string>
     <string name="login_failed" translatable="false">Could not login to system</string>

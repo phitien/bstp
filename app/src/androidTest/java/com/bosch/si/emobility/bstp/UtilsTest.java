@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 
 import junit.framework.TestCase;
 
+import java.util.Date;
+
 /**
  * Created by SSY1SGP on 26/1/16.
  */
@@ -39,7 +41,7 @@ public class UtilsTest extends TestCase{
 
             String timestampAsString = "1454300170039";
             long timestamp = Long.parseLong(timestampAsString);
-            String formattedString = Utils.convertTimestampToDateInAppSpecificFormat(timestamp);
+            String formattedString = Utils.getDbFormattedDatetime(new Date(timestamp));
             assertNotNull(formattedString);
             Log.d("BSTP_TEST", "formattedString " + formattedString);
         }

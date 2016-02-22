@@ -61,4 +61,9 @@ public class Truck extends Model {
     public void setVehicleInfo(String vehicleInfo) {
         this.vehicleInfo = vehicleInfo;
     }
+
+    @Override
+    public String toString() {
+        return vehicleRegNumber;
+    }
 }

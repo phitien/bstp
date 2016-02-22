@@ -81,7 +81,8 @@ public class ConfirmReservationComponent extends Component {
     }
 
     public String getSelectedTruck() {
-        return truckRegNo.getSelectedItem().toString();
+        Truck truck = (Truck) truckRegNo.getSelectedItem();
+        return truck.getVehicleId();
     }
 
     public ConfirmReservationComponent(Activity activity) {
@@ -124,9 +125,9 @@ public class ConfirmReservationComponent extends Component {
 
             driverName.setText(driver.getDriverName());
 
-            List<String> allTrucks = driver.getAssociatedTrucks();
+            List<Truck> allTrucks = driver.getTrucks();
             if (allTrucks.size() > 0) {
-                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this.activity, android.R.layout.simple_spinner_item, allTrucks);
+                ArrayAdapter<Truck> dataAdapter = new ArrayAdapter<>(this.activity, android.R.layout.simple_spinner_item, allTrucks);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 truckRegNo.setAdapter(dataAdapter);
             }

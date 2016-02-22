@@ -235,7 +235,12 @@ public class Utils {
     }
 
     public static String getDbFormattedDatetime(String datetime) {
-        return getDbFormattedDatetime(new Date(datetime));
+        try {
+            return getDbFormattedDatetime(new Date(datetime));
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
     public static String getFormattedDatetime(Date datetime) {
@@ -243,7 +248,12 @@ public class Utils {
     }
 
     public static String getFormattedDatetime(String datetime) {
-        return getFormattedDatetime(new Date(datetime));
+        try {
+            return getFormattedDatetime(new Date(datetime));
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
     public static String getFormattedDate(Date datetime) {

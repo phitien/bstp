@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Created by SSY1SGP on 26/1/16.
  */
-public class UtilsTest extends TestCase{
+public class UtilsTest extends TestCase {
 
     @SmallTest
     public void testDriverModel() {
@@ -25,8 +25,7 @@ public class UtilsTest extends TestCase{
             Driver driver = gson.fromJson(jsonString, Driver.class);
             assert (driver != null);
             Log.d("BSTP_TEST", "user context id" + driver.toString());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.d("BSTP_TEST", "user context id" + e.getLocalizedMessage());
         }
         Log.d("BSTP_TEST", "user context id");
@@ -34,7 +33,7 @@ public class UtilsTest extends TestCase{
     }
 
     @SmallTest
-    public void testTimestampToDateConversion() {
+    public void testTimestampToDateConversion() throws RuntimeException{
 
         try {
             Log.d("BSTP_TEST", "testTimestampToDateConversion");
@@ -43,10 +42,18 @@ public class UtilsTest extends TestCase{
             long timestamp = Long.parseLong(timestampAsString);
             String formattedString = Utils.getDbFormattedDatetime(new Date(timestamp));
             assertNotNull(formattedString);
+
+            String nullValue = null;
+            formattedString = Utils.getDbFormattedDatetime(nullValue);
+            assertEquals(formattedString, "");
+
+            nullValue = "asdasdasd";
+            formattedString = Utils.getDbFormattedDatetime(nullValue);
+            assertEquals(formattedString, "");
+
             Log.d("BSTP_TEST", "formattedString " + formattedString);
-        }
-        catch (Exception e) {
-            Log.d("BSTP_TEST", "testTimestampToDateConversion  "+ e.getLocalizedMessage());
+        } catch (Exception e) {
+            Log.d("BSTP_TEST", "testTimestampToDateConversion  " + e.getLocalizedMessage());
         }
     }
 }

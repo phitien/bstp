@@ -33,7 +33,7 @@ public class UtilsTest extends TestCase {
     }
 
     @SmallTest
-    public void testTimestampToDateConversion() throws RuntimeException{
+    public void testTimestampToDateConversion() {// throws RuntimeException{
 
         try {
             Log.d("BSTP_TEST", "testTimestampToDateConversion");
@@ -45,11 +45,11 @@ public class UtilsTest extends TestCase {
 
             String nullValue = null;
             formattedString = Utils.getDbFormattedDatetime(nullValue);
-            assertEquals(formattedString, "");
+            assertNull(formattedString);
 
             nullValue = "asdasdasd";
             formattedString = Utils.getDbFormattedDatetime(nullValue);
-            assertEquals(formattedString, "");
+            assertNull(formattedString);
 
             Log.d("BSTP_TEST", "formattedString " + formattedString);
         } catch (Exception e) {

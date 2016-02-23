@@ -156,10 +156,8 @@ public class MapComponent extends Component {
     }
 
     private void clearMarkers() {
-        map.clear();
         searchingMarker = null;
         myLocationMarker = null;
-        markers = new ArrayList<>();
         parkingLocations = new ArrayList<>();
     }
 
@@ -170,13 +168,22 @@ public class MapComponent extends Component {
     }
 
     private void drawParkingLocationMarker(ParkingLocation parkingLocation) {
-        String imageName = Utils.getParkingIconName(parkingLocation);
-
         LatLng latLng = new LatLng(parkingLocation.getLatitude(), parkingLocation.getLongitude());
-        markers.add(map.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title(parkingLocation.getLocationTitle())
-                .icon(BitmapDescriptorFactory.fromResource(Utils.getImage(imageName)))));
+        if (!markerAdded(latLng)) {
+            String imageName = Utils.getParkingIconName(parkingLocation);
+            markers.add(map.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(parkingLocation.getLocationTitle())
+                    .icon(BitmapDescriptorFactory.fromResource(Utils.getImage(imageName)))));
+        }
+    }
+
+    private boolean markerAdded(LatLng latLng) {
+        for (Marker marker : markers) {
+            if (marker.getPosition().equals(latLng))
+                return true;
+        }
+        return false;
     }
 
     public LatLngBounds getCurrentLatLngBounds() {

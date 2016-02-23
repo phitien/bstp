@@ -40,7 +40,7 @@ public class UtilsTest extends TestCase {
         String timestampAsString = "1454300170039";
         String formattedString = Utils.getRestfulFormattedDatetime(new Date(Long.parseLong(timestampAsString)));
         assertNotNull(formattedString);
-        
+
         Log.d("BSTP_TEST", "formattedString " + formattedString);
     }
 }

@@ -1,7 +1,5 @@
 package com.bosch.si.emobility.bstp.model;
 
-import android.util.Log;
-
 import com.bosch.si.emobility.bstp.core.Model;
 import com.bosch.si.emobility.bstp.core.Utils;
 
@@ -131,10 +129,10 @@ public class ParkingTransaction extends Model {
     }
 
     public String getFormattedStartTime() {
-        return Utils.getFormattedDatetime(new Date(Long.parseLong(startTime)));
+        return Utils.getDisplayFormattedDatetime(new Date(Long.parseLong(startTime)));
     }
 
     public String getFormattedEndTime() {
-        return Utils.getFormattedDatetime(new Date(Long.parseLong(endTime)));
+        return Utils.getDisplayFormattedDatetime(new Date(Long.parseLong(endTime)));
     }
 }

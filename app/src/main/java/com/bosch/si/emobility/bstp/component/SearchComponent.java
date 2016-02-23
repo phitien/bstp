@@ -189,13 +189,13 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     }
 
     protected void updateComponent() {
-        textViewFromDate.setText(Utils.getFormattedDate(fromDate));
-        textViewFromTime.setText(Utils.getFormattedTime(fromDate));
+        textViewFromDate.setText(Utils.getDisplayFormattedDate(fromDate));
+        textViewFromTime.setText(Utils.getDisplayFormattedTime(fromDate));
 
-        textViewToDate.setText(Utils.getFormattedDate(toDate));
-        textViewToTime.setText(Utils.getFormattedTime(toDate));
+        textViewToDate.setText(Utils.getDisplayFormattedDate(toDate));
+        textViewToTime.setText(Utils.getDisplayFormattedTime(toDate));
 
-        searchCriteria.setStartTime(fromDate.toString()).setEndTime(toDate.toString());
+        searchCriteria.setStartTime(fromDate).setEndTime(toDate);
     }
 
     @Override

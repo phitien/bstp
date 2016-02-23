@@ -15,6 +15,7 @@ import com.bosch.si.emobility.bstp.model.Driver;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.Truck;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,14 +27,14 @@ public class ConfirmReservationComponent extends Component {
     private TextView parkingLocationName;
     private TextView parkingLocationAddress;
 
-    private TextView fromDate;
-    private TextView toDate;
+    private TextView fromDateTextView;
+    private TextView toDateTextView;
 
     private TextView driverName;
     private Spinner truckRegNo;
 
-    private String fromDateTime;
-    private String toDateTime;
+    private Date fromDate;
+    private Date toDate;
 
     private ParkingLocation parkingLocation;
     private Driver driver;
@@ -64,20 +65,20 @@ public class ConfirmReservationComponent extends Component {
         this.truck = truck;
     }
 
-    public String getToDateTime() {
-        return toDateTime;
+    public Date getToDate() {
+        return toDate;
     }
 
-    public void setToDateTime(String toDateTime) {
-        this.toDateTime = toDateTime;
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
     }
 
-    public String getFromDateTime() {
-        return fromDateTime;
+    public Date getFromDate() {
+        return fromDate;
     }
 
-    public void setFromDateTime(String fromDateTime) {
-        this.fromDateTime = fromDateTime;
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
     }
 
     public String getSelectedTruck() {
@@ -98,8 +99,8 @@ public class ConfirmReservationComponent extends Component {
         parkingIcon = (ImageView) this.activity.findViewById(R.id.parkingLocationIcon);
         parkingLocationName = (TextView) this.activity.findViewById(R.id.textViewReserveParkingName);
         parkingLocationAddress = (TextView) this.activity.findViewById(R.id.textViewReserveParkingAddress);
-        fromDate = (TextView) this.activity.findViewById(R.id.textViewReserveFromDateTime);
-        toDate = (TextView) this.activity.findViewById(R.id.textViewReserveToDateTime);
+        fromDateTextView = (TextView) this.activity.findViewById(R.id.textViewReserveFromDateTime);
+        toDateTextView = (TextView) this.activity.findViewById(R.id.textViewReserveToDateTime);
         driverName = (TextView) this.activity.findViewById(R.id.textViewReserveDriverName);
         truckRegNo = (Spinner) this.activity.findViewById(R.id.spinnerTruckRegNo);
     }
@@ -115,11 +116,11 @@ public class ConfirmReservationComponent extends Component {
             parkingLocationAddress.setText(parkingLocation.getAddress());
         }
 
-        if (fromDateTime != null)
-            fromDate.setText(Utils.getFormattedDatetime(fromDateTime));
+        if (fromDate != null)
+            fromDateTextView.setText(Utils.getDisplayFormattedDatetime(fromDate));
 
-        if (toDateTime != null)
-            toDate.setText(Utils.getFormattedDatetime(toDateTime));
+        if (toDate != null)
+            toDateTextView.setText(Utils.getDisplayFormattedDatetime(toDate));
 
         if (driver != null) {
 

@@ -1,7 +1,6 @@
 package com.bosch.si.emobility.bstp.activity;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.view.View;
 
 import com.bosch.si.emobility.bstp.R;
@@ -19,6 +18,8 @@ import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.gson.Gson;
 
+import java.util.Date;
+
 /**
  * Created by SSY1SGP on 26/1/16.
  */
@@ -26,8 +27,8 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
     ConfirmReservationComponent confirmReservationComponent;
 
-    String startTime;
-    String toTime;
+    Date startTime;
+    Date toTime;
 
     ParkingLocation parkingLocation;
     Driver driver;
@@ -54,8 +55,8 @@ public class ConfirmReservationDetailsActivity extends Activity {
         confirmReservationComponent = new ConfirmReservationComponent(this);
 
         confirmReservationComponent.setParkingLocation(parkingLocation);
-        confirmReservationComponent.setFromDateTime(startTime);
-        confirmReservationComponent.setToDateTime(toTime);
+        confirmReservationComponent.setFromDate(startTime);
+        confirmReservationComponent.setToDate(toTime);
 
         driver = DataManager.getInstance().getCurrentDriver();
 
@@ -120,8 +121,8 @@ public class ConfirmReservationDetailsActivity extends Activity {
         reserveParkingService.driverId = driver.getDriverId();
         reserveParkingService.parkingId = parkingLocation.getParkingId();
         reserveParkingService.additionalInfo = getString(R.string.bstp_app);
-        reserveParkingService.startTime = Utils.getDbFormattedDatetime(startTime);
-        reserveParkingService.endTime = Utils.getDbFormattedDatetime(toTime);
+        reserveParkingService.startTime = Utils.getRestfulFormattedDatetime(startTime);
+        reserveParkingService.endTime = Utils.getRestfulFormattedDatetime(toTime);
         reserveParkingService.vehicleId = confirmReservationComponent.getSelectedTruck();
         reserveParkingService.paymentMode = Constants.PAYMENT_MODE_CREDIT;
         reserveParkingService.parkingLocationName = parkingLocation.getLocationTitle();

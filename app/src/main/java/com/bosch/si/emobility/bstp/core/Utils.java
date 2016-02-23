@@ -21,8 +21,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -230,38 +228,20 @@ public class Utils {
             return Constants.DEFAULT_LOCATION;
     }
 
-    public static String getDbFormattedDatetime(Date datetime) {
-        return (String) DateFormat.format(Constants.DB_DATETIME_FORMAT, datetime);
+    public static String getRestfulFormattedDatetime(Date datetime) {
+        return (String) DateFormat.format(Constants.RESTFUL_DATETIME_FORMAT, datetime);
     }
 
-    public static String getDbFormattedDatetime(String datetime) {
-        try {
-            return getDbFormattedDatetime(new Date(datetime));
-        }
-        catch (Exception e) {
-            return null;
-        }
+    public static String getDisplayFormattedDatetime(Date datetime) {
+        return (String) DateFormat.format(Constants.DISPLAY_DATETIME_FORMAT, datetime);
     }
 
-    public static String getFormattedDatetime(Date datetime) {
-        return (String) DateFormat.format(Constants.DATETIME_FORMAT, datetime);
+    public static String getDisplayFormattedDate(Date datetime) {
+        return (String) DateFormat.format(Constants.DISPLAY_DATE_FORMAT, datetime);
     }
 
-    public static String getFormattedDatetime(String datetime) {
-        try {
-            return getFormattedDatetime(new Date(datetime));
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
-
-    public static String getFormattedDate(Date datetime) {
-        return (String) DateFormat.format(Constants.DATE_FORMAT, datetime);
-    }
-
-    public static String getFormattedTime(Date datetime) {
-        return (String) DateFormat.format(Constants.TIME_FORMAT, datetime);
+    public static String getDisplayFormattedTime(Date datetime) {
+        return (String) DateFormat.format(Constants.DISPLAY_TIME_FORMAT, datetime);
     }
 
     public static boolean isLocationServiceDisabled(Context context) {

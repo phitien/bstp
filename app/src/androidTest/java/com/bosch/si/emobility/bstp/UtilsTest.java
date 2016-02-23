@@ -33,27 +33,14 @@ public class UtilsTest extends TestCase {
     }
 
     @SmallTest
-    public void testTimestampToDateConversion() {// throws RuntimeException{
+    public void testTimestampToDateConversion() throws RuntimeException {
 
-        try {
-            Log.d("BSTP_TEST", "testTimestampToDateConversion");
+        Log.d("BSTP_TEST", "testTimestampToDateConversion");
 
-            String timestampAsString = "1454300170039";
-            long timestamp = Long.parseLong(timestampAsString);
-            String formattedString = Utils.getDbFormattedDatetime(new Date(timestamp));
-            assertNotNull(formattedString);
-
-            String nullValue = null;
-            formattedString = Utils.getDbFormattedDatetime(nullValue);
-            assertNull(formattedString);
-
-            nullValue = "asdasdasd";
-            formattedString = Utils.getDbFormattedDatetime(nullValue);
-            assertNull(formattedString);
-
-            Log.d("BSTP_TEST", "formattedString " + formattedString);
-        } catch (Exception e) {
-            Log.d("BSTP_TEST", "testTimestampToDateConversion  " + e.getLocalizedMessage());
-        }
+        String timestampAsString = "1454300170039";
+        String formattedString = Utils.getRestfulFormattedDatetime(new Date(Long.parseLong(timestampAsString)));
+        assertNotNull(formattedString);
+        
+        Log.d("BSTP_TEST", "formattedString " + formattedString);
     }
 }

@@ -7,6 +7,7 @@ import com.bosch.si.emobility.bstp.model.ParkingTransaction;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +28,8 @@ public class DataManager {
     LatLng searchLatLng = null;
 
     ParkingLocation currentParkingLocation = null;
-    String endTime;
-    String startTime;
+    Date endTime;
+    Date startTime;
 
     List<ParkingTransaction> transactions = new ArrayList<>();
     ParkingTransaction currentTransaction;
@@ -47,19 +48,19 @@ public class DataManager {
         this.currentParkingLocation = currentParkingLocation;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
-    public String getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 

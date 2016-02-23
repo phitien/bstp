@@ -6,20 +6,22 @@ import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.service.SearchService;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Date;
+
 /**
  * Created by sgp0458 on 4/12/15.
  */
 public class SearchCriteria extends Model {
 
     private String direction;
-    private String endTime;
+    private Date endTime;
+    private Date startTime;
     private String highway;
     private double latitude;
     private String locationName;
     private double longitude;
     private float radius = Constants.DEFAULT_ZOOM_RADIUS;
     private String searchString;
-    private String startTime;
 
     public float getRadius() {
         return radius;
@@ -37,11 +39,11 @@ public class SearchCriteria extends Model {
         this.direction = direction;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public SearchCriteria setEndTime(String endTime) {
+    public SearchCriteria setEndTime(Date endTime) {
         this.endTime = endTime;
         return this;
     }
@@ -89,11 +91,11 @@ public class SearchCriteria extends Model {
         return this;
     }
 
-    public String getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public SearchCriteria setStartTime(String startTime) {
+    public SearchCriteria setStartTime(Date startTime) {
         this.startTime = startTime;
         return this;
     }
@@ -107,13 +109,13 @@ public class SearchCriteria extends Model {
     private SearchService fillToSearchService(SearchService service) {
 
         service.direction = direction;
-        service.endTime = Utils.getDbFormattedDatetime(endTime);
+        service.endTime = Utils.getRestfulFormattedDatetime(endTime);
+        service.startTime = Utils.getRestfulFormattedDatetime(startTime);
         service.highway = highway;
         service.latitude = latitude;
         service.locationName = locationName;
         service.longitude = longitude;
         service.searchString = searchString;
-        service.startTime = Utils.getDbFormattedDatetime(startTime);
         service.radius = radius;
         return service;
     }

@@ -295,4 +295,12 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     public void onProviderDisabled(String provider) {
 
     }
+
+    public void showIndicator() {
+        headerComponent.showIndicator();
+    }
+
+    public void hideIndicator() {
+        headerComponent.hideIndicator();
+    }
 }

@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
@@ -21,6 +22,8 @@ public class HeaderComponent extends Component {
     TextView textViewTitle;
     ImageButton imageButtonSearch;
     ImageButton imageButtonMenu;
+    ProgressBar progressBar;
+
 
     public HeaderComponent(Activity activity) {
         super(activity);
@@ -52,6 +55,14 @@ public class HeaderComponent extends Component {
         }
     }
 
+    public void showIndicator() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void hideIndicator() {
+        progressBar.setVisibility(View.GONE);
+    }
+
     @Override
     public void setActivity(Activity activity) {
         super.setActivity(activity);
@@ -59,15 +70,16 @@ public class HeaderComponent extends Component {
         textViewTitle = (TextView) this.activity.findViewById(R.id.textViewTitle);
         imageButtonSearch = (ImageButton) this.activity.findViewById(R.id.imageButtonSearch);
         imageButtonMenu = (ImageButton) this.activity.findViewById(R.id.imageButtonMenu);
+        progressBar = (ProgressBar) this.activity.findViewById(R.id.progressBar);
 
         if (disableSearch) {
             imageButtonSearch.setVisibility(View.GONE);
         }
 
-        imageButtonSearch.setOnTouchListener(new View.OnTouchListener(){
+        imageButtonSearch.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction()==MotionEvent.ACTION_DOWN) { //esto es necesario para evitar que salte el evento muchas veces con una sola presión del dedo.
+                if (event.getAction() == MotionEvent.ACTION_DOWN) { //esto es necesario para evitar que salte el evento muchas veces con una sola presión del dedo.
                     imageButtonSearch.setPressed(!imageButtonSearch.isPressed()); //invertimos el estado del botón
                     return v.performClick();
                 }

@@ -18,7 +18,6 @@ import com.bosch.si.emobility.bstp.core.Event;
 import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
-import com.bosch.si.emobility.bstp.service.ParkingLocationInfoService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,15 +30,12 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Created by sgp0458 on 16/12/15.
@@ -310,6 +306,7 @@ public class MapComponent extends Component {
                                     AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
                                         @Override
                                         protected void onPreExecute() {
+                                            showIndicator();
                                             clearMarkers();
                                             drawMyLocationMarker();
                                             drawMySearchingMarker(searchingLatLng);
@@ -328,6 +325,7 @@ public class MapComponent extends Component {
                                         @Override
                                         protected void onPostExecute(Void aVoid) {
                                             drawLocationMarkers();
+                                            hideIndicator();
                                         }
                                     };
 
@@ -346,5 +344,13 @@ public class MapComponent extends Component {
 
         getAddressTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 
+    }
+
+    private void showIndicator() {
+        this.activity.showIndicator();
+    }
+
+    private void hideIndicator() {
+        this.activity.hideIndicator();
     }
 }

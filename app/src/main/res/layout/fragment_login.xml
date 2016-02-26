@@ -47,7 +47,8 @@
         android:layout_above="@+id/loginButton"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:checked="true"
-        android:paddingLeft="10dp"
+        android:drawablePadding="50dp"
+        android:singleLine="true"
         android:text="@string/save_credentials" />
 
     <Button

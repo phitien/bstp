@@ -48,11 +48,13 @@ public class Utils {
 
     public static class Log {
         public static void e(String tag, String msg) {
-            android.util.Log.e(tag, msg);
+            if (msg != null)
+                android.util.Log.e(tag, msg);
         }
 
         public static void e(String tag, String msg, Throwable tr) {
-            android.util.Log.e(tag, msg, tr);
+            if (msg != null)
+                android.util.Log.e(tag, msg, tr);
         }
     }
 

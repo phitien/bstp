@@ -49,7 +49,7 @@
     <string name="Confirm" translatable="false">Bestätigen</string>
     <string name="Driver" translatable="false">Fahrer</string>
     <string name="Truck" translatable="false">Fahrzeug</string>
-    <string name="reservation_canceled_successfully">Ihre Reservierung storniert.</string>
-    <string name="reservation_canceled_unsuccessfully">Konnte die Buchung zu stornieren.</string>
-    <string name="unable_to_complete_the_search">Nicht in der Lage jetzt mit der Suche zu vollenden !</string>
+    <string name="reservation_canceled_successfully">Ihre Reservierung wurde storniert.</string>
+    <string name="reservation_canceled_unsuccessfully">Die Reservierung konnte nicht storniert werden.</string>
+    <string name="unable_to_complete_the_search">Leider war die Suche nicht möglich.</string>
 </resources>

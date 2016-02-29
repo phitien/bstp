@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by SSY1SGP on 13/1/16.
  */
-public class ParkingSearchServiceTest extends TestCase{
+public class ParkingSearchServiceTest extends TestCase {
 
     private AuthenticationManager authenicationManager = new AuthenticationManager();
 
@@ -62,41 +62,16 @@ public class ParkingSearchServiceTest extends TestCase{
 
             Log.d("BSTP_TEST", "user context id" + user.getContextId());
 
-
-            //SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ") {
-                @Override
-                public StringBuffer format(Date date, StringBuffer toAppendTo, java.text.FieldPosition pos) {
-                    StringBuffer toFix = super.format(date, toAppendTo, pos);
-                    return toFix.insert(toFix.length()-2, ':');
-                };
-            };
-
-
-            Calendar calendar = Calendar.getInstance(); // gets a calendar using the default time zone and locale.
-            calendar.add(Calendar.HOUR, 24);
-            String startTime = df.format(calendar.getTime());
-
-            calendar.add(Calendar.HOUR, 24);
-            String endTime = df.format(calendar.getTime());
-
-
-
-            Log.d("BSTP_TEST","start time"+startTime);
-            Log.d("BSTP_TEST","end time"+endTime);
-
-
             //create search criteria
             SearchCriteria searchCriteria = new SearchCriteria();
             searchCriteria.setDirection("Notused");
             searchCriteria.setHighway("Notused");
-            searchCriteria.setStartTime(startTime);
-            searchCriteria.setEndTime(endTime);
+            searchCriteria.setStartTime(new Date());
+            searchCriteria.setEndTime(new Date());
             searchCriteria.setLatitude(0.0);
             searchCriteria.setLongitude(0.0);
             searchCriteria.setLocationName("telaviv");
-            searchCriteria.setRadius(15000);
+            searchCriteria.setRadius(25000);
             searchCriteria.setSearchString("Notused");
 
             //create search service
@@ -113,26 +88,6 @@ public class ParkingSearchServiceTest extends TestCase{
 
                     Log.d("BSTP_TEST", "Search service response" + responseString);
 
-
-                    /*AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... params) {
-                            Gson gson = new Gson();
-                            List<ParkingLocation> locations = gson.fromJson(responseString, new TypeToken<ArrayList<ParkingLocation>>() {
-                            }.getType());
-                            for (ParkingLocation parkingLocation : locations) {
-                                parkingLocations.put(parkingLocation.getParkingId(), parkingLocation);
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(Void aVoid) {
-
-                        }
-                    };
-
-                    task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);*/
                 }
 
                 @Override
@@ -140,7 +95,7 @@ public class ParkingSearchServiceTest extends TestCase{
 
                     Log.d("BSTP_TEST", "Search service response" + service.getResponseString());
 
-                    assertFalse("failed to search",false);
+                    assertFalse("failed to search", false);
                 }
             });
 
@@ -148,12 +103,11 @@ public class ParkingSearchServiceTest extends TestCase{
 
             Log.d("BSTP_TEST", "Search service response" + searchService.getResponseCode());
 
-            assertTrue("Service is ok",searchService.isOK());
+            assertTrue("Service is ok", searchService.isOK());
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
-            Log.d("BSTP_TEST","Search service execption"+e.getLocalizedMessage());
+            Log.d("BSTP_TEST", "Search service execption" + e.getLocalizedMessage());
             assertFalse(false);
         }
     }

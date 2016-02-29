@@ -33,6 +33,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -277,24 +278,29 @@ public class MapComponent extends Component {
     }
 
     public void refresh() {
-        AsyncTask<Void, Void, Address> getAddressTask = new AsyncTask<Void, Void, Address>() {
+        AsyncTask<Void, Void, String> getAddressTask = new AsyncTask<Void, Void, String>() {
             @Override
-            protected Address doInBackground(Void... params) {
+            protected String doInBackground(Void... params) {
                 try {
                     Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
                     List<Address> addresses = geocoder.getFromLocation(currLatLng.latitude, currLatLng.longitude, 1);
-                    return addresses.get(0);
+                    return addresses.get(0).getFeatureName();
                 } catch (Exception e) {
-                    Utils.Log.e("BSTP_MapComponent_displayParkingAreas: ", e.getMessage());
+                    try {
+                        return Utils.getLocationName(currLatLng.latitude, currLatLng.longitude);
+                    } catch (Exception e1) {
+                        e.printStackTrace();
+                        e1.printStackTrace();
+                    }
                 }
                 return null;
             }
 
             @Override
-            protected void onPostExecute(Address address) {
-                if (address != null) {
+            protected void onPostExecute(String locationName) {
+                if (locationName != null) {
                     ((MapsActivity) activity).getSearchCriteria()
-                            .setLocationName(address.getFeatureName())
+                            .setLocationName(locationName)
                             .setLatLng(currLatLng)
                             .createSearchService()
                             .executeAsync(new ServiceCallback() {

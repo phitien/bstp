@@ -607,7 +607,7 @@ public abstract class AbstractService implements IService {
             } else {
                 String body = getBody();
 
-                Log.d("BSTP_SVC","Body "+ body);
+//                Log.d("BSTP_SVC","Body "+ body);
 
                 if (body != null && !body.isEmpty()) {
                     byte[] postDataBytes = body.getBytes(CHARSET);

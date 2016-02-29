@@ -431,7 +431,7 @@ public abstract class AbstractService implements IService {
             responseString = null;
             IServiceConnection conn = getConnection();
 
-            Log.d("BSTP_SVC", conn.getURLConnection().getRequestMethod());
+//            Log.d("BSTP_SVC", conn.getURLConnection().getRequestMethod());
 
             conn.connect();
             //set responseCode
@@ -439,7 +439,7 @@ public abstract class AbstractService implements IService {
             inputStream = conn.getInputStream();
             responseCookie = conn.getURLConnection().getHeaderField(SET_COOKIE);
 
-            Log.d("BSTP_SVC","responseCode "+ responseCode);
+//            Log.d("BSTP_SVC","responseCode "+ responseCode);
 
             if (isOK()) {
                 BufferedReader reader = null;
@@ -453,7 +453,7 @@ public abstract class AbstractService implements IService {
                     //set responseString
                     responseString = builder.toString();
 
-                    Log.d("BSTP_SVC","Response string "+ responseString);
+//                    Log.d("BSTP_SVC","Response string "+ responseString);
 
                 } catch (IOException e) {
                     exception = e;
@@ -549,7 +549,7 @@ public abstract class AbstractService implements IService {
             Log.d("BSTP_SVC",e.getLocalizedMessage());
         }
 
-        Log.d("BSTP_SVC","url " + url.toString());
+//        Log.d("BSTP_SVC","url " + url.toString());
 
         URLConnection conn = url.openConnection();
         if (conn instanceof HttpsURLConnection) {
@@ -557,7 +557,7 @@ public abstract class AbstractService implements IService {
             HttpsURLConnection httpsConn = (HttpsURLConnection) conn;
             updateConnectionParams(httpsConn);
 
-            Log.d("BSTP_SVC", httpsConn.getRequestMethod());
+//            Log.d("BSTP_SVC", httpsConn.getRequestMethod());
 
             return new ServiceConnection(httpsConn);
         } else if (conn instanceof HttpURLConnection) {

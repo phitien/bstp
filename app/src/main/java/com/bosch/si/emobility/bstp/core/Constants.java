@@ -17,10 +17,11 @@ public class Constants {
     public static final LatLng DEFAULT_LOCATION = new LatLng(50.1211277, 8.4964787);//Frankfurt
     public static final float DEFAULT_ZOOM_LEVEL = 9.5f;
     public static final float DEFAULT_ZOOM_RADIUS = 25000;
-    public static final String DISPLAY_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DISPLAY_DATE_FORMAT = "dd.MM.yyyy";
     public static final String DISPLAY_TIME_FORMAT = "hh:mm";
-    public static final String DISPLAY_DATETIME_FORMAT = "yyyy-MM-dd / kk:mm";
+    public static final String DISPLAY_DATETIME_FORMAT = "dd.MM.yyyy / kk:mm";
     public static final String RESTFUL_DATETIME_FORMAT = "yyyy-MM-dd'T'kk:mm:ssZ";
+    public static final String RESPONSE_DATETIME_FORMAT = "yyyy-MM-dd'T'kk:mm:ss.SSSZ";
     public static final String HOCKEY_APP_ID = "c94bedcf98a14355847b6ebc059b6463";
     public static final String NOT_USED_PARAM = "Notused";
     public static final String PAYMENT_MODE_CREDIT = "Credit";

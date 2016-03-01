@@ -241,20 +241,43 @@ public class Utils {
             return Constants.DEFAULT_LOCATION;
     }
 
+    public static String getResponseDatetimeFormat() {
+        return Constants.RESPONSE_DATETIME_FORMAT;
+    }
+
+    public static String getRestfulDatetimeFormat() {
+        return Constants.RESTFUL_DATETIME_FORMAT;
+    }
+
     public static String getRestfulFormattedDatetime(Date datetime) {
-        return (String) DateFormat.format(Constants.RESTFUL_DATETIME_FORMAT, datetime);
+        return (String) DateFormat.format(getRestfulDatetimeFormat(), datetime);
+    }
+
+    public static String getDisplayDatetimeFormat() {
+        //TODO localization
+        return Constants.DISPLAY_DATETIME_FORMAT;
+    }
+
+    public static String getDisplayDateFormat() {
+        //TODO localization
+        return Constants.DISPLAY_DATE_FORMAT;
+    }
+
+    public static String getDisplayTimeFormat() {
+        //TODO localization
+        return Constants.DISPLAY_TIME_FORMAT;
     }
 
     public static String getDisplayFormattedDatetime(Date datetime) {
-        return (String) DateFormat.format(Constants.DISPLAY_DATETIME_FORMAT, datetime);
+        return (String) DateFormat.format(getDisplayDatetimeFormat(), datetime);
     }
 
     public static String getDisplayFormattedDate(Date datetime) {
-        return (String) DateFormat.format(Constants.DISPLAY_DATE_FORMAT, datetime);
+        return (String) DateFormat.format(getDisplayDateFormat(), datetime);
     }
 
     public static String getDisplayFormattedTime(Date datetime) {
-        return (String) DateFormat.format(Constants.DISPLAY_TIME_FORMAT, datetime);
+        return (String) DateFormat.format(getDisplayTimeFormat(), datetime);
     }
 
     public static boolean isLocationServiceDisabled(Context context) {

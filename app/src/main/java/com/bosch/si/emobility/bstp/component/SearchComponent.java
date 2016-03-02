@@ -61,6 +61,8 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     static Date fromDate;
     static Date toDate;
 
+    static boolean fromDateChanged = false;
+
     static SearchCriteria searchCriteria = new SearchCriteria();
 
     public SearchComponent(Activity activity) {
@@ -177,12 +179,27 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
     private void validateDates() {
         Date now = Calendar.getInstance().getTime();
 
-        if (fromDate == null || fromDate.getTime() <= now.getTime() + TimeUnit.MINUTES.toMillis(5)) {
+        //set fromDate to now + 1 hour if fromDate undefined or fromDate is in the past
+        if (fromDate == null) {
+            fromDate = new Date(now.getTime() + TimeUnit.HOURS.toMillis(Constants.DIFFERENCE_BETWEEN_NOW_FROM_DATE));
+        } else if (Math.abs(fromDate.getTime() - now.getTime()) > TimeUnit.SECONDS.toMillis(30) && fromDate.getTime() - now.getTime() < 0) {
             fromDate = new Date(now.getTime() + TimeUnit.HOURS.toMillis(Constants.DIFFERENCE_BETWEEN_NOW_FROM_DATE));
         }
 
-        if (toDate == null || toDate.getTime() <= fromDate.getTime() + TimeUnit.MINUTES.toMillis(5)) {
+        //set toDate to fromDate + 8 hours if fromDate changes or toDate undefined or toDate is in the past
+        if (fromDateChanged || toDate == null) {
             toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(Constants.DIFFERENCE_BETWEEN_FROM_DATE_TO_DATE));
+        } else if (Math.abs(toDate.getTime() - now.getTime()) > TimeUnit.SECONDS.toMillis(30) && toDate.getTime() - now.getTime() < 0) {
+            toDate = new Date(fromDate.getTime() + TimeUnit.HOURS.toMillis(Constants.DIFFERENCE_BETWEEN_FROM_DATE_TO_DATE));
+        }
+
+        //automatically change fromDate if toDate is changed and toDate > now and toDate < fromDate
+        if (!fromDateChanged && toDate.getTime() > now.getTime() && toDate.getTime() <= fromDate.getTime()) {
+            if (toDate.getTime() > now.getTime() + TimeUnit.HOURS.toMillis(Constants.DIFFERENCE_BETWEEN_NOW_FROM_DATE)) {
+                fromDate = new Date(now.getTime() + TimeUnit.HOURS.toMillis(Constants.DIFFERENCE_BETWEEN_NOW_FROM_DATE));
+            } else {
+                fromDate = new Date(now.getTime());
+            }
         }
 
         updateComponent();
@@ -203,8 +220,10 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
         Date date;
         if (currentTextView == textViewFromDate) {
             date = fromDate;
+            fromDateChanged = true;
         } else {
             date = toDate;
+            fromDateChanged = false;
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -225,8 +244,10 @@ public class SearchComponent extends Component implements DatePickerDialog.OnDat
         Date date;
         if (currentTextView == textViewFromTime) {
             date = fromDate;
+            fromDateChanged = true;
         } else {
             date = toDate;
+            fromDateChanged = false;
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

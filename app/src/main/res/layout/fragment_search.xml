@@ -38,13 +38,27 @@
     <TextView
         android:id="@+id/textViewFromDate"
         style="@style/App_TextViewDarkStyle"
-        android:layout_width="@dimen/date_textview_width"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextSearch"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_toRightOf="@id/textViewFrom"
         android:singleLine="true"
-        android:text="2015-12-24"
+        android:text="@string/date_format"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textViewFromSeparator"
+        style="@style/App_TextViewDarkStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextSearch"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@id/textViewFromDate"
+        android:singleLine="true"
+        android:text="/"
         android:textAlignment="center" />
 
     <TextView
@@ -54,9 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextSearch"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_toRightOf="@id/textViewFromDate"
+        android:layout_toRightOf="@id/textViewFromSeparator"
         android:singleLine="true"
-        android:text="23:59:59"
+        android:text="@string/time_format"
         android:textAlignment="center" />
 
     <TextView
@@ -72,13 +86,27 @@
     <TextView
         android:id="@+id/textViewToDate"
         style="@style/App_TextViewDarkStyle"
-        android:layout_width="@dimen/date_textview_width"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewFrom"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_toRightOf="@id/textViewTo"
         android:singleLine="true"
-        android:text="2015-12-25"
+        android:text="@string/date_format"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textViewToSeparator"
+        style="@style/App_TextViewDarkStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFrom"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@id/textViewToDate"
+        android:singleLine="true"
+        android:text="/"
         android:textAlignment="center" />
 
     <TextView
@@ -88,9 +116,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewFrom"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_toRightOf="@id/textViewToDate"
+        android:layout_toRightOf="@id/textViewToSeparator"
         android:singleLine="true"
-        android:text="00:00:00"
+        android:text="@string/time_format"
         android:textAlignment="center" />
 
 </RelativeLayout>

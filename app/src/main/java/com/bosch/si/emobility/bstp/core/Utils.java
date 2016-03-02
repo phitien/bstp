@@ -254,18 +254,15 @@ public class Utils {
     }
 
     public static String getDisplayDatetimeFormat() {
-        //TODO localization
-        return Constants.DISPLAY_DATETIME_FORMAT;
+        return getString(R.string.datetime_format);
     }
 
     public static String getDisplayDateFormat() {
-        //TODO localization
-        return Constants.DISPLAY_DATE_FORMAT;
+        return getString(R.string.date_format);
     }
 
     public static String getDisplayTimeFormat() {
-        //TODO localization
-        return Constants.DISPLAY_TIME_FORMAT;
+        return getString(R.string.time_format);
     }
 
     public static String getDisplayFormattedDatetime(Date datetime) {

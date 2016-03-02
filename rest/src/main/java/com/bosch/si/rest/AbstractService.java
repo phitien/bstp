@@ -1,6 +1,7 @@
 package com.bosch.si.rest;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -588,7 +589,7 @@ public abstract class AbstractService implements IService {
         //set params for non-get method
         if (getMethod() != METHOD.GET) {
             conn.setDoInput(true);
-            if (getMethod() != METHOD.DELETE)
+            if (Build.VERSION.SDK_INT >= 19 && getMethod() != METHOD.DELETE)
                 conn.setDoOutput(true);
             //set authorization
             String authorization = getAuthorization();

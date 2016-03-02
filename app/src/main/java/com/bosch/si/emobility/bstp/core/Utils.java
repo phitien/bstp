@@ -309,14 +309,15 @@ public class Utils {
         String bookable = "bookable1";
 
         String color = "blue";
+        float usedPercentage = 0;
         try {
-            float usedPercentage = 1 - (parkingLocation.getAvailabilityCount() / parkingLocation.getTotalCapacityCount());
-            if (usedPercentage < 0.7)
-                color = "green";
-            else if (usedPercentage == 0)
+            usedPercentage = 1 - ((float) parkingLocation.getAvailabilityCount() / parkingLocation.getTotalCapacityCount());
+            if (usedPercentage == 1)
                 color = "red";
-            else
+            else if (usedPercentage > 0.7 && usedPercentage < 1)
                 color = "orange";
+            else if (usedPercentage < 0.7)
+                color = "green";
         } catch (Exception e) {
             bookable = "bookable0";
         }
@@ -335,6 +336,12 @@ public class Utils {
         return prefix + "_" + bookable + "_" + color + "_" + type;
     }
 
+    /**
+     * Get location info for a position in any device
+     * @param lat
+     * @param lng
+     * @return
+     */
     public static JSONObject getLocationInfo(double lat, double lng) {
         HttpGet httpGet = new HttpGet("http://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng + "&sensor=true");
         HttpClient client = new DefaultHttpClient();
@@ -363,6 +370,12 @@ public class Utils {
         return jsonObject;
     }
 
+    /**
+     * Get location name for a position in any device
+     * @param latitude
+     * @param longitude
+     * @return
+     */
     public static String getLocationName(double latitude, double longitude) throws Exception {
         if (latitude < -90.0 || latitude > 90.0) {
             throw new IllegalArgumentException("latitude == " + latitude);

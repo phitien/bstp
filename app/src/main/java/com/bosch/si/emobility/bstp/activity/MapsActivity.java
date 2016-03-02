@@ -95,15 +95,6 @@ public class MapsActivity extends Activity {
         mapComponent.refresh();
     }
 
-    @Override
-    public void onSessionExpired() {
-        if (UserSessionManager.getInstance().getUser().isSaveCredentials()) {//if save credentials
-            doReLogin();
-        } else {
-            showLoginDialog();
-        }
-    }
-
     private void showLoginDialog() {
         authenticationChecked = false;
         loginComponent.setEnabled(true, true);
@@ -126,6 +117,15 @@ public class MapsActivity extends Activity {
             searchComponent.setEnabled(false, true);
         } else if (detailComponent.isShown()) {
             detailComponent.setEnabled(false, true);
+        }
+    }
+
+    @Override
+    public void onSessionExpired() {
+        if (UserSessionManager.getInstance().getUser().isSaveCredentials()) {//if save credentials
+            doReLogin();
+        } else {
+            showLoginDialog();
         }
     }
 

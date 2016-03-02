@@ -17,13 +17,9 @@ import com.bosch.si.emobility.bstp.activity.MapsActivity;
 import com.bosch.si.emobility.bstp.activity.UpcomingActivity;
 import com.bosch.si.emobility.bstp.component.HeaderComponent;
 import com.bosch.si.emobility.bstp.component.MenuComponent;
-import com.bosch.si.emobility.bstp.manager.DataManager;
-import com.bosch.si.emobility.bstp.model.Driver;
-import com.bosch.si.emobility.bstp.service.GetDriverInfoService;
 import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +31,7 @@ import de.greenrobot.event.EventBus;
  * Created by sgp0458 on 8/12/15.
  */
 public abstract class Activity extends android.support.v4.app.FragmentActivity implements IActivity, LocationListener {
+
     protected HeaderComponent headerComponent;
     protected MenuComponent menuComponent;
 
@@ -238,6 +235,7 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
         } else if (event.getType() == Constants.EventType.RE_LOGIN_FAILED.toString()) {
             onLogout();
         } else if (event.getType() == Constants.EventType.SESSION_EXPIRED.toString()) {
+            UserSessionManager.getInstance().setSessionExpired(true);
             onSessionExpired();
         } else {
             showMessage(event);
@@ -277,9 +275,7 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
 
     @Override
     public void onSessionExpired() {
-        if (!(this instanceof MapsActivity)) {
-            finish();
-        }
+        openMapsActivity();
     }
 
     @Override

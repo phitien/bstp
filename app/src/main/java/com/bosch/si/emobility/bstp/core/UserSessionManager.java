@@ -31,12 +31,14 @@ public class UserSessionManager {
     }
 
     private User user;
+    private boolean sessionExpired;
     private static final String CREDENTIALS_FILE_NAME = "config.dat";
     private static final String CREDENTIALS_FOLDER_NAME = "Credentials";
     private File credentialsFile = Utils.getFile(CREDENTIALS_FOLDER_NAME, CREDENTIALS_FILE_NAME);
 
     public void setUserSession(User user) {
         try {
+            sessionExpired = false;
             this.user = user;
             deleteCredentialsFile();//delete old file
             if (this.user != null && this.user.isValid() && this.user.isSaveCredentials()) {
@@ -78,9 +80,17 @@ public class UserSessionManager {
 
     public boolean isLogged() {
         if (user != null) {
-            return this.user.isValid();
+            return !sessionExpired && this.user.isValid();
         }
         return false;
+    }
+
+    public boolean isSessionExpired() {
+        return sessionExpired;
+    }
+
+    public void setSessionExpired(boolean sessionExpired) {
+        this.sessionExpired = sessionExpired;
     }
 
     public static class AESCryptor {

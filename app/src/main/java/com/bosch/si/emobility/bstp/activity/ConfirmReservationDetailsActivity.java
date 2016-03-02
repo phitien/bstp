@@ -65,7 +65,7 @@ public class ConfirmReservationDetailsActivity extends Activity {
     @Override
     public void onEventMainThread(Event event) {
         if (event.getType() == Constants.EventType.ALERT_DIALOG_HIDE.toString()) {
-            finish();
+//            finish();
         } else {
             super.onEventMainThread(event);
         }
@@ -73,7 +73,6 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
     public void onCancelConfirmReserveButtonClicked(View view) {
         //dismiss the view
-        setResult(Activity.RESULT_OK);
         finish();
     }
 

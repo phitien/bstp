@@ -132,7 +132,7 @@ public class MapsActivity extends Activity {
         hideKeyboard();
         mapComponent.setEnabled(enabled, true);
         headerComponent.setEnabled(enabled, true);
-        searchComponent.setEnabled(false, true);
+        searchComponent.setEnabled(enabled, true);
         menuComponent.setEnabled(false, true);
         detailComponent.setEnabled(false, true);
     }

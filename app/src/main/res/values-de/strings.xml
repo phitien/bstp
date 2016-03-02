@@ -24,7 +24,7 @@
     <string name="route_to_location" translatable="false">Route zum Parkplatz </string>
     <string name="save_credentials" translatable="false">Daten speichern</string>
     <string name="search" translatable="false">Suche</string>
-    <string name="security_level" translatable="false">Sicherheitsstufe</string>
+    <string name="security_level" translatable="false">Sicherheitsstufe:</string>
     <string name="time" translatable="false">Zeit</string>
     <string name="title_activity_about" translatable="false"><![CDATA[Über]]></string>
     <string name="title_activity_reservation">Reservierungen</string>

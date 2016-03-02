@@ -30,7 +30,7 @@
     <string name="re_login_failed" translatable="false">Re-Login failed</string>
 
     <string name="action_reserve" translatable="false">Reserve</string>
-    <string name="security_level" translatable="false">Security Level</string>
+    <string name="security_level" translatable="false">Security Level:</string>
     <string name="free" translatable="false">free</string>
     <string name="title_activity_upcoming" translatable="false">Upcoming</string>
 

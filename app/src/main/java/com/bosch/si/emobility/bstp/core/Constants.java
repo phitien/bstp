@@ -94,6 +94,7 @@ public class Constants {
         RE_LOGIN_FAILED,
         CAMERA_CHANGED,
         LOGOUT_OK,
+        ALERT_DIALOG_HIDE,;
     }
 
 

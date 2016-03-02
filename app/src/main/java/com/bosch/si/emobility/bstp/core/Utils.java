@@ -1,9 +1,11 @@
 package com.bosch.si.emobility.bstp.core;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
@@ -55,6 +57,31 @@ public class Utils {
             notify("", message);
         }
 
+        public static void alert(final String title, final String message) {
+            final Activity activity = Application.getInstance().getCurrentContext();
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!activity.isFinishing()) {
+                        new AlertDialog.Builder(activity)
+                                .setTitle(title)
+                                .setMessage(message)
+                                .setCancelable(false)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                        Event.broadcast("", Constants.EventType.ALERT_DIALOG_HIDE.toString());
+                                    }
+                                }).create().show();
+                    }
+                }
+            });
+        }
+
+        public static void alert(String message) {
+            alert(getString(R.string.message), message);
+        }
     }
 
     public static class Log {
@@ -338,6 +365,7 @@ public class Utils {
 
     /**
      * Get location info for a position in any device
+     *
      * @param lat
      * @param lng
      * @return
@@ -372,6 +400,7 @@ public class Utils {
 
     /**
      * Get location name for a position in any device
+     *
      * @param latitude
      * @param longitude
      * @return

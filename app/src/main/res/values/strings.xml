@@ -26,7 +26,7 @@
     <string name="your_location" translatable="false">Your location</string>
     <string name="current_search_location" translatable="false">Searching location</string>
     <string name="session_expired" translatable="false">Session expired</string>
-    <string name="re_login_ok" translatable="false">Re-Login successfully</string>
+    <string name="re_login_ok" translatable="false">Session has been renewed</string>
     <string name="re_login_failed" translatable="false">Re-Login failed</string>
 
     <string name="action_reserve" translatable="false">Reserve</string>
@@ -60,5 +60,6 @@
     <string name="datetime_format" translatable="false">dd.MM.yyyy / kk:mm</string>
     <string name="date_format" translatable="false">dd.MM.yyyy</string>
     <string name="time_format" translatable="false">kk:mm</string>
+    <string name="message">Message</string>
 
 </resources>

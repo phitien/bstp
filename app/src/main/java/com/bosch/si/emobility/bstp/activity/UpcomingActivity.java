@@ -59,6 +59,7 @@ public class UpcomingActivity extends Activity {
 
     @Override
     public void onReloginOk() {
+        super.onReloginOk();
         populateData();
     }
 
@@ -98,8 +99,6 @@ public class UpcomingActivity extends Activity {
 
                                          @Override
                                          protected void onPostExecute(Void aVoid) {
-
-                                             Utils.Indicator.hide();
                                              UpcomingAdapter adapter = new UpcomingAdapter(UpcomingActivity.this);
                                              listViewUpcoming.setAdapter(adapter);
                                          }
@@ -110,10 +109,14 @@ public class UpcomingActivity extends Activity {
 
                                  @Override
                                  public void failure(IService service) {
-                                     service.getResponseCode();
+
                                  }
 
-
+                                 @Override
+                                 public void onPostExecute(IService service) {
+                                     super.onPostExecute(service);
+                                     Utils.Indicator.hide();
+                                 }
                              }
 
         );

@@ -17,9 +17,13 @@ import com.bosch.si.emobility.bstp.activity.MapsActivity;
 import com.bosch.si.emobility.bstp.activity.UpcomingActivity;
 import com.bosch.si.emobility.bstp.component.HeaderComponent;
 import com.bosch.si.emobility.bstp.component.MenuComponent;
+import com.bosch.si.emobility.bstp.manager.DataManager;
+import com.bosch.si.emobility.bstp.model.Driver;
+import com.bosch.si.emobility.bstp.service.GetDriverInfoService;
 import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -129,7 +133,7 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
                 try {
                     JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
                     user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
-                    JSONArray currentUserRoles = (JSONArray) jsonObj.getJSONObject("ns2:identityContext").getJSONObject("ns2:tenantRelatedData").getJSONArray("ns2:role");
+                    JSONArray currentUserRoles = jsonObj.getJSONObject("ns2:identityContext").getJSONObject("ns2:tenantRelatedData").getJSONArray("ns2:role");
                     Boolean isADriver = false;
 
                     for (int i = 0; i < currentUserRoles.length(); i++) {
@@ -227,17 +231,24 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     public void onEventMainThread(Event event) {
         if (event.getType() == Constants.EventType.LOGOUT_OK.toString()) {
             onLogoutOk();
+        } else if (event.getType() == Constants.EventType.LOGIN_OK.toString()) {
+            onLoginOk();
         } else if (event.getType() == Constants.EventType.RE_LOGIN_OK.toString()) {
             onReloginOk();
         } else if (event.getType() == Constants.EventType.RE_LOGIN_FAILED.toString()) {
             onLogout();
+        } else if (event.getType() == Constants.EventType.SESSION_EXPIRED.toString()) {
+            onSessionExpired();
         } else {
             showMessage(event);
         }
     }
 
     private void showMessage(Event event) {
-        String message = event.getMessage();
+        showMessage(event.getMessage());
+    }
+
+    private void showMessage(String message) {
         if (message != null && !message.isEmpty()) {
             Utils.Notifier.notify(message);
         }
@@ -251,12 +262,24 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
         openMapsActivity();
     }
 
+    @Override
+    public void onLoginOk() {
+
+    }
+
     /**
      * Should be overridden in sub class
      */
     @Override
     public void onReloginOk() {
-        //do nothing
+        showMessage(Utils.getString(R.string.re_login_ok));
+    }
+
+    @Override
+    public void onSessionExpired() {
+        if (!(this instanceof MapsActivity)) {
+            finish();
+        }
     }
 
     @Override

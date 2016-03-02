@@ -1,18 +1,17 @@
 package com.bosch.si.emobility.bstp.activity;
 
-import android.app.ProgressDialog;
 import android.view.View;
 
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.component.ConfirmReservationComponent;
 import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.core.Constants;
+import com.bosch.si.emobility.bstp.core.Event;
 import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.Driver;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.ParkingTransaction;
-import com.bosch.si.emobility.bstp.service.GetDriverInfoService;
 import com.bosch.si.emobility.bstp.service.ReserveParkingService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
@@ -33,8 +32,6 @@ public class ConfirmReservationDetailsActivity extends Activity {
     ParkingLocation parkingLocation;
     Driver driver;
 
-    ParkingTransaction parkingTransaction;
-
     @Override
     public int layoutResID() {
         return R.layout.activity_confirm_reservation_details;
@@ -43,7 +40,7 @@ public class ConfirmReservationDetailsActivity extends Activity {
     @Override
     protected void setup() {
         super.setup();
-        
+
         headerComponent.setDisableSearch(true);
 
         DataManager dataManager = DataManager.getInstance();
@@ -60,48 +57,17 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
         driver = DataManager.getInstance().getCurrentDriver();
 
-        if (driver == null) {
+        confirmReservationComponent.setDriver(driver);
+        confirmReservationComponent.populateData();
 
-            final ProgressDialog mDialog = new ProgressDialog(ConfirmReservationDetailsActivity.this);
-            mDialog.setMessage(getString(R.string.please_wait));
-            mDialog.setCancelable(false);
-            mDialog.show();
+    }
 
-            GetDriverInfoService driverInfoService = new GetDriverInfoService();
-            driverInfoService.executeAsync(new ServiceCallback() {
-                @Override
-                public void success(IService service) {
-                    Driver driver = new Gson().fromJson(service.getResponseString(), Driver.class);
-                    if (driver != null) {
-                        DataManager.getInstance().setCurrentDriver(driver);
-                    }
-                }
-
-                @Override
-                public void failure(IService service) {
-
-                }
-
-                @Override
-                public void onPostExecute(IService service) {
-                    super.onPostExecute(service);
-                    mDialog.dismiss();
-                    driver = DataManager.getInstance().getCurrentDriver();
-
-                    if (driver != null) {
-                        confirmReservationComponent.setDriver(driver);
-                        confirmReservationComponent.populateData();
-                    } else {
-                        //cancel the intent
-                        Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
-                        setResult(Activity.RESULT_OK);
-                        finish();
-                    }
-                }
-            });
+    @Override
+    public void onEventMainThread(Event event) {
+        if (event.getType() == Constants.EventType.ALERT_DIALOG_HIDE.toString()) {
+            finish();
         } else {
-            confirmReservationComponent.setDriver(driver);
-            confirmReservationComponent.populateData();
+            super.onEventMainThread(event);
         }
     }
 
@@ -130,24 +96,24 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
             @Override
             public void success(IService service) {
-                parkingTransaction = new Gson().fromJson(service.getResponseString(), ParkingTransaction.class);
+                ParkingTransaction parkingTransaction = new Gson().fromJson(service.getResponseString(), ParkingTransaction.class);
+                if (parkingTransaction != null) {
+                    Utils.Notifier.notify(getString(R.string.reserved_successfully));
+                    finish();
+                } else {
+                    Utils.Notifier.alert(getString(R.string.reserved_unsuccessfully));
+                }
             }
 
             @Override
             public void failure(IService service) {
+                Utils.Notifier.alert(getString(R.string.reserved_unsuccessfully));
             }
 
             @Override
             public void onPostExecute(IService service) {
                 super.onPostExecute(service);
                 Utils.Indicator.hide();
-                if (parkingTransaction != null) {
-                    Utils.Notifier.notify(getString(R.string.reserved_successfully));
-                } else {
-                    Utils.Notifier.notify(getString(R.string.reserved_unsuccessfully));
-                }
-                setResult(Activity.RESULT_OK);
-                finish();
             }
         });
     }

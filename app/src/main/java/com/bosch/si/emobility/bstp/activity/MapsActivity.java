@@ -18,10 +18,15 @@ import com.bosch.si.emobility.bstp.core.Event;
 import com.bosch.si.emobility.bstp.core.UserSessionManager;
 import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
+import com.bosch.si.emobility.bstp.model.Driver;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.SearchCriteria;
+import com.bosch.si.emobility.bstp.service.GetDriverInfoService;
+import com.bosch.si.rest.IService;
+import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.gson.Gson;
 
 public class MapsActivity extends Activity {
 
@@ -74,12 +79,6 @@ public class MapsActivity extends Activity {
             super.onEventMainThread(event);
         } else if (event.getType() == Constants.EventType.CAMERA_CHANGED.toString()) {
             onCameraChanged();
-        } else if (event.getType() == Constants.EventType.SESSION_EXPIRED.toString()) {
-            if (UserSessionManager.getInstance().getUser().isSaveCredentials()) {//if save credentials
-                doReLogin();
-            } else {//else open login dialog
-                showLoginDialog();
-            }
         } else {
             super.onEventMainThread(event);
         }
@@ -92,7 +91,17 @@ public class MapsActivity extends Activity {
 
     @Override
     public void onReloginOk() {
+        super.onReloginOk();
         mapComponent.refresh();
+    }
+
+    @Override
+    public void onSessionExpired() {
+        if (UserSessionManager.getInstance().getUser().isSaveCredentials()) {//if save credentials
+            doReLogin();
+        } else {
+            showLoginDialog();
+        }
     }
 
     private void showLoginDialog() {
@@ -122,7 +131,7 @@ public class MapsActivity extends Activity {
 
     private void checkAuthentication() {
         if (!UserSessionManager.getInstance().isLogged()) {//show login dialog
-            showLoginDialog();
+            onSessionExpired();
         } else {
             openMap();
         }
@@ -142,6 +151,33 @@ public class MapsActivity extends Activity {
             loginComponent.setEnabled(false, true);
             setEnabled(true);
             authenticationChecked = true;
+            final Driver[] driver = {DataManager.getInstance().getCurrentDriver()};
+            if (driver[0] == null) {
+                Utils.Indicator.show();
+                GetDriverInfoService driverInfoService = new GetDriverInfoService();
+                driverInfoService.executeAsync(new ServiceCallback() {
+                    @Override
+                    public void success(IService service) {
+                        driver[0] = new Gson().fromJson(service.getResponseString(), Driver.class);
+                        if (driver[0] != null) {
+                            DataManager.getInstance().setCurrentDriver(driver[0]);
+                        } else {
+                            Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
+                        }
+                    }
+
+                    @Override
+                    public void failure(IService service) {
+                        Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
+                    }
+
+                    @Override
+                    public void onPostExecute(IService service) {
+                        super.onPostExecute(service);
+                        Utils.Indicator.hide();
+                    }
+                });
+            }
         }
     }
 
@@ -174,4 +210,5 @@ public class MapsActivity extends Activity {
         DataManager.getInstance().setEndTime(searchComponent.getSearchCriteria().getEndTime());
         startActivity(intent);
     }
+
 }

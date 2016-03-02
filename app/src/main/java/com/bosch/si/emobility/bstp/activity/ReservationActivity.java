@@ -73,7 +73,6 @@ public class ReservationActivity extends Activity {
 
         try {
 
-            Utils.Indicator.setDialogTitle(getString(R.string.please_wait));
             Utils.Indicator.show();
 
             CancelParkingReservationService cancelParkingReservationService = new CancelParkingReservationService();
@@ -81,26 +80,20 @@ public class ReservationActivity extends Activity {
             cancelParkingReservationService.executeAsync(new ServiceCallback() {
                 @Override
                 public void success(IService service) {
-
+                    Utils.Notifier.notify(getString(R.string.reservation_canceled_successfully));
+                    DataManager.getInstance().setJustCanceledReservations(true);
+                    finish();
                 }
 
                 @Override
                 public void failure(IService service) {
-
+                    Utils.Notifier.notify(getString(R.string.reservation_canceled_unsuccessfully));
                 }
 
                 @Override
                 public void onPostExecute(IService service) {
                     super.onPostExecute(service);
                     Utils.Indicator.hide();
-
-                    if (service.getResponseCode() == 200) {
-                        Utils.Notifier.notify(getString(R.string.reservation_canceled_successfully));
-                        DataManager.getInstance().setJustCanceledReservations(true);
-                        finish();
-                    } else {
-                        Utils.Notifier.notify(getString(R.string.reservation_canceled_unsuccessfully));
-                    }
                 }
             });
         } catch (Exception e) {

@@ -190,7 +190,8 @@ public abstract class AbstractService implements IService {
                     .excludeFieldsWithoutExposeAnnotation()
                     .excludeFieldsWithModifiers(Modifier.PROTECTED, Modifier.PRIVATE)
                     .create();
-            return gson.toJson(this).toString();
+            String rs = gson.toJson(this).toString();
+            return rs == null || rs.equals("{}") ? "" : rs;
         }
         return body;
     }
@@ -514,7 +515,7 @@ public abstract class AbstractService implements IService {
         try {
 
             // Create a trust manager that does not validate certificate chains
-            final TrustManager[] trustAllCerts = new TrustManager[] {
+            final TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {
                         @Override
                         public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
@@ -544,9 +545,8 @@ public abstract class AbstractService implements IService {
                     return true;
                 }
             });
-        }
-        catch (Exception e) {
-            Log.d("BSTP_SVC",e.getLocalizedMessage());
+        } catch (Exception e) {
+            Log.d("BSTP_SVC", e.getLocalizedMessage());
         }
 
 //        Log.d("BSTP_SVC","url " + url.toString());
@@ -588,7 +588,8 @@ public abstract class AbstractService implements IService {
         //set params for non-get method
         if (getMethod() != METHOD.GET) {
             conn.setDoInput(true);
-            conn.setDoOutput(true);
+            if (getMethod() != METHOD.DELETE)
+                conn.setDoOutput(true);
             //set authorization
             String authorization = getAuthorization();
             if (authorization != null && !authorization.isEmpty()) {
@@ -606,9 +607,6 @@ public abstract class AbstractService implements IService {
                 writer.close();
             } else {
                 String body = getBody();
-
-//                Log.d("BSTP_SVC","Body "+ body);
-
                 if (body != null && !body.isEmpty()) {
                     byte[] postDataBytes = body.getBytes(CHARSET);
                     conn.setRequestProperty(CONTENT_LENGTH, "" + Integer.toString(postDataBytes.length));

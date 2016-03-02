@@ -114,7 +114,6 @@ public class ConfirmReservationDetailsActivity extends Activity {
     public void onConfirmReserveButtonClicked(View view) {
         //reserve the space
 
-        Utils.Indicator.setDialogTitle(getString(R.string.please_wait));
         Utils.Indicator.show();
 
         ReserveParkingService reserveParkingService = new ReserveParkingService();

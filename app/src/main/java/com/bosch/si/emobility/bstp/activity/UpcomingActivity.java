@@ -70,7 +70,6 @@ public class UpcomingActivity extends Activity {
 
     private void populateData() {
 
-        Utils.Indicator.setDialogTitle(getString(R.string.please_wait));
         Utils.Indicator.show();
 
         GetUpcomingReservationsService service = new GetUpcomingReservationsService();

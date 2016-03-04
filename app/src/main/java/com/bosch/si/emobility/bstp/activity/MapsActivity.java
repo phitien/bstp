@@ -15,6 +15,7 @@ import com.bosch.si.emobility.bstp.component.SearchComponent;
 import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.core.Constants;
 import com.bosch.si.emobility.bstp.core.Event;
+import com.bosch.si.emobility.bstp.core.User;
 import com.bosch.si.emobility.bstp.core.UserSessionManager;
 import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
@@ -122,7 +123,7 @@ public class MapsActivity extends Activity {
 
     @Override
     public void onSessionExpired() {
-        if (UserSessionManager.getInstance().getUser().isSaveCredentials()) {//if save credentials
+        if (UserSessionManager.getInstance().isSaveCredentials()) {//if save credentials
             doReLogin();
         } else {
             showLoginDialog();

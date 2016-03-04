@@ -85,6 +85,13 @@ public class UserSessionManager {
         return false;
     }
 
+    public boolean isSaveCredentials() {
+        if (user != null) {
+            return this.user.isSaveCredentials();
+        }
+        return false;
+    }
+
     public boolean isSessionExpired() {
         return sessionExpired;
     }

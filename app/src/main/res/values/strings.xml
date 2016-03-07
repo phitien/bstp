@@ -57,8 +57,8 @@
     <string name="reservation_canceled_unsuccessfully" translatable="false">Failed to cancel the reservation</string>
     <string name="unable_to_complete_the_search" translatable="false">Unable to complete the search now!</string>
 
-    <string name="datetime_format" translatable="false">dd.MM.yyyy / kk:mm</string>
-    <string name="date_format" translatable="false">dd.MM.yyyy</string>
+    <string name="datetime_format" translatable="false">yyyy-MM-dd / kk:mm</string>
+    <string name="date_format" translatable="false">yyyy-MM-dd</string>
     <string name="time_format" translatable="false">kk:mm</string>
     <string name="message">Message</string>
 

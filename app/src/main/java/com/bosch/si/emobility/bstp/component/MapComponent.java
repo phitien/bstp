@@ -159,8 +159,15 @@ public class MapComponent extends Component {
     }
 
     private void drawLocationMarkers() {
-        for (ParkingLocation parkingLocation : parkingLocations) {
-            drawParkingLocationMarker(parkingLocation);
+        if (parkingLocations != null) {
+            for (ParkingLocation parkingLocation : parkingLocations) {
+                try {
+                    drawParkingLocationMarker(parkingLocation);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

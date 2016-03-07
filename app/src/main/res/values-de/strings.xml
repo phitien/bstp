@@ -52,7 +52,9 @@
     <string name="reservation_canceled_successfully">Ihre Reservierung wurde storniert.</string>
     <string name="reservation_canceled_unsuccessfully">Die Reservierung konnte nicht storniert werden.</string>
     <string name="unable_to_complete_the_search">Leider war die Suche nicht möglich.</string>
+
     <string name="datetime_format" translatable="false">dd.MM.yyyy / kk:mm</string>
     <string name="date_format" translatable="false">dd.MM.yyyy</string>
     <string name="time_format" translatable="false">kk:mm</string>
+
 </resources>

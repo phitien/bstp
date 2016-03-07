@@ -152,33 +152,6 @@ public class MapsActivity extends Activity {
             loginComponent.setEnabled(false, true);
             setEnabled(true);
             authenticationChecked = true;
-            final Driver[] driver = {DataManager.getInstance().getCurrentDriver()};
-            if (driver[0] == null) {
-                Utils.Indicator.show();
-                GetDriverInfoService driverInfoService = new GetDriverInfoService();
-                driverInfoService.executeAsync(new ServiceCallback() {
-                    @Override
-                    public void success(IService service) {
-                        driver[0] = new Gson().fromJson(service.getResponseString(), Driver.class);
-                        if (driver[0] != null) {
-                            DataManager.getInstance().setCurrentDriver(driver[0]);
-                        } else {
-                            Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
-                        }
-                    }
-
-                    @Override
-                    public void failure(IService service) {
-                        Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
-                    }
-
-                    @Override
-                    public void onPostExecute(IService service) {
-                        super.onPostExecute(service);
-                        Utils.Indicator.hide();
-                    }
-                });
-            }
         }
     }
 
@@ -206,6 +179,40 @@ public class MapsActivity extends Activity {
     }
 
     public void onReserveButtonClicked(View view) {
+        final Driver[] driver = {DataManager.getInstance().getCurrentDriver()};
+        if (driver[0] == null) {
+            Utils.Indicator.show();
+            GetDriverInfoService driverInfoService = new GetDriverInfoService();
+            driverInfoService.executeAsync(new ServiceCallback() {
+                @Override
+                public void success(IService service) {
+                    driver[0] = new Gson().fromJson(service.getResponseString(), Driver.class);
+                    if (driver[0] != null) {
+                        DataManager.getInstance().setCurrentDriver(driver[0]);
+                        openConfirmReservationDetailsActivity();
+                    } else {
+                        Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
+                    }
+                }
+
+                @Override
+                public void failure(IService service) {
+                    Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
+                }
+
+                @Override
+                public void onPostExecute(IService service) {
+                    super.onPostExecute(service);
+                    Utils.Indicator.hide();
+                }
+            });
+        }
+        else {
+            openConfirmReservationDetailsActivity();
+        }
+    }
+
+    private void openConfirmReservationDetailsActivity() {
         Intent intent = new Intent(MapsActivity.this, ConfirmReservationDetailsActivity.class);
         DataManager.getInstance().setStartTime(searchComponent.getSearchCriteria().getStartTime());
         DataManager.getInstance().setEndTime(searchComponent.getSearchCriteria().getEndTime());

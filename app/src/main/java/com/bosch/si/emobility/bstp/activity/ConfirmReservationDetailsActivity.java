@@ -12,6 +12,7 @@ import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.Driver;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.ParkingTransaction;
+import com.bosch.si.emobility.bstp.service.GetDriverInfoService;
 import com.bosch.si.emobility.bstp.service.ReserveParkingService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
@@ -78,7 +79,39 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
     public void onConfirmReserveButtonClicked(View view) {
         //reserve the space
+        final Driver[] drivers = {DataManager.getInstance().getCurrentDriver()};
+        if (drivers[0] == null) {
+            Utils.Indicator.show();
+            GetDriverInfoService driverInfoService = new GetDriverInfoService();
+            driverInfoService.executeAsync(new ServiceCallback() {
+                @Override
+                public void success(IService service) {
+                    drivers[0] = new Gson().fromJson(service.getResponseString(), Driver.class);
+                    if (drivers[0] != null) {
+                        DataManager.getInstance().setCurrentDriver(drivers[0]);
+                        reserve(drivers[0]);
+                    } else {
+                        Utils.Notifier.alert(getString(R.string.unable_to_get_driver_details));
+                    }
+                }
 
+                @Override
+                public void failure(IService service) {
+                    Utils.Notifier.alert(getString(R.string.unable_to_get_driver_details));
+                }
+
+                @Override
+                public void onPostExecute(IService service) {
+                    super.onPostExecute(service);
+                    Utils.Indicator.hide();
+                }
+            });
+        } else {
+            reserve(drivers[0]);
+        }
+    }
+
+    private void reserve(Driver driver) {
         Utils.Indicator.show();
 
         ReserveParkingService reserveParkingService = new ReserveParkingService();

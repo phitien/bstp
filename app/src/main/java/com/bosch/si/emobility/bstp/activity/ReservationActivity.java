@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.component.DetailComponent;
 import com.bosch.si.emobility.bstp.core.Activity;
+import com.bosch.si.emobility.bstp.core.Constants;
+import com.bosch.si.emobility.bstp.core.Event;
 import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
@@ -67,30 +69,38 @@ public class ReservationActivity extends Activity {
         startActivity(intent);
     }
 
+    @Override
+    public void onEventMainThread(Event event) {
+        if (event.getType() == Constants.EventType.DIALOG_YES.toString()) {
+            try {
+                Utils.Indicator.show();
+
+                CancelParkingReservationService cancelParkingReservationService = new CancelParkingReservationService();
+                cancelParkingReservationService.transactionId = currentTransanction.getTransactionId();
+                cancelParkingReservationService.executeAsync(new ServiceCallback() {
+                    @Override
+                    public void success(IService service) {
+                        Utils.Notifier.notify(getString(R.string.reservation_canceled_successfully));
+                        DataManager.getInstance().setJustCanceledReservations(true);
+                        finish();
+                    }
+
+                    @Override
+                    public void failure(IService service) {
+                        Utils.Notifier.alert(getString(R.string.reservation_canceled_unsuccessfully));
+                    }
+                });
+            } catch (Exception e) {
+                Utils.Notifier.alert(getString(R.string.reservation_canceled_unsuccessfully));
+            }
+        } else if (event.getType() == Constants.EventType.DIALOG_NO.toString()) {
+            //do nothing
+        } else {
+            super.onEventMainThread(event);
+        }
+    }
 
     public void onCancelReservationClicked(View view) {
-
-        try {
-
-            Utils.Indicator.show();
-
-            CancelParkingReservationService cancelParkingReservationService = new CancelParkingReservationService();
-            cancelParkingReservationService.transactionId = currentTransanction.getTransactionId();
-            cancelParkingReservationService.executeAsync(new ServiceCallback() {
-                @Override
-                public void success(IService service) {
-                    Utils.Notifier.notify(getString(R.string.reservation_canceled_successfully));
-                    DataManager.getInstance().setJustCanceledReservations(true);
-                    finish();
-                }
-
-                @Override
-                public void failure(IService service) {
-                    Utils.Notifier.alert(getString(R.string.reservation_canceled_unsuccessfully));
-                }
-            });
-        } catch (Exception e) {
-            Utils.Notifier.alert(getString(R.string.reservation_canceled_unsuccessfully));
-        }
+        Utils.Notifier.yesNoDialog(getString(R.string.cancel_reservation_confirm_message));
     }
 }

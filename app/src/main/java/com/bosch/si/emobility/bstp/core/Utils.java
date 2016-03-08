@@ -87,6 +87,44 @@ public class Utils {
         public static void alert(String message) {
             alert(getString(R.string.message), message);
         }
+
+        public static void yesNoDialog(final String title, final String message) {
+            final Activity activity = Application.getInstance().getCurrentContext();
+            if (activity != null) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!activity.isFinishing()) {
+                            new AlertDialog.Builder(activity)
+                                    .setTitle(title)
+                                    .setMessage(message)
+                                    .setCancelable(false)
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                            Event.broadcast("", Constants.EventType.DIALOG_YES.toString());
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                            Event.broadcast("", Constants.EventType.DIALOG_NO.toString());
+                                        }
+                                    })
+                                    .create().show();
+                        }
+                    }
+                });
+            }
+        }
+
+        public static void yesNoDialog(String message) {
+            yesNoDialog(getString(R.string.message), message);
+        }
+
+
     }
 
     public static class Log {

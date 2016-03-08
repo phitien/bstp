@@ -63,5 +63,6 @@
     <string name="message" translatable="false">Message</string>
     <string name="no_parking_location_found" translatable="false">No parking location found</string>
     <string name="request_timeout_message" translatable="false">Sorry, the service was not available due to slow connection</string>
+    <string name="cancel_reservation_confirm_message">Do you want to cancel this reservation?</string>
 
 </resources>

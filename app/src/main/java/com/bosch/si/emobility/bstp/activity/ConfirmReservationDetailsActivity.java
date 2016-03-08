@@ -67,14 +67,18 @@ public class ConfirmReservationDetailsActivity extends Activity {
     public void onEventMainThread(Event event) {
         if (event.getType() == Constants.EventType.ALERT_DIALOG_HIDE.toString()) {
 //            finish();
+        } else if (event.getType() == Constants.EventType.DIALOG_YES.toString()) {
+            //dismiss the view
+            finish();
+        } else if (event.getType() == Constants.EventType.DIALOG_NO.toString()) {
+            //do nothing
         } else {
             super.onEventMainThread(event);
         }
     }
 
     public void onCancelConfirmReserveButtonClicked(View view) {
-        //dismiss the view
-        finish();
+        Utils.Notifier.yesNoDialog(getString(R.string.cancel_reservation_confirm_message));
     }
 
     public void onConfirmReserveButtonClicked(View view) {

@@ -54,13 +54,10 @@ public class ReservationActivity extends Activity {
     }
 
     public void onRouteToLocationClicked(View view) {
-
-//        Event.broadcast(Utils.getString(R.string.session_expired), Constants.EventType.SESSION_EXPIRED.toString());
-
         ParkingLocation parkingLocation = currentTransanction.getParkingLocation();
 
         LatLng s = Utils.getMyLocationLatLng(this);
-        LatLng d = new LatLng(parkingLocation.getLatitude(), parkingLocation.getLongitude());//TODO replace this line by parking location position
+        LatLng d = new LatLng(parkingLocation.getLatitude(), parkingLocation.getLongitude());
 
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                 Uri.parse(String.format("http://maps.google.com/maps?saddr=%s,%s&daddr=%s,%s",
@@ -90,12 +87,6 @@ public class ReservationActivity extends Activity {
                 @Override
                 public void failure(IService service) {
                     Utils.Notifier.alert(getString(R.string.reservation_canceled_unsuccessfully));
-                }
-
-                @Override
-                public void onPostExecute(IService service) {
-                    super.onPostExecute(service);
-                    Utils.Indicator.hide();
                 }
             });
         } catch (Exception e) {

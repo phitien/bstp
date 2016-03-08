@@ -51,10 +51,13 @@
     <string name="Truck" translatable="false">Fahrzeug</string>
     <string name="reservation_canceled_successfully">Ihre Reservierung wurde storniert.</string>
     <string name="reservation_canceled_unsuccessfully">Die Reservierung konnte nicht storniert werden.</string>
-    <string name="unable_to_complete_the_search">Leider war die Suche nicht möglich.</string>
+    <string name="service_error_message">Leider ist der Service zur Zeit nicht verfügbar</string>
 
     <string name="datetime_format" translatable="false">dd.MM.yyyy / kk:mm</string>
     <string name="date_format" translatable="false">dd.MM.yyyy</string>
     <string name="time_format" translatable="false">kk:mm</string>
+    <string name="no_parking_location_found" translatable="false">Kein parkplatz gefunden</string>
+    <string name="message" translatable="false">Meldung</string>
+    <string name="request_timeout_message" translatable="false">Leider ist der Service zur Zeit nicht verfügbar</string>
 
 </resources>

@@ -37,6 +37,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.cert.CertificateException;
@@ -162,7 +163,12 @@ public abstract class AbstractService implements IService {
                 }
 
                 @Override
-                public void onSessionExpiry(IService service) {
+                public void onUnauthorized(IService service) {
+
+                }
+
+                @Override
+                public void timeout(IService service) {
 
                 }
             };
@@ -329,9 +335,15 @@ public abstract class AbstractService implements IService {
                 }
 
                 @Override
-                public void onSessionExpiry(IService service) {
-                    serviceCallback.onSessionExpiry(service);
-                    defaultCallback.onSessionExpiry(service);
+                public void onUnauthorized(IService service) {
+                    serviceCallback.onUnauthorized(service);
+                    defaultCallback.onUnauthorized(service);
+                }
+
+                @Override
+                public void timeout(IService service) {
+                    serviceCallback.timeout(service);
+                    defaultCallback.timeout(service);
                 }
             };
         } else {
@@ -477,11 +489,19 @@ public abstract class AbstractService implements IService {
 
     private void doPostExecution(IServiceCallback callback, AbstractService me) {
         try {
-            if (isOK()) {
-                callback.success(me);
-            } else if (isUnauthorized()) {
-                callback.onSessionExpiry(me);
-            } else {
+            if (exception == null) {
+                if (isOK()) {
+                    callback.success(me);
+                } else if (isUnauthorized()) {
+                    callback.onUnauthorized(me);
+                } else {
+                    callback.failure(me);
+                }
+            } else if (exception instanceof SocketTimeoutException) {
+                //Handle socket timeout exception
+                callback.timeout(me);
+            }
+            else {
                 callback.failure(me);
             }
             callback.onPostExecute(me);

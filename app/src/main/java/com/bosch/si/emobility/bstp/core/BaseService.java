@@ -17,6 +17,11 @@ public class BaseService extends AbstractService {
     }
 
     @Override
+    public int getConnectTimeout() {
+        return Constants.REQUEST_TIMEOUT;
+    }
+
+    @Override
     public IServiceCallback getCallback() {
         callback = new ServiceCallback() {
             @Override
@@ -30,8 +35,18 @@ public class BaseService extends AbstractService {
             }
 
             @Override
-            public void onSessionExpiry(IService service) {
+            public void onPostExecute(IService service) {
+                Utils.Indicator.hide();//remove indicator anw
+            }
+
+            @Override
+            public void onUnauthorized(IService service) {
                 Event.broadcast(Utils.getString(R.string.session_expired), Constants.EventType.SESSION_EXPIRED.toString());
+            }
+
+            @Override
+            public void timeout(IService service) {
+                Utils.Notifier.notify(Utils.getString(R.string.request_timeout_message));
             }
         };
         return super.getCallback();

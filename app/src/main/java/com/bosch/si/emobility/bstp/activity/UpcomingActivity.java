@@ -3,6 +3,7 @@ package com.bosch.si.emobility.bstp.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,10 +28,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class UpcomingActivity extends Activity {
+public class UpcomingActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener {
 
     ListView listViewUpcoming;
     TextView emptyView;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public int layoutResID() {
@@ -55,6 +57,16 @@ public class UpcomingActivity extends Activity {
         listViewUpcoming.setEmptyView(emptyView);
 
         populateData();
+
+//        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+//        swipeRefreshLayout.setOnRefreshListener(this);
+//        swipeRefreshLayout.post(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        populateData();
+//                                    }
+//                                }
+//        );
     }
 
     @Override
@@ -79,7 +91,7 @@ public class UpcomingActivity extends Activity {
 
         service.fromDate = Utils.getRestfulFormattedDatetime(fromDate);
         service.toDate = Utils.getRestfulFormattedDatetime(toDate);
-        service.searchTerm = "";//TODO to clarify requirements
+        service.searchTerm = "";//TODO: to clarify requirements
 
         service.executeAsync(new ServiceCallback() {
                                  @Override
@@ -111,12 +123,6 @@ public class UpcomingActivity extends Activity {
                                  public void failure(IService service) {
 
                                  }
-
-                                 @Override
-                                 public void onPostExecute(IService service) {
-                                     super.onPostExecute(service);
-                                     Utils.Indicator.hide();
-                                 }
                              }
 
         );
@@ -124,6 +130,11 @@ public class UpcomingActivity extends Activity {
 
 
     public void onSearchButtonClicked(View view) {
+    }
+
+    @Override
+    public void onRefresh() {
+//        populateData();
     }
 
     private class UpcomingAdapter extends ArrayAdapter<ParkingTransaction> {

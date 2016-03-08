@@ -1,5 +1,6 @@
 package com.bosch.si.rest.callback;
 
+import com.bosch.si.rest.AbstractService;
 import com.bosch.si.rest.IService;
 
 /**
@@ -16,5 +17,7 @@ public interface IServiceCallback {
 
     void onPostExecute(IService service);
 
-    void onSessionExpiry(IService service);
+    void onUnauthorized(IService service);
+
+    void timeout(IService service);
 }

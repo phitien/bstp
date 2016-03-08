@@ -162,7 +162,7 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
             }
 
             @Override
-            public void onSessionExpiry(IService service) {
+            public void onUnauthorized(IService service) {
                 onLogout();
                 Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
             }

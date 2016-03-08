@@ -99,12 +99,6 @@ public class ConfirmReservationDetailsActivity extends Activity {
                 public void failure(IService service) {
                     Utils.Notifier.alert(getString(R.string.unable_to_get_driver_details));
                 }
-
-                @Override
-                public void onPostExecute(IService service) {
-                    super.onPostExecute(service);
-                    Utils.Indicator.hide();
-                }
             });
         } else {
             reserve(drivers[0]);
@@ -114,17 +108,17 @@ public class ConfirmReservationDetailsActivity extends Activity {
     private void reserve(Driver driver) {
         Utils.Indicator.show();
 
-        ReserveParkingService reserveParkingService = new ReserveParkingService();
-        reserveParkingService.driverId = driver.getDriverId();
-        reserveParkingService.parkingId = parkingLocation.getParkingId();
-        reserveParkingService.additionalInfo = getString(R.string.bstp_app);
-        reserveParkingService.startTime = Utils.getRestfulFormattedDatetime(startTime);
-        reserveParkingService.endTime = Utils.getRestfulFormattedDatetime(toTime);
-        reserveParkingService.vehicleId = confirmReservationComponent.getSelectedTruck();
-        reserveParkingService.paymentMode = Constants.PAYMENT_MODE_CREDIT;
-        reserveParkingService.parkingLocationName = parkingLocation.getLocationTitle();
+        ReserveParkingService service = new ReserveParkingService();
+        service.driverId = driver.getDriverId();
+        service.parkingId = parkingLocation.getParkingId();
+        service.additionalInfo = getString(R.string.bstp_app);
+        service.startTime = Utils.getRestfulFormattedDatetime(startTime);
+        service.endTime = Utils.getRestfulFormattedDatetime(toTime);
+        service.vehicleId = confirmReservationComponent.getSelectedTruck();
+        service.paymentMode = Constants.PAYMENT_MODE_CREDIT;
+        service.parkingLocationName = parkingLocation.getLocationTitle();
 
-        reserveParkingService.executeAsync(new ServiceCallback() {
+        service.executeAsync(new ServiceCallback() {
 
             @Override
             public void success(IService service) {
@@ -140,12 +134,6 @@ public class ConfirmReservationDetailsActivity extends Activity {
             @Override
             public void failure(IService service) {
                 Utils.Notifier.alert(getString(R.string.reserved_unsuccessfully));
-            }
-
-            @Override
-            public void onPostExecute(IService service) {
-                super.onPostExecute(service);
-                Utils.Indicator.hide();
             }
         });
     }

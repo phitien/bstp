@@ -42,7 +42,7 @@ public class SplashActivity extends Activity {
                 public void run() {
                     openMapsActivity();
                 }
-            }, Constants.SPLASH_TIME_OUT);
+            }, Constants.SPLASH_TIMEOUT);
         }
 
     }

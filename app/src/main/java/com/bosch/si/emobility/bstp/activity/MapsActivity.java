@@ -202,7 +202,6 @@ public class MapsActivity extends Activity {
 
                 @Override
                 public void onPostExecute(IService service) {
-                    super.onPostExecute(service);
                     Utils.Indicator.hide();
                 }
             });

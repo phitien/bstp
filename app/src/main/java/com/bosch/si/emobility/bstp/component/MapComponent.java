@@ -33,7 +33,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -159,12 +158,13 @@ public class MapComponent extends Component {
     }
 
     private void drawLocationMarkers() {
-        if (parkingLocations != null) {
+        if (parkingLocations == null || parkingLocations.size() <= 0) {
+//            Utils.Notifier.notify(activity.getString(R.string.no_parking_location_found));
+        } else {
             for (ParkingLocation parkingLocation : parkingLocations) {
                 try {
                     drawParkingLocationMarker(parkingLocation);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -330,7 +330,6 @@ public class MapComponent extends Component {
                                             Gson gson = new Gson();
                                             parkingLocations = gson.fromJson(responseString, new TypeToken<ArrayList<ParkingLocation>>() {
                                             }.getType());
-
                                             DataManager.getInstance().setParkingLocations(parkingLocations);
                                             return null;
                                         }
@@ -347,8 +346,7 @@ public class MapComponent extends Component {
 
                                 @Override
                                 public void failure(IService service) {
-                                    service.getResponseCode();
-                                    Utils.Notifier.notify(activity.getString(R.string.unable_to_complete_the_search));
+                                    Utils.Notifier.notify(activity.getString(R.string.service_error_message));
                                 }
                             });
                 }

@@ -173,7 +173,7 @@ public class MapComponent extends Component {
         double height = l1.distanceTo(l2);
         double width = l1.distanceTo(l3);
         double area = height * width;
-        return area > 2000 * 2000;//4 square km
+        return area > 5000 * 5000;//25 square km
     }
 
     private void clearMarkers() {

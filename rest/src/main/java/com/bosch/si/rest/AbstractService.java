@@ -171,6 +171,11 @@ public abstract class AbstractService implements IService {
                 public void timeout(IService service) {
 
                 }
+
+                @Override
+                public void error(IService service) {
+
+                }
             };
         return callback;
     }
@@ -345,6 +350,12 @@ public abstract class AbstractService implements IService {
                     serviceCallback.timeout(service);
                     defaultCallback.timeout(service);
                 }
+
+                @Override
+                public void error(IService service) {
+                    serviceCallback.error(service);
+                    defaultCallback.error(service);
+                }
             };
         } else {
             return defaultCallback;
@@ -507,7 +518,7 @@ public abstract class AbstractService implements IService {
                 //Handle socket timeout exception
                 callback.timeout(me);
             } else {
-                callback.failure(me);
+                callback.error(me);
             }
             callback.onPostExecute(me);
         } catch (Exception e) {

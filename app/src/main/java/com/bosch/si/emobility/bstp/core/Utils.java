@@ -50,11 +50,8 @@ public class Utils {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (!activity.isFinishing()) {
-                            //noinspection ResourceType
-                            Toast toast = Toast.makeText(activity, message, DURATION);
-                            toast.show();
-                        }
+                        //noinspection ResourceType
+                        Toast.makeText(activity, message, DURATION).show();
                     }
                 });
             }

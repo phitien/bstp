@@ -45,6 +45,11 @@ public class BaseService extends AbstractService {
             }
 
             @Override
+            public void error(IService service) {
+                Utils.Notifier.notify(Utils.getString(R.string.restful_service_error_message));
+            }
+
+            @Override
             public void timeout(IService service) {
                 Utils.Notifier.notify(Utils.getString(R.string.request_timeout_message));
             }

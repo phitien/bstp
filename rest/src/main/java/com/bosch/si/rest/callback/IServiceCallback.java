@@ -20,4 +20,6 @@ public interface IServiceCallback {
     void onUnauthorized(IService service);
 
     void timeout(IService service);
+
+    void error(IService service);
 }

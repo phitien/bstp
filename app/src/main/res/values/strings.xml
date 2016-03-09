@@ -55,7 +55,7 @@
     <string name="unable_to_get_driver_details" translatable="false">Unable to get driver details</string>
     <string name="reservation_canceled_successfully" translatable="false">Successfully to canceled the reservation</string>
     <string name="reservation_canceled_unsuccessfully" translatable="false">Failed to cancel the reservation</string>
-    <string name="service_error_message" translatable="false">Sorry, the service is currently unavailable</string>
+    <string name="service_error_message" translatable="false">Unfortunately, the service is currently unavailable</string>
 
     <string name="datetime_format" translatable="false">yyyy-MM-dd / kk:mm</string>
     <string name="date_format" translatable="false">yyyy-MM-dd</string>

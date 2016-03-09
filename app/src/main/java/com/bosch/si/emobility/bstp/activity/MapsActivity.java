@@ -93,7 +93,6 @@ public class MapsActivity extends Activity {
     @Override
     public void onReloginOk() {
         super.onReloginOk();
-        mapComponent.refresh();
     }
 
     private void showLoginDialog() {

@@ -115,16 +115,10 @@ public class ConfirmReservationDetailsActivity extends Activity {
         service.parkingLocationName = parkingLocation.getLocationTitle();
 
         service.executeAsync(new ServiceCallback() {
-
             @Override
             public void success(IService service) {
-                ParkingTransaction parkingTransaction = new Gson().fromJson(service.getResponseString(), ParkingTransaction.class);
-                if (parkingTransaction != null) {
-                    Utils.Notifier.notify(getString(R.string.reserved_successfully));
-                    finish();
-                } else {
-                    Utils.Notifier.alert(getString(R.string.reserved_unsuccessfully));
-                }
+                finish();
+                Utils.Notifier.notify(getString(R.string.reserved_successfully));
             }
 
             @Override

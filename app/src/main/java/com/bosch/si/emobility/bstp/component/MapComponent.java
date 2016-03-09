@@ -5,6 +5,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -34,8 +35,12 @@ import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Queue;
 
 /**
  * Created by sgp0458 on 16/12/15.
@@ -51,8 +56,6 @@ public class MapComponent extends Component {
     private ArrayList<Marker> markers = new ArrayList<>();
     private ArrayList<ParkingLocation> parkingLocations = new ArrayList<>();
 
-    private LatLng prevLatLng = null;
-    private LatLng currLatLng = null;
     private float zoomLevel = -1;
 
     public MapComponent(Activity activity) {
@@ -136,19 +139,42 @@ public class MapComponent extends Component {
     private void displayParkingAreas() {
         drawMyLocationMarker();
         drawMySearchingMarker(searchingLatLng);
-        if (shouldRefreshMap()) {
-            refresh();
+
+        Log.e("ASD", String.valueOf(points.size()));
+        Point p1 = points.poll();
+        if (p1 != null) {
+            Log.e("ASD_P1", p1.toString());
+            Point p2 = points.poll();
+            if (p2 != null) {
+                Log.e("ASD_P2", p2.toString());
+                if (shouldRefreshMap(p1, p2)) {
+                    refresh(p2);
+                }
+                points.offer(p2);
+            } else {
+                refresh(p1);
+                points.offer(p1);
+            }
+        } else {
+            //do nothing
         }
     }
 
     //refresh map if the distance between the current location and searching location is greater than 100 km
-    private boolean shouldRefreshMap() {
-        if (currLatLng != null && prevLatLng != null) {
-            float[] results = new float[1];
-            Location.distanceBetween(prevLatLng.latitude, prevLatLng.longitude, currLatLng.latitude, currLatLng.longitude, results);
-            return results[0] > 100000;
-        }
-        return prevLatLng == null;
+    private boolean shouldRefreshMap(Point prev, Point curr) {
+        Location l1 = new Location("southwest");
+        l1.setLatitude(prev.getLatLng().latitude);
+        l1.setLongitude(prev.getLatLng().longitude);
+        Location l2 = new Location("southeast");
+        l2.setLatitude(prev.getLatLng().latitude);
+        l2.setLongitude(curr.getLatLng().longitude);
+        Location l3 = new Location("northwest");
+        l3.setLatitude(curr.getLatLng().latitude);
+        l3.setLongitude(prev.getLatLng().longitude);
+        double height = l1.distanceTo(l2);
+        double width = l1.distanceTo(l3);
+        double area = height * width;
+        return area > 2000 * 2000;//4 square km
     }
 
     private void clearMarkers() {
@@ -206,6 +232,39 @@ public class MapComponent extends Component {
         return currentCameraBounds;
     }
 
+    protected class Point {
+        LatLng latLng;
+        Date time;
+
+        public Point(LatLng latLng, Date time) {
+            this.latLng = latLng;
+            this.time = time;
+        }
+
+        public LatLng getLatLng() {
+            return latLng;
+        }
+
+        public void setLatLng(LatLng latLng) {
+            this.latLng = latLng;
+        }
+
+        public Date getTime() {
+            return time;
+        }
+
+        public void setTime(Date time) {
+            this.time = time;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s:%s", time.toString(), latLng.toString());
+        }
+    }
+
+    private Queue<Point> points = new LinkedList<>();
+
     @Override
     public void setEnabled(boolean enabled, boolean noAnimation) {
         if (map != null) {
@@ -230,7 +289,7 @@ public class MapComponent extends Component {
                             if (currentCameraBounds != null) {
                                 LatLng center = currentCameraBounds.getCenter();
                                 if (center != null) {
-                                    currLatLng = center;
+                                    points.offer(new Point(center, Calendar.getInstance().getTime()));
                                     displayParkingAreas();
                                 }
                             }
@@ -284,17 +343,18 @@ public class MapComponent extends Component {
         return null;
     }
 
-    public void refresh() {
+    public void refresh(final Point point) {
+        final LatLng latLng = point.getLatLng();
         AsyncTask<Void, Void, String> getAddressTask = new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 try {
                     Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-                    List<Address> addresses = geocoder.getFromLocation(currLatLng.latitude, currLatLng.longitude, 1);
+                    List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                     return addresses.get(0).getFeatureName();
                 } catch (Exception e) {
                     try {
-                        return Utils.getLocationName(currLatLng.latitude, currLatLng.longitude);
+                        return Utils.getLocationName(latLng.latitude, latLng.longitude);
                     } catch (Exception e1) {
                         e.printStackTrace();
                         e1.printStackTrace();
@@ -308,7 +368,7 @@ public class MapComponent extends Component {
                 if (locationName != null) {
                     ((MapsActivity) activity).getSearchCriteria()
                             .setLocationName(locationName)
-                            .setLatLng(currLatLng)
+                            .setLatLng(latLng)
                             .createSearchService()
                             .executeAsync(new ServiceCallback() {
                                 @Override

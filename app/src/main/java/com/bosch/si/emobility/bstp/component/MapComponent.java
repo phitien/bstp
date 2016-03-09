@@ -140,19 +140,19 @@ public class MapComponent extends Component {
         drawMyLocationMarker();
         drawMySearchingMarker(searchingLatLng);
 
-        Point p1 = points.poll();
-        if (p1 != null) {
-            Log.e("ASD_P1", p1.toString());
-            Point p2 = points.poll();
-            if (p2 != null) {
-                Log.e("ASD_P2", p2.toString());
-                if (shouldRefreshMap(p1, p2)) {
-                    refresh(p2);
+        MapState s1 = mapStates.poll();
+        if (s1 != null) {
+            Log.e("ASD_P1", s1.toString());
+            MapState s2 = mapStates.poll();
+            if (s2 != null) {
+                Log.e("ASD_P2", s2.toString());
+                if (shouldRefreshMap(s1, s2)) {
+                    refresh(s2);
                 }
-                points.offer(p2);
+                mapStates.offer(s2);
             } else {
-                refresh(p1);
-                points.offer(p1);
+                refresh(s1);
+                mapStates.offer(s1);
             }
         } else {
             //do nothing
@@ -160,7 +160,9 @@ public class MapComponent extends Component {
     }
 
     //refresh map if the distance between the current location and searching location is greater than 100 km
-    private boolean shouldRefreshMap(Point prev, Point curr) {
+    private boolean shouldRefreshMap(MapState prev, MapState curr) {
+        if (prev.getZoom() != curr.getZoom())
+            return true;
         Location l1 = new Location("southwest");
         l1.setLatitude(prev.getLatLng().latitude);
         l1.setLongitude(prev.getLatLng().longitude);
@@ -231,13 +233,15 @@ public class MapComponent extends Component {
         return currentCameraBounds;
     }
 
-    protected class Point {
+    protected class MapState {
         LatLng latLng;
         Date time;
+        float zoom;
 
-        public Point(LatLng latLng, Date time) {
+        public MapState(LatLng latLng, Date time, float zoom) {
             this.latLng = latLng;
             this.time = time;
+            this.zoom = zoom;
         }
 
         public LatLng getLatLng() {
@@ -256,13 +260,21 @@ public class MapComponent extends Component {
             this.time = time;
         }
 
+        public float getZoom() {
+            return zoom;
+        }
+
+        public void setZoom(float zoom) {
+            this.zoom = zoom;
+        }
+
         @Override
         public String toString() {
             return String.format("%s:%s", time.toString(), latLng.toString());
         }
     }
 
-    private Queue<Point> points = new LinkedList<>();
+    private Queue<MapState> mapStates = new LinkedList<>();
 
     @Override
     public void setEnabled(boolean enabled, boolean noAnimation) {
@@ -288,7 +300,7 @@ public class MapComponent extends Component {
                             if (currentCameraBounds != null) {
                                 LatLng center = currentCameraBounds.getCenter();
                                 if (center != null) {
-                                    points.offer(new Point(center, Calendar.getInstance().getTime()));
+                                    mapStates.offer(new MapState(center, Calendar.getInstance().getTime(), cameraPosition.zoom));
                                     displayParkingAreas();
                                 }
                             }
@@ -342,8 +354,8 @@ public class MapComponent extends Component {
         return null;
     }
 
-    public void refresh(final Point point) {
-        final LatLng latLng = point.getLatLng();
+    public void refresh(final MapState mapState) {
+        final LatLng latLng = mapState.getLatLng();
         AsyncTask<Void, Void, String> getAddressTask = new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {

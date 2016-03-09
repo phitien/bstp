@@ -17,9 +17,14 @@ import com.bosch.si.emobility.bstp.activity.MapsActivity;
 import com.bosch.si.emobility.bstp.activity.UpcomingActivity;
 import com.bosch.si.emobility.bstp.component.HeaderComponent;
 import com.bosch.si.emobility.bstp.component.MenuComponent;
+import com.bosch.si.emobility.bstp.manager.DataManager;
+import com.bosch.si.emobility.bstp.model.Driver;
+import com.bosch.si.emobility.bstp.service.GetDriverInfoService;
 import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.IService;
+import com.bosch.si.rest.callback.IServiceCallback;
 import com.bosch.si.rest.callback.ServiceCallback;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,6 +57,59 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     protected void onResume() {
         super.onResume();
         registerEventBus();
+        if (UserSessionManager.getInstance().isLogged()) {//show login dialog
+            loadDriverInfo(new DriverLoaderCallback() {
+                @Override
+                public void beforeLoad() {
+                    Utils.Indicator.show();
+                }
+
+                @Override
+                public void afterLoaded(Driver driver) {
+                    //do nothing
+                }
+
+                @Override
+                public void loadFailed() {
+                    Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
+                }
+            });
+        }
+    }
+
+    protected interface DriverLoaderCallback {
+        void beforeLoad();
+
+        void afterLoaded(Driver driver);
+
+        void loadFailed();
+    }
+
+    protected void loadDriverInfo(final DriverLoaderCallback callback) {
+        final Driver[] drivers = {DataManager.getInstance().getCurrentDriver()};
+        if (drivers[0] == null) {
+            callback.beforeLoad();
+            GetDriverInfoService driverInfoService = new GetDriverInfoService();
+            driverInfoService.executeAsync(new ServiceCallback() {
+                @Override
+                public void success(IService service) {
+                    drivers[0] = new Gson().fromJson(service.getResponseString(), Driver.class);
+                    if (drivers[0] != null) {
+                        DataManager.getInstance().setCurrentDriver(drivers[0]);
+                        callback.afterLoaded(drivers[0]);
+                    } else {
+                        callback.loadFailed();
+                    }
+                }
+
+                @Override
+                public void failure(IService service) {
+                    callback.loadFailed();
+                }
+            });
+        } else {
+            callback.afterLoaded(drivers[0]);
+        }
     }
 
     protected void setup() {

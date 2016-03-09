@@ -83,30 +83,22 @@ public class ConfirmReservationDetailsActivity extends Activity {
 
     public void onConfirmReserveButtonClicked(View view) {
         //reserve the space
-        final Driver[] drivers = {DataManager.getInstance().getCurrentDriver()};
-        if (drivers[0] == null) {
-            Utils.Indicator.show();
-            GetDriverInfoService driverInfoService = new GetDriverInfoService();
-            driverInfoService.executeAsync(new ServiceCallback() {
-                @Override
-                public void success(IService service) {
-                    drivers[0] = new Gson().fromJson(service.getResponseString(), Driver.class);
-                    if (drivers[0] != null) {
-                        DataManager.getInstance().setCurrentDriver(drivers[0]);
-                        reserve(drivers[0]);
-                    } else {
-                        Utils.Notifier.alert(getString(R.string.unable_to_get_driver_details));
-                    }
-                }
+        loadDriverInfo(new DriverLoaderCallback() {
+            @Override
+            public void beforeLoad() {
+                Utils.Indicator.show();
+            }
 
-                @Override
-                public void failure(IService service) {
-                    Utils.Notifier.alert(getString(R.string.unable_to_get_driver_details));
-                }
-            });
-        } else {
-            reserve(drivers[0]);
-        }
+            @Override
+            public void afterLoaded(Driver driver) {
+                reserve(driver);
+            }
+
+            @Override
+            public void loadFailed() {
+                Utils.Notifier.alert(getString(R.string.unable_to_get_driver_details));
+            }
+        });
     }
 
     private void reserve(Driver driver) {

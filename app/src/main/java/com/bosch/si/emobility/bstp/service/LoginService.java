@@ -25,7 +25,6 @@ public class LoginService extends AbstractService {
     @Override
     public String getBody() {
         body = user.toXMLString();
-        Log.d("BSTP_SVC", body);
         return super.getBody();
     }
 }

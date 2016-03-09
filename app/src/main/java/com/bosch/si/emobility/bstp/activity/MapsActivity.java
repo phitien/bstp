@@ -179,36 +179,22 @@ public class MapsActivity extends Activity {
     }
 
     public void onReserveButtonClicked(View view) {
-        final Driver[] driver = {DataManager.getInstance().getCurrentDriver()};
-        if (driver[0] == null) {
-            Utils.Indicator.show();
-            GetDriverInfoService driverInfoService = new GetDriverInfoService();
-            driverInfoService.executeAsync(new ServiceCallback() {
-                @Override
-                public void success(IService service) {
-                    driver[0] = new Gson().fromJson(service.getResponseString(), Driver.class);
-                    if (driver[0] != null) {
-                        DataManager.getInstance().setCurrentDriver(driver[0]);
-                        openConfirmReservationDetailsActivity();
-                    } else {
-                        Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
-                    }
-                }
+        loadDriverInfo(new DriverLoaderCallback() {
+            @Override
+            public void beforeLoad() {
+                Utils.Indicator.show();
+            }
 
-                @Override
-                public void failure(IService service) {
-                    Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
-                }
+            @Override
+            public void afterLoaded(Driver driver) {
+                openConfirmReservationDetailsActivity();
+            }
 
-                @Override
-                public void onPostExecute(IService service) {
-                    Utils.Indicator.hide();
-                }
-            });
-        }
-        else {
-            openConfirmReservationDetailsActivity();
-        }
+            @Override
+            public void loadFailed() {
+                Utils.Notifier.notify(getString(R.string.unable_to_get_driver_details));
+            }
+        });
     }
 
     private void openConfirmReservationDetailsActivity() {

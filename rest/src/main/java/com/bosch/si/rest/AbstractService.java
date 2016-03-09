@@ -418,6 +418,7 @@ public abstract class AbstractService implements IService {
             signal.await();
         } catch (InterruptedException e) {
             exception = e;
+            e.printStackTrace();
         }
 
         return responseString;
@@ -428,6 +429,7 @@ public abstract class AbstractService implements IService {
             callback.onProgressUpdate(me);
         } catch (Exception e) {
             exception = e;
+            e.printStackTrace();
         }
     }
 
@@ -436,6 +438,7 @@ public abstract class AbstractService implements IService {
             callback.onPreExecute(me);
         } catch (Exception e) {
             exception = e;
+            e.printStackTrace();
         }
     }
 
@@ -471,11 +474,13 @@ public abstract class AbstractService implements IService {
 
                 } catch (IOException e) {
                     exception = e;
+                    e.printStackTrace();
                 } finally {
                     try {
                         if (reader != null)
                             reader.close();
                     } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -483,6 +488,7 @@ public abstract class AbstractService implements IService {
         } catch (Exception e) {
             exception = e;
             inputStream = null;
+            e.printStackTrace();
         }
         return isOK();
     }
@@ -500,16 +506,13 @@ public abstract class AbstractService implements IService {
             } else if (exception instanceof SocketTimeoutException) {
                 //Handle socket timeout exception
                 callback.timeout(me);
-            }
-            else {
+            } else {
                 callback.failure(me);
             }
             callback.onPostExecute(me);
         } catch (Exception e) {
             exception = e;
-        }
-        if (exception != null) {
-            System.out.print("REST:" + exception.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -567,7 +570,7 @@ public abstract class AbstractService implements IService {
                 }
             });
         } catch (Exception e) {
-            Log.d("BSTP_SVC", e.getLocalizedMessage());
+            e.printStackTrace();
         }
 
 //        Log.d("BSTP_SVC","url " + url.toString());

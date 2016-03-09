@@ -140,7 +140,6 @@ public class MapComponent extends Component {
         drawMyLocationMarker();
         drawMySearchingMarker(searchingLatLng);
 
-        Log.e("ASD", String.valueOf(points.size()));
         Point p1 = points.poll();
         if (p1 != null) {
             Log.e("ASD_P1", p1.toString());

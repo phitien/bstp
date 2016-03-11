@@ -10,6 +10,7 @@ public class Truck extends Model {
     private String vehicleId;
     private String vehicleType;
     private String vehicleRegNumber;
+    private String licensePlateLabel;
     private String vehicleModelName;
     private String parkingMode;
     private String vehicleInfo;
@@ -46,6 +47,14 @@ public class Truck extends Model {
         this.vehicleRegNumber = vehicleRegNumber;
     }
 
+    public String getLicensePlateLabel() {
+        return licensePlateLabel;
+    }
+
+    public void setLicensePlateLabel(String licensePlateLabel) {
+        this.licensePlateLabel = licensePlateLabel;
+    }
+
     public String getParkingMode() {
         return parkingMode;
     }
@@ -64,6 +73,6 @@ public class Truck extends Model {
 
     @Override
     public String toString() {
-        return vehicleRegNumber;
+        return licensePlateLabel;
     }
 }

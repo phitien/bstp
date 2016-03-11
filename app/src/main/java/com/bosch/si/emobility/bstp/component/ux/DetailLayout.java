@@ -8,6 +8,7 @@ import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
@@ -80,10 +81,9 @@ public class DetailLayout extends RelativeLayout {
     }
 
     public int getDragRange() {
-        if (mDragRange == 0)
-            return getPaddingTop() + ((View) getParent()).getMeasuredHeight() - headerView.getMeasuredHeight();
-        else
-            return mDragRange;
+        if (mDragRange <= 0)
+            mDragRange = ((View) getParent()).getMeasuredHeight() - headerView.getMeasuredHeight();
+        return mDragRange;
     }
 
     boolean smoothSlideTo(float slideOffset) {
@@ -114,11 +114,28 @@ public class DetailLayout extends RelativeLayout {
 
         @Override
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
+            int dragRange = getDragRange();
             int top = getPaddingTop();
             if (yvel > 0 || (yvel == 0 && mDragOffset > 0.5f)) {
-                top += getDragRange();
+                top += dragRange;
             }
             dragHelper.settleCapturedViewAt(releasedChild.getLeft(), top);
+
+            int releasedChildTop = releasedChild.getTop();
+
+            if (yvel > 0) {//moving down
+                if (releasedChildTop > 200) {
+                    smoothSlideTo(1f);
+                } else {
+                    smoothSlideTo(0f);
+                }
+            } else {//moving up
+                if (releasedChildTop < dragRange + 200) {
+                    smoothSlideTo(0f);
+                } else {
+                    smoothSlideTo(1f);
+                }
+            }
         }
 
         @Override
@@ -142,15 +159,15 @@ public class DetailLayout extends RelativeLayout {
         }
     }
 
-    public static boolean isPointInsideView(float x, float y, View view){
+    public static boolean isPointInsideView(float x, float y, View view) {
         int location[] = new int[2];
         view.getLocationOnScreen(location);
         int viewX = location[0];
         int viewY = location[1];
 
         //point is inside view bounds
-        if(( x > viewX && x < (viewX + view.getWidth())) &&
-                ( y > viewY && y < (viewY + view.getHeight()))){
+        if ((x > viewX && x < (viewX + view.getWidth())) &&
+                (y > viewY && y < (viewY + view.getHeight()))) {
             return true;
         } else {
             return false;
@@ -160,7 +177,7 @@ public class DetailLayout extends RelativeLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 
-        if(isPointInsideView(ev.getRawX(), ev.getRawY(), reserveButtonRef)){
+        if (isPointInsideView(ev.getRawX(), ev.getRawY(), reserveButtonRef)) {
             super.onInterceptTouchEvent(ev);
             return false;
         }
@@ -208,9 +225,9 @@ public class DetailLayout extends RelativeLayout {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
 
-        if(isPointInsideView(ev.getRawX(), ev.getRawY(), reserveButtonRef)){
+        if (isPointInsideView(ev.getRawX(), ev.getRawY(), reserveButtonRef)) {
             super.onTouchEvent(ev);
-            return  true;
+            return true;
         }
 
         dragHelper.processTouchEvent(ev);
@@ -270,8 +287,6 @@ public class DetailLayout extends RelativeLayout {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        mDragRange = getPaddingTop() + getHeight() - headerView.getHeight();
-
         headerView.layout(
                 0,
                 mTop,

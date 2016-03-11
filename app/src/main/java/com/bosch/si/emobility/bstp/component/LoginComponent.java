@@ -9,6 +9,7 @@ import com.bosch.si.emobility.bstp.R;
 import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.core.Component;
 import com.bosch.si.emobility.bstp.core.User;
+import com.bosch.si.emobility.bstp.core.UserSessionManager;
 
 /**
  * Created by sgp0458 on 16/12/15.
@@ -47,5 +48,14 @@ public class LoginComponent extends Component {
     @Override
     protected boolean isSlidDown() {
         return true;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled, boolean noAnimation) {
+        super.setEnabled(enabled, noAnimation);
+        if (enabled) {
+            editTextUsername.setText("");
+            editTextPassword.setText("");
+        }
     }
 }

@@ -60,13 +60,8 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
         if (UserSessionManager.getInstance().isLogged()) {//show login dialog
             loadDriverInfo(new DriverLoaderCallback() {
                 @Override
-                public void beforeLoad() {
-                    Utils.Indicator.show();
-                }
-
-                @Override
                 public void afterLoaded(Driver driver) {
-                    //do nothing
+                    Utils.Indicator.hide();
                 }
 
                 @Override
@@ -78,8 +73,6 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     }
 
     protected interface DriverLoaderCallback {
-        void beforeLoad();
-
         void afterLoaded(Driver driver);
 
         void loadFailed();
@@ -88,7 +81,8 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     protected void loadDriverInfo(final DriverLoaderCallback callback) {
         final Driver[] drivers = {DataManager.getInstance().getCurrentDriver()};
         if (drivers[0] == null) {
-            callback.beforeLoad();
+            Utils.Indicator.show();
+
             GetDriverInfoService driverInfoService = new GetDriverInfoService();
             driverInfoService.executeAsync(new ServiceCallback() {
                 @Override
@@ -105,6 +99,11 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
                 @Override
                 public void failure(IService service) {
                     callback.loadFailed();
+                }
+
+                @Override
+                public void onPostExecute(IService service) {
+                    Utils.Indicator.hide();
                 }
             });
         } else {
@@ -175,86 +174,6 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
         UserSessionManager.getInstance().clearUserSession();
     }
 
-    protected void doLogin(final User user) {
-        Utils.Indicator.show();
-        //call login rest service and setup map after succeed
-        LoginService loginService = new LoginService();
-        loginService.user = user;
-
-        loginService.executeAsync(new ServiceCallback() {
-            @Override
-            public void success(IService service) {
-                //Save Authorization Cookie
-                try {
-                    JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
-                    user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
-                    JSONArray currentUserRoles = jsonObj.getJSONObject("ns2:identityContext").getJSONObject("ns2:tenantRelatedData").getJSONArray("ns2:role");
-                    Boolean isADriver = false;
-
-                    for (int i = 0; i < currentUserRoles.length(); i++) {
-                        JSONObject item = currentUserRoles.getJSONObject(i);
-                        if (item.getString("ns2:name").equalsIgnoreCase(Constants.IM_USER_ROLE_FOR_DRIVER) == true) {
-                            isADriver = true;
-                            break;
-                        }
-                    }
-
-                    if (isADriver == true) {
-                        UserSessionManager.getInstance().setUserSession(user);
-                        Event.broadcast(Utils.getString(R.string.login_ok), Constants.EventType.LOGIN_OK.toString());
-                    } else {
-                        onLogout();
-                        Event.broadcast(Utils.getString(R.string.login_failed_with_reason_invalid_role), Constants.EventType.LOGIN_FAILED.toString());
-                    }
-
-                } catch (Exception e) {
-                    onLogout();
-                    Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
-                }
-            }
-
-            @Override
-            public void failure(IService service) {
-                onLogout();
-                Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
-            }
-
-            @Override
-            public void onUnauthorized(IService service) {
-                onLogout();
-                Event.broadcast(Utils.getString(R.string.login_failed), Constants.EventType.LOGIN_FAILED.toString());
-            }
-        });
-    }
-
-    protected void doReLogin() {
-        final User user = UserSessionManager.getInstance().getUser();
-        LoginService loginService = new LoginService();
-        loginService.user = user;
-
-        loginService.executeAsync(new ServiceCallback() {
-            @Override
-            public void success(IService service) {
-                //Save Authorization Cookie
-                try {
-                    JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
-                    user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
-                    UserSessionManager.getInstance().setUserSession(user);
-                    Event.broadcast(Utils.getString(R.string.re_login_ok), Constants.EventType.RE_LOGIN_OK.toString());
-                } catch (Exception e) {
-                    onLogout();
-                    Event.broadcast(Utils.getString(R.string.re_login_failed), Constants.EventType.RE_LOGIN_FAILED.toString());
-                }
-            }
-
-            @Override
-            public void failure(IService service) {
-                onLogout();
-                Event.broadcast(Utils.getString(R.string.re_login_failed), Constants.EventType.RE_LOGIN_FAILED.toString());
-            }
-        });
-    }
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -286,14 +205,7 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     public void onEventMainThread(Event event) {
         if (event.getType() == Constants.EventType.LOGOUT_OK.toString()) {
             onLogoutOk();
-        } else if (event.getType() == Constants.EventType.LOGIN_OK.toString()) {
-            onLoginOk();
-        } else if (event.getType() == Constants.EventType.RE_LOGIN_OK.toString()) {
-            onReloginOk();
-        } else if (event.getType() == Constants.EventType.RE_LOGIN_FAILED.toString()) {
-            onLogout();
         } else if (event.getType() == Constants.EventType.SESSION_EXPIRED.toString()) {
-            UserSessionManager.getInstance().setSessionExpired(true);
             onSessionExpired();
         } else {
             showMessage(event);
@@ -319,25 +231,13 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
     }
 
     @Override
-    public void onLoginOk() {
-
-    }
-
-    /**
-     * Should be overridden in sub class
-     */
-    @Override
-    public void onReloginOk() {
-        showMessage(Utils.getString(R.string.re_login_ok));
-    }
-
-    @Override
     public void onSessionExpired() {
         openMapsActivity();
     }
 
     @Override
     public void onBackPressed() {
+        Utils.Indicator.hide();
         if (menuComponent != null && menuComponent.isShown()) {
             menuComponent.setEnabled(false, true);
         } else {

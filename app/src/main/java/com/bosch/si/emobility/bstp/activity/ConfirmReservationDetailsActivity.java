@@ -77,11 +77,6 @@ public class ConfirmReservationDetailsActivity extends Activity {
         //reserve the space
         loadDriverInfo(new DriverLoaderCallback() {
             @Override
-            public void beforeLoad() {
-                Utils.Indicator.show();
-            }
-
-            @Override
             public void afterLoaded(Driver driver) {
                 reserve(driver);
             }
@@ -109,13 +104,18 @@ public class ConfirmReservationDetailsActivity extends Activity {
         service.executeAsync(new ServiceCallback() {
             @Override
             public void success(IService service) {
-                finish();
                 Utils.Notifier.notify(getString(R.string.reserved_successfully));
+                finish();
             }
 
             @Override
             public void failure(IService service) {
                 Utils.Notifier.alert(getString(R.string.reserved_unsuccessfully));
+            }
+
+            @Override
+            public void onPostExecute(IService service) {
+                Utils.Indicator.hide();
             }
         });
     }

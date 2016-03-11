@@ -53,7 +53,7 @@
     <string name="reserved_successfully" translatable="false">Successfully reserved the parking space!</string>
     <string name="reserved_unsuccessfully" translatable="false">Unable to reserve parking space!</string>
     <string name="unable_to_get_driver_details" translatable="false">Unable to get driver details</string>
-    <string name="reservation_canceled_successfully" translatable="false">Successfully to canceled the reservation</string>
+    <string name="reservation_canceled_successfully" translatable="false">Successfully canceled the reservation</string>
     <string name="reservation_canceled_unsuccessfully" translatable="false">Failed to cancel the reservation</string>
     <string name="service_error_message" translatable="false">Unfortunately, the service is currently unavailable</string>
 
@@ -63,7 +63,9 @@
     <string name="message" translatable="false">Message</string>
     <string name="no_parking_location_found" translatable="false">No parking location found</string>
     <string name="request_timeout_message" translatable="false">Sorry, the service was not available due to slow connection</string>
-    <string name="cancel_reservation_confirm_message">Do you want to cancel this reservation?</string>
+    <string name="cancel_reservation_confirm_message" translatable="false">Do you want to cancel this reservation?</string>
     <string name="restful_service_error_message">Sorry, the service was not available.</string>
+    <string name="username_empty" translatable="false">Username is empty</string>
+    <string name="password_empty" translatable="false">Password is empty</string>
 
 </resources>

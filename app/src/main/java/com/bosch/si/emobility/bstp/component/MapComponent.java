@@ -142,10 +142,8 @@ public class MapComponent extends Component {
 
         MapState s1 = mapStates.poll();
         if (s1 != null) {
-            Log.e("ASD_P1", s1.toString());
             MapState s2 = mapStates.poll();
             if (s2 != null) {
-                Log.e("ASD_P2", s2.toString());
                 if (shouldRefreshMap(s1, s2)) {
                     refresh(s2);
                 }

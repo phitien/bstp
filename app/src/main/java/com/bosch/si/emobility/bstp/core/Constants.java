@@ -8,7 +8,9 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Constants {
     public static final int REQUEST_TIMEOUT = 45000;
+    public static final int INDICATOR_TIMEOUT = 60000;
     public static final int SPLASH_TIMEOUT = 2000;
+    public static final int NOTIFICATION_SHOWING_DURATION = 10000;
     public static final long MIN_TIME_BW_UPDATES = 1000;
     public static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 0F;
     //public static final String BASE_URL = "http://ivsrv034.bosch-si.com:9000";

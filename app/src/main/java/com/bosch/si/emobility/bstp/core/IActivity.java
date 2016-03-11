@@ -43,16 +43,6 @@ public interface IActivity {
     void onEventMainThread(Event event);
 
     /**
-     * Method to trigger when login successfully
-     */
-    void onLoginOk();
-
-    /**
-     * Method to trigger when re-login successfully
-     */
-    void onReloginOk();
-
-    /**
      * Method to trigger when logout successfully
      */
     void onLogoutOk();

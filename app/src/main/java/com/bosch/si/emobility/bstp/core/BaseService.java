@@ -1,10 +1,14 @@
 package com.bosch.si.emobility.bstp.core;
 
 import com.bosch.si.emobility.bstp.R;
+import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.AbstractService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.IServiceCallback;
 import com.bosch.si.rest.callback.ServiceCallback;
+
+import org.json.JSONObject;
+import org.json.XML;
 
 import java.util.Map;
 
@@ -35,13 +39,14 @@ public class BaseService extends AbstractService {
             }
 
             @Override
-            public void onPostExecute(IService service) {
-                Utils.Indicator.hide();//remove indicator anw
-            }
-
-            @Override
             public void onUnauthorized(IService service) {
-                Event.broadcast(Utils.getString(R.string.session_expired), Constants.EventType.SESSION_EXPIRED.toString());
+                UserSessionManager.getInstance().setSessionExpired(true);
+                if (UserSessionManager.getInstance().isSaveCredentials()) {//if save credentials
+                    doReLogin(service);
+                } else {
+                    UserSessionManager.getInstance().clearUserSession();
+                    Event.broadcast(Utils.getString(R.string.session_expired), Constants.EventType.SESSION_EXPIRED.toString());
+                }
             }
 
             @Override
@@ -55,6 +60,40 @@ public class BaseService extends AbstractService {
             }
         };
         return super.getCallback();
+    }
+
+    protected void doReLogin(final IService executingService) {
+        Utils.Indicator.show();
+
+        final User user = UserSessionManager.getInstance().getUser();
+        LoginService loginService = new LoginService();
+        loginService.user = user;
+
+        loginService.executeAsync(new ServiceCallback() {
+            @Override
+            public void success(IService service) {
+                //Save Authorization Cookie
+                try {
+                    JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
+                    user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
+                    UserSessionManager.getInstance().setUserSession(user);
+                    if (!(executingService instanceof LoginService))
+                        executingService.redoOnce();
+                } catch (Exception e) {
+                    UserSessionManager.getInstance().clearUserSession();
+                }
+            }
+
+            @Override
+            public void failure(IService service) {
+                UserSessionManager.getInstance().clearUserSession();
+            }
+
+            @Override
+            public void onPostExecute(IService service) {
+                Utils.Indicator.hide();
+            }
+        });
     }
 
     @Override

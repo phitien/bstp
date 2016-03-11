@@ -3,7 +3,6 @@ package com.bosch.si.rest;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.bosch.si.rest.anno.Authorization;
 import com.bosch.si.rest.anno.ContentType;
@@ -307,7 +306,7 @@ public abstract class AbstractService implements IService {
 
     private IServiceCallback mergeCallbacks(final IServiceCallback serviceCallback) {
         final IServiceCallback defaultCallback = getCallback();
-        if (serviceCallback != null) {
+        if (serviceCallback != null && serviceCallback != defaultCallback) {
             return new IServiceCallback() {
                 @Override
                 public void onPreExecute(IService service) {
@@ -362,11 +361,17 @@ public abstract class AbstractService implements IService {
         }
     }
 
+    protected boolean async;
+    protected IServiceCallback callback2;
+    protected boolean stopRedo;
+
     @Override
     public final void executeAsync(IServiceCallback serviceCallback) {
 
-        final AbstractService me = this;
+        async = true;
+        this.callback2 = serviceCallback;
 
+        final AbstractService me = this;
         final IServiceCallback callback = mergeCallbacks(serviceCallback);
 
         AsyncTask<Object, Object, Boolean> task = new AsyncTask<Object, Object, Boolean>() {
@@ -397,9 +402,14 @@ public abstract class AbstractService implements IService {
 
     @Override
     public final String executeSync(IServiceCallback serviceCallback) {
+
+        async = false;
+        this.callback2 = serviceCallback;
+
         final AbstractService me = this;
         final CountDownLatch signal = new CountDownLatch(1);
         final IServiceCallback callback = mergeCallbacks(serviceCallback);
+
         AsyncTask<Object, Object, Boolean> task = new AsyncTask<Object, Object, Boolean>() {
             @Override
             protected void onPreExecute() {
@@ -428,18 +438,35 @@ public abstract class AbstractService implements IService {
         try {
             signal.await();
         } catch (InterruptedException e) {
-            exception = e;
             e.printStackTrace();
         }
 
         return responseString;
     }
 
+    @Override
+    public void redoOnce() {
+        if (!stopRedo) {
+            redo();
+            stopRedo = true;
+        }
+    }
+
+    @Override
+    public void redo() {
+        if (!stopRedo) {
+            if (async) {
+                executeAsync(callback2);
+            } else {
+                executeSync(callback2);
+            }
+        }
+    }
+
     private void doProgressUpdate(IServiceCallback callback, AbstractService me) {
         try {
             callback.onProgressUpdate(me);
         } catch (Exception e) {
-            exception = e;
             e.printStackTrace();
         }
     }
@@ -448,26 +475,20 @@ public abstract class AbstractService implements IService {
         try {
             callback.onPreExecute(me);
         } catch (Exception e) {
-            exception = e;
             e.printStackTrace();
         }
     }
 
-    @NonNull
     private Boolean doExecutionInBackground() {
         try {
             responseString = null;
             IServiceConnection conn = getConnection();
-
-//            Log.d("BSTP_SVC", conn.getURLConnection().getRequestMethod());
 
             conn.connect();
             //set responseCode
             responseCode = conn.getResponseCode();
             inputStream = conn.getInputStream();
             responseCookie = conn.getURLConnection().getHeaderField(SET_COOKIE);
-
-//            Log.d("BSTP_SVC","responseCode "+ responseCode);
 
             if (isOK()) {
                 BufferedReader reader = null;
@@ -480,12 +501,9 @@ public abstract class AbstractService implements IService {
                     }
                     //set responseString
                     responseString = builder.toString();
-
-//                    Log.d("BSTP_SVC","Response string "+ responseString);
-
                 } catch (IOException e) {
-                    exception = e;
                     e.printStackTrace();
+                    exception = e;
                 } finally {
                     try {
                         if (reader != null)
@@ -497,15 +515,16 @@ public abstract class AbstractService implements IService {
             }
             conn.disconnect();
         } catch (Exception e) {
+            e.printStackTrace();
             exception = e;
             inputStream = null;
-            e.printStackTrace();
         }
         return isOK();
     }
 
     private void doPostExecution(IServiceCallback callback, AbstractService me) {
         try {
+            callback.onPostExecute(me);
             if (exception == null) {
                 if (isOK()) {
                     callback.success(me);
@@ -520,10 +539,9 @@ public abstract class AbstractService implements IService {
             } else {
                 callback.error(me);
             }
-            callback.onPostExecute(me);
         } catch (Exception e) {
-            exception = e;
             e.printStackTrace();
+            exception = e;
         }
     }
 
@@ -584,15 +602,11 @@ public abstract class AbstractService implements IService {
             e.printStackTrace();
         }
 
-//        Log.d("BSTP_SVC","url " + url.toString());
-
         URLConnection conn = url.openConnection();
         if (conn instanceof HttpsURLConnection) {
 
             HttpsURLConnection httpsConn = (HttpsURLConnection) conn;
             updateConnectionParams(httpsConn);
-
-//            Log.d("BSTP_SVC", httpsConn.getRequestMethod());
 
             return new ServiceConnection(httpsConn);
         } else if (conn instanceof HttpURLConnection) {

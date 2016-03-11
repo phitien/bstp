@@ -23,11 +23,16 @@ import com.bosch.si.emobility.bstp.model.Driver;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
 import com.bosch.si.emobility.bstp.model.SearchCriteria;
 import com.bosch.si.emobility.bstp.service.GetDriverInfoService;
+import com.bosch.si.emobility.bstp.service.LoginService;
 import com.bosch.si.rest.IService;
 import com.bosch.si.rest.callback.ServiceCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
 
 public class MapsActivity extends Activity {
 
@@ -72,13 +77,7 @@ public class MapsActivity extends Activity {
 
     @Override
     public void onEventMainThread(Event event) {
-        if (event.getType() == Constants.EventType.LOGIN_OK.toString()) {
-            Utils.Indicator.hide();
-            openMap();
-        } else if (event.getType() == Constants.EventType.LOGIN_FAILED.toString()) {
-            Utils.Indicator.hide();
-            super.onEventMainThread(event);
-        } else if (event.getType() == Constants.EventType.CAMERA_CHANGED.toString()) {
+        if (event.getType() == Constants.EventType.CAMERA_CHANGED.toString()) {
             onCameraChanged();
         } else {
             super.onEventMainThread(event);
@@ -88,11 +87,6 @@ public class MapsActivity extends Activity {
     @Override
     public void onLogoutOk() {
         showLoginDialog();
-    }
-
-    @Override
-    public void onReloginOk() {
-        super.onReloginOk();
     }
 
     private void showLoginDialog() {
@@ -122,11 +116,7 @@ public class MapsActivity extends Activity {
 
     @Override
     public void onSessionExpired() {
-        if (UserSessionManager.getInstance().isSaveCredentials()) {//if save credentials
-            doReLogin();
-        } else {
-            showLoginDialog();
-        }
+        showLoginDialog();
     }
 
     private void checkAuthentication() {
@@ -180,11 +170,6 @@ public class MapsActivity extends Activity {
     public void onReserveButtonClicked(View view) {
         loadDriverInfo(new DriverLoaderCallback() {
             @Override
-            public void beforeLoad() {
-                Utils.Indicator.show();
-            }
-
-            @Override
             public void afterLoaded(Driver driver) {
                 openConfirmReservationDetailsActivity();
             }
@@ -201,6 +186,72 @@ public class MapsActivity extends Activity {
         DataManager.getInstance().setStartTime(searchComponent.getSearchCriteria().getStartTime());
         DataManager.getInstance().setEndTime(searchComponent.getSearchCriteria().getEndTime());
         startActivity(intent);
+    }
+
+    protected void doLogin(final User user) {
+
+        hideKeyboard();
+
+        if (user.getUsername().trim().isEmpty()) {
+            Utils.Notifier.notify(getString(R.string.username_empty));
+            return;
+        }
+
+        if (user.getPassword().trim().isEmpty()) {
+            Utils.Notifier.notify(getString(R.string.password_empty));
+            return;
+        }
+
+        Utils.Indicator.show();
+        //call login rest service and setup map after succeed
+        LoginService loginService = new LoginService();
+        loginService.user = user;
+
+        loginService.executeAsync(new ServiceCallback() {
+            @Override
+            public void success(IService service) {
+                //Save Authorization Cookie
+                try {
+                    JSONObject jsonObj = XML.toJSONObject(service.getResponseString());
+                    user.setContextId(jsonObj.getJSONObject("ns2:identityContext").getString("ns2:contextId"));
+                    JSONArray currentUserRoles = jsonObj.getJSONObject("ns2:identityContext").getJSONObject("ns2:tenantRelatedData").getJSONArray("ns2:role");
+                    Boolean isADriver = false;
+
+                    for (int i = 0; i < currentUserRoles.length(); i++) {
+                        JSONObject item = currentUserRoles.getJSONObject(i);
+                        if (item.getString("ns2:name").equalsIgnoreCase(Constants.IM_USER_ROLE_FOR_DRIVER) == true) {
+                            isADriver = true;
+                            break;
+                        }
+                    }
+
+                    if (isADriver == true) {
+                        UserSessionManager.getInstance().setUserSession(user);
+                        openMap();
+                    } else {
+                        Utils.Notifier.notify(Utils.getString(R.string.login_failed_with_reason_invalid_role));
+                    }
+
+                } catch (Exception e) {
+                    Utils.Notifier.notify(Utils.getString(R.string.login_failed));
+                }
+            }
+
+            @Override
+            public void failure(IService service) {
+                Utils.Notifier.notify(Utils.getString(R.string.login_failed));
+            }
+
+            @Override
+            public void onUnauthorized(IService service) {
+                Utils.Notifier.notify(Utils.getString(R.string.login_failed));
+            }
+
+            @Override
+            public void onPostExecute(IService service) {
+                Utils.Indicator.hide();
+            }
+        });
     }
 
 }

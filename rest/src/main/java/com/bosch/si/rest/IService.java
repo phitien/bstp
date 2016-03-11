@@ -82,6 +82,10 @@ public interface IService {
 
     public String executeSync(IServiceCallback callback);
 
+    public void redoOnce();
+
+    public void redo();
+
     public String getFieldValue(String fieldName) throws Exception;
 
     public InputStream getInputStream();

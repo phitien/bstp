@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.text.format.DateFormat;
 import android.widget.Toast;
 
@@ -42,16 +43,30 @@ import java.util.Date;
  */
 public class Utils {
     public static class Notifier {
-        public static int DURATION = 1000;
 
         public static void notify(final String message) {
+            notify(message, Constants.NOTIFICATION_SHOWING_DURATION);
+        }
+
+        public static void notify(final String message, final int milliseconds) {
             final Activity activity = Application.getInstance().getCurrentContext();
             if (activity != null) {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //noinspection ResourceType
-                        Toast.makeText(activity, message, DURATION).show();
+                        Utils.Indicator.hide();
+
+                        final Toast[] toasts = new Toast[1];
+                        toasts[0] = Toast.makeText(activity, message, Toast.LENGTH_LONG);
+                        toasts[0].show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                toasts[0].cancel();
+                                toasts[0] = Toast.makeText(activity, message, Toast.LENGTH_LONG);
+                                toasts[0].show();
+                            }
+                        }, 2500);
                     }
                 });
             }
@@ -63,19 +78,19 @@ public class Utils {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (!activity.isFinishing()) {
-                            new AlertDialog.Builder(activity)
-                                    .setTitle(title)
-                                    .setMessage(message)
-                                    .setCancelable(false)
-                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();
-                                            Event.broadcast("", Constants.EventType.ALERT_DIALOG_HIDE.toString());
-                                        }
-                                    }).create().show();
-                        }
+                        Utils.Indicator.hide();
+
+                        new AlertDialog.Builder(activity)
+                                .setTitle(title)
+                                .setMessage(message)
+                                .setCancelable(false)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                        Event.broadcast("", Constants.EventType.ALERT_DIALOG_HIDE.toString());
+                                    }
+                                }).create().show();
                     }
                 });
             }
@@ -91,27 +106,28 @@ public class Utils {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (!activity.isFinishing()) {
-                            new AlertDialog.Builder(activity)
-                                    .setTitle(title)
-                                    .setMessage(message)
-                                    .setCancelable(false)
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();
-                                            Event.broadcast("", Constants.EventType.DIALOG_YES.toString());
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();
-                                            Event.broadcast("", Constants.EventType.DIALOG_NO.toString());
-                                        }
-                                    })
-                                    .create().show();
-                        }
+                        Utils.Indicator.hide();
+
+                        new AlertDialog.Builder(activity)
+                                .setTitle(title)
+                                .setMessage(message)
+                                .setCancelable(false)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                        Event.broadcast("", Constants.EventType.DIALOG_YES.toString());
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                        Event.broadcast("", Constants.EventType.DIALOG_NO.toString());
+                                    }
+                                })
+                                .create().show();
+
                     }
                 });
             }
@@ -151,6 +167,7 @@ public class Utils {
 
         public static void show() {
             try {
+                hide();
                 Context context = Application.getInstance().getCurrentContext();
                 if (context != null) {
                     hide();

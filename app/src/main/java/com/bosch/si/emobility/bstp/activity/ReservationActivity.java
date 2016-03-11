@@ -89,6 +89,11 @@ public class ReservationActivity extends Activity {
                     public void failure(IService service) {
                         Utils.Notifier.alert(getString(R.string.reservation_canceled_unsuccessfully));
                     }
+
+                    @Override
+                    public void onPostExecute(IService service) {
+                        Utils.Indicator.hide();
+                    }
                 });
             } catch (Exception e) {
                 Utils.Notifier.alert(getString(R.string.reservation_canceled_unsuccessfully));

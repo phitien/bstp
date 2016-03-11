@@ -55,24 +55,6 @@ public class UpcomingActivity extends Activity implements SwipeRefreshLayout.OnR
 
         emptyView = (TextView) findViewById(R.id.noReservationsInfoLabel);
         listViewUpcoming.setEmptyView(emptyView);
-
-        populateData();
-
-//        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-//        swipeRefreshLayout.setOnRefreshListener(this);
-//        swipeRefreshLayout.post(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        populateData();
-//                                    }
-//                                }
-//        );
-    }
-
-    @Override
-    public void onReloginOk() {
-        super.onReloginOk();
-        populateData();
     }
 
     private void openDetailActivity(int position) {
@@ -93,38 +75,31 @@ public class UpcomingActivity extends Activity implements SwipeRefreshLayout.OnR
         service.toDate = Utils.getRestfulFormattedDatetime(toDate);
         service.searchTerm = "";//TODO: to clarify requirements
 
-        service.executeAsync(new ServiceCallback() {
-                                 @Override
-                                 public void success(IService service) {
-                                     final String responseString = service.getResponseString();
-                                     AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-                                         @Override
-                                         protected Void doInBackground(Void... params) {
-                                             Gson gson = new Gson();
-                                             DataManager.getInstance().setTransactions(
-                                                     (List<ParkingTransaction>) gson.fromJson(
-                                                             responseString,
-                                                             new TypeToken<ArrayList<ParkingTransaction>>() {
-                                                             }.getType()));
-                                             return null;
-                                         }
+        service.executeAsync(
+                new ServiceCallback() {
+                    @Override
+                    public void success(IService service) {
+                        final String responseString = service.getResponseString();
+                        Gson gson = new Gson();
+                        DataManager.getInstance().setTransactions(
+                                (List<ParkingTransaction>) gson.fromJson(
+                                        responseString,
+                                        new TypeToken<ArrayList<ParkingTransaction>>() {
+                                        }.getType()));
+                        UpcomingAdapter adapter = new UpcomingAdapter(UpcomingActivity.this);
+                        listViewUpcoming.setAdapter(adapter);
+                    }
 
-                                         @Override
-                                         protected void onPostExecute(Void aVoid) {
-                                             UpcomingAdapter adapter = new UpcomingAdapter(UpcomingActivity.this);
-                                             listViewUpcoming.setAdapter(adapter);
-                                         }
-                                     };
+                    @Override
+                    public void failure(IService service) {
+                        service.getResponseCode();
+                    }
 
-                                     task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-                                 }
-
-                                 @Override
-                                 public void failure(IService service) {
-
-                                 }
-                             }
-
+                    @Override
+                    public void onPostExecute(IService service) {
+                        Utils.Indicator.hide();
+                    }
+                }
         );
     }
 
@@ -160,23 +135,9 @@ public class UpcomingActivity extends Activity implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (resultCode == RESULT_OK) {
-            // The user picked a contact.
-            // The Intent's data Uri identifies which contact was selected.
-            // Do something with the contact here (bigger example below)
-            populateData();
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        if (DataManager.getInstance().isJustCanceledReservations()) {
-            populateData();
-            DataManager.getInstance().setJustCanceledReservations(false);
-        }
+        populateData();
     }
 
 }

@@ -54,8 +54,6 @@ public class Utils {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Utils.Indicator.hide();
-
                         final Toast[] toasts = new Toast[1];
                         toasts[0] = Toast.makeText(activity, message, Toast.LENGTH_LONG);
                         toasts[0].show();
@@ -78,8 +76,6 @@ public class Utils {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Utils.Indicator.hide();
-
                         new AlertDialog.Builder(activity)
                                 .setTitle(title)
                                 .setMessage(message)
@@ -106,8 +102,6 @@ public class Utils {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Utils.Indicator.hide();
-
                         new AlertDialog.Builder(activity)
                                 .setTitle(title)
                                 .setMessage(message)
@@ -173,7 +167,7 @@ public class Utils {
                     hide();
                     String title = dialogTitle;
                     String message = dialogMessage != null ? dialogMessage : Utils.getString(R.string.please_wait);
-                    overlayDialog = ProgressDialog.show(context, title, message, true);
+                    overlayDialog = ProgressDialog.show(context, title, message, true, true);
                     overlayDialog.show();
                     dialogTitle = null;
                     dialogMessage = null;

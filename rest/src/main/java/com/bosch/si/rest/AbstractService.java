@@ -83,7 +83,7 @@ public abstract class AbstractService implements IService {
 
     protected IServiceConnection connection;
 
-    protected Executor executor = AsyncTask.SERIAL_EXECUTOR;
+    protected Executor executor = AsyncTask.THREAD_POOL_EXECUTOR;
 
     protected String authorization = null;
 
@@ -369,10 +369,10 @@ public abstract class AbstractService implements IService {
     public final void executeAsync(IServiceCallback serviceCallback) {
 
         async = true;
-        this.callback2 = serviceCallback;
+        callback2 = serviceCallback;
 
         final AbstractService me = this;
-        final IServiceCallback callback = mergeCallbacks(serviceCallback);
+        final IServiceCallback callback = mergeCallbacks(callback2);
 
         AsyncTask<Object, Object, Boolean> task = new AsyncTask<Object, Object, Boolean>() {
 
@@ -404,11 +404,11 @@ public abstract class AbstractService implements IService {
     public final String executeSync(IServiceCallback serviceCallback) {
 
         async = false;
-        this.callback2 = serviceCallback;
+        callback2 = serviceCallback;
 
         final AbstractService me = this;
         final CountDownLatch signal = new CountDownLatch(1);
-        final IServiceCallback callback = mergeCallbacks(serviceCallback);
+        final IServiceCallback callback = mergeCallbacks(callback2);
 
         AsyncTask<Object, Object, Boolean> task = new AsyncTask<Object, Object, Boolean>() {
             @Override

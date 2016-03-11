@@ -237,7 +237,6 @@ public abstract class Activity extends android.support.v4.app.FragmentActivity i
 
     @Override
     public void onBackPressed() {
-        Utils.Indicator.hide();
         if (menuComponent != null && menuComponent.isShown()) {
             menuComponent.setEnabled(false, true);
         } else {

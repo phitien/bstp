@@ -324,7 +324,7 @@ public class Utils {
     }
 
     public static String getRestfulDatetimeFormat() {
-        return Constants.RESTFUL_DATETIME_FORMAT;
+        return Constants.REQUEST_DATETIME_FORMAT;
     }
 
     public static String getRestfulFormattedDatetime(Date datetime) {

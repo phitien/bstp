@@ -11,7 +11,7 @@ android {
         applicationId "com.bosch.si.emobility.bstp"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 10
+        versionCode 11
         versionName "1.1"
         multiDexEnabled true
     }

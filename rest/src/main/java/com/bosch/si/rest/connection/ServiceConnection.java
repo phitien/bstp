@@ -101,9 +101,17 @@ public class ServiceConnection implements IServiceConnection {
     public InputStream getInputStream() {
         try {
             if (secure) {
-                return httpsURLConnection.getInputStream();
+                InputStream stream = httpsURLConnection.getErrorStream();
+                if (stream == null) {
+                    stream = httpsURLConnection.getInputStream();
+                }
+                return stream;
             } else if (httpURLConnection != null) {
-                return httpURLConnection.getInputStream();
+                InputStream stream = httpURLConnection.getErrorStream();
+                if (stream == null) {
+                    stream = httpURLConnection.getInputStream();
+                }
+                return stream;
             }
         } catch (IOException e) {
             System.out.print("REST_ServiceConnection_getInputStream:" + e.getMessage());

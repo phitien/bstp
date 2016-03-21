@@ -35,8 +35,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by sgp0458 on 4/12/15.
@@ -327,10 +329,6 @@ public class Utils {
         return Constants.REQUEST_DATETIME_FORMAT;
     }
 
-    public static String getRestfulFormattedDatetime(Date datetime) {
-        return (String) DateFormat.format(getRestfulDatetimeFormat(), datetime);
-    }
-
     public static String getDisplayDatetimeFormat() {
         return getString(R.string.datetime_format);
     }
@@ -343,16 +341,32 @@ public class Utils {
         return getString(R.string.time_format);
     }
 
+    public static String getRestfulFormattedDatetime(Date datetime) {
+//        SimpleDateFormat sdf = new SimpleDateFormat(getRestfulDatetimeFormat());
+//        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+//        return sdf.format(datetime);
+        return (String) DateFormat.format(getRestfulDatetimeFormat(), datetime);
+    }
+
     public static String getDisplayFormattedDatetime(Date datetime) {
-        return (String) DateFormat.format(getDisplayDatetimeFormat(), datetime);
+        SimpleDateFormat sdf = new SimpleDateFormat(getDisplayDatetimeFormat());
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return sdf.format(datetime);
+//        return (String) DateFormat.format(getDisplayDatetimeFormat(), datetime);
     }
 
     public static String getDisplayFormattedDate(Date datetime) {
-        return (String) DateFormat.format(getDisplayDateFormat(), datetime);
+        SimpleDateFormat sdf = new SimpleDateFormat(getDisplayDateFormat());
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return sdf.format(datetime);
+//        return (String) DateFormat.format(getDisplayDateFormat(), datetime);
     }
 
     public static String getDisplayFormattedTime(Date datetime) {
-        return (String) DateFormat.format(getDisplayTimeFormat(), datetime);
+        SimpleDateFormat sdf = new SimpleDateFormat(getDisplayTimeFormat());
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return sdf.format(datetime);
+//        return (String) DateFormat.format(getDisplayTimeFormat(), datetime);
     }
 
     public static boolean isLocationServiceDisabled(Context context) {

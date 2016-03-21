@@ -3,6 +3,7 @@ package com.bosch.si.rest;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.bosch.si.rest.anno.Authorization;
 import com.bosch.si.rest.anno.ContentType;
@@ -490,7 +491,7 @@ public abstract class AbstractService implements IService {
             inputStream = conn.getInputStream();
             responseCookie = conn.getURLConnection().getHeaderField(SET_COOKIE);
 
-            if (isOK()) {
+            if (inputStream != null) {
                 BufferedReader reader = null;
                 try {
                     StringBuilder builder = new StringBuilder();
@@ -513,6 +514,7 @@ public abstract class AbstractService implements IService {
                     }
                 }
             }
+
             conn.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
@@ -532,6 +534,7 @@ public abstract class AbstractService implements IService {
                     callback.onUnauthorized(me);
                 } else {
                     callback.failure(me);
+                    Log.e("REST", me.getResponseString());
                 }
             } else if (exception instanceof SocketTimeoutException) {
                 //Handle socket timeout exception

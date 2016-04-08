@@ -342,35 +342,25 @@ public class Utils {
     }
 
     public static String getRestfulFormattedDatetime(Date datetime) {
-//        SimpleDateFormat sdf = new SimpleDateFormat(getRestfulDatetimeFormat());
-//        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-//        return sdf.format(datetime);
         return (String) DateFormat.format(getRestfulDatetimeFormat(), datetime);
     }
 
     public static String getDisplayFormattedDatetime(Date datetime) {
         SimpleDateFormat sdf = new SimpleDateFormat(getDisplayDatetimeFormat());
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         return sdf.format(datetime);
-//        return (String) DateFormat.format(getDisplayDatetimeFormat(), datetime);
     }
 
     public static String getDisplayFormattedDate(Date datetime) {
         SimpleDateFormat sdf = new SimpleDateFormat(getDisplayDateFormat());
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         return sdf.format(datetime);
-//        return (String) DateFormat.format(getDisplayDateFormat(), datetime);
     }
 
     public static String getDisplayFormattedTime(Date datetime) {
         SimpleDateFormat sdf = new SimpleDateFormat(getDisplayTimeFormat());
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         return sdf.format(datetime);
-//        return (String) DateFormat.format(getDisplayTimeFormat(), datetime);
     }
 
     public static boolean isLocationServiceDisabled(Context context) {
-        Location location = null;
         try {
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             // getting GPS status

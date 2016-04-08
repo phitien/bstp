@@ -33,14 +33,14 @@ public class UtilsTest extends TestCase {
     }
 
     @SmallTest
-    public void testTimestampToDateConversion() throws RuntimeException {
-
-        Log.d("BSTP_TEST", "testTimestampToDateConversion");
-
-        String timestampAsString = "1454300170039";
-        String formattedString = Utils.getRestfulFormattedDatetime(new Date(Long.parseLong(timestampAsString)));
-        assertNotNull(formattedString);
-
-        Log.d("BSTP_TEST", "formattedString " + formattedString);
+    public void testDatetimeConversion() {
+        String datetimeString = "Mon Feb 01 05:16:10 GMT+01:00 2016";
+        Date date = new Date(datetimeString);
+        assertEquals(datetimeString, date.toString());
+        assertEquals("2016-02-01T05:16:10Z", Utils.getRestfulFormattedDatetime(date));
+        assertEquals("2016-02-01 / 05:16", Utils.getDisplayFormattedDatetime(date));
+        assertEquals("2016-02-01", Utils.getDisplayFormattedDate(date));
+        assertEquals("05:16", Utils.getDisplayFormattedTime(date));
     }
+
 }

@@ -7,7 +7,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bosch.si.emobility.bstp.R;
-import com.bosch.si.emobility.bstp.component.ListView.SecurityDetailsListAdapater;
+import com.bosch.si.emobility.bstp.component.ListView.SecurityDetailsListAdapter;
 import com.bosch.si.emobility.bstp.component.ux.DetailLayout;
 import com.bosch.si.emobility.bstp.core.Activity;
 import com.bosch.si.emobility.bstp.core.Component;
@@ -15,7 +15,6 @@ import com.bosch.si.emobility.bstp.core.FacilityViewManager;
 import com.bosch.si.emobility.bstp.core.Utils;
 import com.bosch.si.emobility.bstp.manager.DataManager;
 import com.bosch.si.emobility.bstp.model.ParkingLocation;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 /**
  * Created by sgp0458 on 16/12/15.
@@ -69,7 +68,7 @@ public class DetailComponent extends Component {
                     Integer.valueOf(parkingLocation.getTotalCapacityCount())));
             textViewSecurityLevel.setText(parkingLocation.getSecurityLevel());
 
-            SecurityDetailsListAdapater adpater = new SecurityDetailsListAdapater(this.activity, R.layout.security_item, parkingLocation.getMappedSecurityDetails());
+            SecurityDetailsListAdapter adpater = new SecurityDetailsListAdapter(this.activity, R.layout.security_item, parkingLocation.getMappedSecurityDetails());
             listViewSecurityDetails.setAdapter(adpater);
 
             facilityViewManager.updateIcons(parkingLocation.getFacilities());

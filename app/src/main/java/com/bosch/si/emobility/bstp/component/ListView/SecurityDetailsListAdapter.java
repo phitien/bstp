@@ -17,12 +17,12 @@ import java.util.List;
 /**
  * Created by SSY1SGP on 22/1/16.
  */
-public class SecurityDetailsListAdapater extends ArrayAdapter<SecurityDetails> {
+public class SecurityDetailsListAdapter extends ArrayAdapter<SecurityDetails> {
 
     private final Context context;
     private final List<SecurityDetails> securityDetails;
 
-    public SecurityDetailsListAdapater(Context context, int resource, List<SecurityDetails> details) {
+    public SecurityDetailsListAdapter(Context context, int resource, List<SecurityDetails> details) {
         super(context, resource);
         this.context = context;
         this.securityDetails = details;

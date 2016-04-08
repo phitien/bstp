@@ -132,6 +132,11 @@ public class MapComponent extends Component {
         return zoomLevel;
     }
 
+    /**
+     * move the map to the position
+     *
+     * @param latLng
+     */
     public void moveCamera(LatLng latLng) {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, getZoomLevel(Constants.DEFAULT_ZOOM_RADIUS)));
     }
@@ -198,23 +203,32 @@ public class MapComponent extends Component {
 
     private void drawParkingLocationMarker(ParkingLocation parkingLocation) {
         LatLng latLng = new LatLng(parkingLocation.getLatitude(), parkingLocation.getLongitude());
-        if (!markerAdded(latLng)) {
-            String imageName = Utils.getParkingIconName(parkingLocation);
+        Marker marker = markerAdded(latLng);
+        String imageName = Utils.getParkingIconName(parkingLocation);
+        if (marker == null) {
             markers.add(map.addMarker(new MarkerOptions()
                     .position(latLng)
                     .title(parkingLocation.getLocationTitle())
                     .icon(BitmapDescriptorFactory.fromResource(Utils.getImage(imageName)))));
+        } else {
+            marker.setTitle(parkingLocation.getLocationTitle());
+            marker.setIcon(BitmapDescriptorFactory.fromResource(Utils.getImage(imageName)));
         }
     }
 
-    private boolean markerAdded(LatLng latLng) {
+    private Marker markerAdded(LatLng latLng) {
         for (Marker marker : markers) {
             if (marker.getPosition().equals(latLng))
-                return true;
+                return marker;
         }
-        return false;
+        return null;
     }
 
+    /**
+     * Retrieve the map bounds
+     *
+     * @return LatLngBounds
+     */
     public LatLngBounds getCurrentLatLngBounds() {
         if (currentCameraBounds == null) {
             LatLngBounds bounds = null;

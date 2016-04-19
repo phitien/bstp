@@ -1,13 +1,9 @@
 package com.bosch.si.emobility.bstp.model;
 
-import com.bosch.si.emobility.bstp.core.Constants;
 import com.bosch.si.emobility.bstp.core.Model;
 import com.bosch.si.emobility.bstp.core.Utils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.SimpleFormatter;
 
 /**
  * Created by sgp0458 on 18/12/15.
@@ -134,18 +130,16 @@ public class ParkingTransaction extends Model {
 
     public String getFormattedStartTime() {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat(Utils.getResponseDatetimeFormat());
-            return Utils.getDisplayFormattedDatetime(sdf.parse(startTime));
-        } catch (ParseException e) {
+            return Utils.getLocalDatetime(Utils.parseUTCDate(startTime));
+        } catch (Exception e) {
             return startTime;
         }
     }
 
     public String getFormattedEndTime() {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat(Utils.getResponseDatetimeFormat());
-            return Utils.getDisplayFormattedDatetime(sdf.parse(endTime));
-        } catch (ParseException e) {
+            return Utils.getLocalDatetime(Utils.parseUTCDate(endTime));
+        } catch (Exception e) {
             return endTime;
         }
     }

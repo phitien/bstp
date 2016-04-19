@@ -71,8 +71,8 @@ public class UpcomingActivity extends Activity implements SwipeRefreshLayout.OnR
         Date fromDate = Utils.getNextDateByAddingHours(0);
         Date toDate = Utils.getNextDateByAddingHours(24 * 365);
 
-        service.fromDate = Utils.getRestfulFormattedDatetime(fromDate);
-        service.toDate = Utils.getRestfulFormattedDatetime(toDate);
+        service.fromDate = Utils.getUTCDatetime(fromDate);
+        service.toDate = Utils.getUTCDatetime(toDate);
         service.searchTerm = "";//TODO: to clarify requirements
 
         service.executeAsync(

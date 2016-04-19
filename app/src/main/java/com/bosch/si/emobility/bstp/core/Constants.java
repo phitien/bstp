@@ -20,7 +20,7 @@ public class Constants {
     public static final LatLng DEFAULT_LOCATION = new LatLng(50.1211277, 8.4964787);//Frankfurt
     public static final float DEFAULT_ZOOM_LEVEL = 9.5f;
     public static final float DEFAULT_ZOOM_RADIUS = 30000;
-    public static final String REQUEST_DATETIME_FORMAT = "yyyy-MM-dd'T'kk:mm:ssZ";
+    public static final String REQUEST_DATETIME_FORMAT = "yyyy-MM-dd'T'kk:mm:ss.SSSZ";
     public static final String RESPONSE_DATETIME_FORMAT = "yyyy-MM-dd'T'kk:mm:ss";
     public static final String HOCKEY_APP_ID = "c94bedcf98a14355847b6ebc059b6463";
     public static final String NOT_USED_PARAM = "Notused";

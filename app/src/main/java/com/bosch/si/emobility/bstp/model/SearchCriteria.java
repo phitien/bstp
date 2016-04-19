@@ -109,8 +109,8 @@ public class SearchCriteria extends Model {
     private SearchService fillToSearchService(SearchService service) {
 
         service.direction = direction;
-        service.endTime = Utils.getRestfulFormattedDatetime(endTime);
-        service.startTime = Utils.getRestfulFormattedDatetime(startTime);
+        service.endTime = Utils.getUTCDatetime(endTime);
+        service.startTime = Utils.getUTCDatetime(startTime);
         service.highway = highway;
         service.latitude = latitude;
         service.locationName = locationName;

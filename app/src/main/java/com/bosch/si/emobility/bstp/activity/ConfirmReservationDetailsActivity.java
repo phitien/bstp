@@ -95,8 +95,8 @@ public class ConfirmReservationDetailsActivity extends Activity {
         service.driverId = driver.getDriverId();
         service.parkingId = parkingLocation.getParkingId();
         service.additionalInfo = getString(R.string.bstp_app);
-        service.startTime = Utils.getRestfulFormattedDatetime(startTime);
-        service.endTime = Utils.getRestfulFormattedDatetime(toTime);
+        service.startTime = Utils.getUTCDatetime(startTime);
+        service.endTime = Utils.getUTCDatetime(toTime);
         service.vehicleId = confirmReservationComponent.getSelectedTruck();
         service.paymentMode = Constants.PAYMENT_MODE_CREDIT;
         service.parkingLocationName = parkingLocation.getLocationTitle();

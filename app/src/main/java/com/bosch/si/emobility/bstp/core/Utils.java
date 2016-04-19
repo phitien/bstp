@@ -35,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -321,42 +322,47 @@ public class Utils {
             return Constants.DEFAULT_LOCATION;
     }
 
-    public static String getResponseDatetimeFormat() {
-        return Constants.RESPONSE_DATETIME_FORMAT;
-    }
-
-    public static String getRestfulDatetimeFormat() {
-        return Constants.REQUEST_DATETIME_FORMAT;
-    }
-
-    public static String getDisplayDatetimeFormat() {
+    protected static String getDisplayDatetimeFormat() {
         return getString(R.string.datetime_format);
     }
 
-    public static String getDisplayDateFormat() {
+    protected static String getDisplayDateFormat() {
         return getString(R.string.date_format);
     }
 
-    public static String getDisplayTimeFormat() {
+    protected static String getDisplayTimeFormat() {
         return getString(R.string.time_format);
     }
 
-    public static String getRestfulFormattedDatetime(Date datetime) {
-        return (String) DateFormat.format(getRestfulDatetimeFormat(), datetime);
+    protected static SimpleDateFormat getUTCDateFormat() {
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.REQUEST_DATETIME_FORMAT);
+        sdf.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+        return sdf;
     }
 
-    public static String getDisplayFormattedDatetime(Date datetime) {
+    public static Date parseUTCDate(String date) throws ParseException {
+        return getUTCDateFormat().parse(date);
+    }
+
+    public static String getUTCDatetime(Date datetime) {
+        return getUTCDateFormat().format(datetime);
+    }
+
+    public static String getLocalDatetime(Date datetime) {
         SimpleDateFormat sdf = new SimpleDateFormat(getDisplayDatetimeFormat());
+        sdf.setTimeZone(TimeZone.getDefault());
         return sdf.format(datetime);
     }
 
-    public static String getDisplayFormattedDate(Date datetime) {
+    public static String getLocalDate(Date datetime) {
         SimpleDateFormat sdf = new SimpleDateFormat(getDisplayDateFormat());
+        sdf.setTimeZone(TimeZone.getDefault());
         return sdf.format(datetime);
     }
 
-    public static String getDisplayFormattedTime(Date datetime) {
+    public static String getLocalTime(Date datetime) {
         SimpleDateFormat sdf = new SimpleDateFormat(getDisplayTimeFormat());
+        sdf.setTimeZone(TimeZone.getDefault());
         return sdf.format(datetime);
     }
 

@@ -117,10 +117,10 @@ public class ConfirmReservationComponent extends Component {
         }
 
         if (fromDate != null)
-            fromDateTextView.setText(Utils.getDisplayFormattedDatetime(fromDate));
+            fromDateTextView.setText(Utils.getLocalDatetime(fromDate));
 
         if (toDate != null)
-            toDateTextView.setText(Utils.getDisplayFormattedDatetime(toDate));
+            toDateTextView.setText(Utils.getLocalDatetime(toDate));
 
         if (driver != null) {
 
